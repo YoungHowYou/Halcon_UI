@@ -5,9 +5,9 @@
 <body>
 <l>create_dict (DictHandle)</l>
 <l>create_message_queue (OutQueueHandle)</l>
-<l>create_Control (DictHandle, 2, '按钮', 200, 200, 100, 20, '按钮1', 'Text')</l>
 <c></c>
-<l>create_Control (DictHandle, 3, '按钮', 200, 400, 100, 20, '按钮1', 'Text')</l>
+<l>Create_Button (DictHandle, '开始检测', 2, 100, 100, 40, 20)</l>
+<l>Create_Parm (DictHandle, '速度', 3, 100, 125, 200, 20, 100, 'int', [0,5])</l>
 <c></c>
 <c></c>
 <l>Open_Frameworkwindows (DictHandle, OutQueueHandle)</l>
@@ -21,6 +21,7 @@
 <procedure name="create_Control">
 <interface>
 <ic>
+<par name="Handle" base_type="ctrl" dimension="0"/>
 <par name="FatherHandle" base_type="ctrl" dimension="0"/>
 <par name="ID" base_type="ctrl" dimension="0"/>
 <par name="Type" base_type="ctrl" dimension="0"/>
@@ -29,11 +30,9 @@
 <par name="CX" base_type="ctrl" dimension="0"/>
 <par name="CY" base_type="ctrl" dimension="0"/>
 <par name="pName" base_type="ctrl" dimension="0"/>
-<par name="Text" base_type="ctrl" dimension="0"/>
 </ic>
 </interface>
 <body>
-<l>create_dict (Handle)</l>
 <l>if (ID&lt;2 and ID&gt;512)</l>
 <l>    throw ('ID要大于2，小于512')</l>
 <l>endif</l>
@@ -44,7 +43,6 @@
 <l>set_dict_tuple (Handle, 'CX', CX)</l>
 <l>set_dict_tuple (Handle, 'CY', CY)</l>
 <l>set_dict_tuple (Handle, '标题', pName)</l>
-<l>set_dict_tuple (Handle, '默认内容', Text)</l>
 <l>set_dict_tuple (FatherHandle, '控件'+ID, Handle)</l>
 <c></c>
 <l>return ()</l>
@@ -54,6 +52,7 @@
 <parameter id="CX"/>
 <parameter id="CY"/>
 <parameter id="FatherHandle"/>
+<parameter id="Handle"/>
 <parameter id="ID">
 <default_type>integer</default_type>
 <default_value>2</default_value>
@@ -67,7 +66,6 @@
 <value_max>65535</value_max>
 <value_min>2</value_min>
 </parameter>
-<parameter id="Text"/>
 <parameter id="Type">
 <default_type>string</default_type>
 <default_value>'按钮'</default_value>
@@ -137,6 +135,81 @@
 <item>'查找'</item>
 </values>
 </parameter>
+</parameters>
+</docu>
+</procedure>
+<procedure name="Create_Button">
+<interface>
+<ic>
+<par name="DictHandle" base_type="ctrl" dimension="0"/>
+<par name="pName" base_type="ctrl" dimension="0"/>
+<par name="ID" base_type="ctrl" dimension="0"/>
+<par name="X" base_type="ctrl" dimension="0"/>
+<par name="Y" base_type="ctrl" dimension="0"/>
+<par name="CX" base_type="ctrl" dimension="0"/>
+<par name="CY" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<l>create_dict (Handle)</l>
+<l>create_Control (Handle, DictHandle, ID, '按钮', X, Y, CX, CY, pName)</l>
+<c></c>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="Create_Button">
+<parameters>
+<parameter id="CX"/>
+<parameter id="CY"/>
+<parameter id="DictHandle"/>
+<parameter id="ID"/>
+<parameter id="X"/>
+<parameter id="Y"/>
+<parameter id="pName"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="Create_Parm">
+<interface>
+<ic>
+<par name="DictHandle" base_type="ctrl" dimension="0"/>
+<par name="pName" base_type="ctrl" dimension="0"/>
+<par name="ID" base_type="ctrl" dimension="0"/>
+<par name="X" base_type="ctrl" dimension="0"/>
+<par name="Y" base_type="ctrl" dimension="0"/>
+<par name="CX" base_type="ctrl" dimension="0"/>
+<par name="CY" base_type="ctrl" dimension="0"/>
+<par name="Val" base_type="ctrl" dimension="0"/>
+<par name="Type" base_type="ctrl" dimension="0"/>
+<par name="Limit" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<l>if(CX&lt;120)</l>
+<l>    throw('CX一定要大于120')</l>
+<l>endif</l>
+<l>create_dict (Handle)</l>
+<c></c>
+<l>create_Control (Handle, DictHandle, ID, '参数', X, Y, CX, CY, pName)</l>
+<l>set_dict_tuple (Handle, '默认值', Val)</l>
+<c></c>
+<l>set_dict_tuple (Handle, '类型', Type)</l>
+<l>set_dict_tuple (Handle, '限制', Limit)</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="Create_Parm">
+<parameters>
+<parameter id="CX"/>
+<parameter id="CY"/>
+<parameter id="DictHandle"/>
+<parameter id="ID"/>
+<parameter id="Limit"/>
+<parameter id="Type"/>
+<parameter id="Val"/>
+<parameter id="X"/>
+<parameter id="Y"/>
+<parameter id="pName"/>
 </parameters>
 </docu>
 </procedure>

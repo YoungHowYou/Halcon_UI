@@ -6,27 +6,22 @@
 #include "StringQueue.h"
 using namespace HalconCpp;
 
-static HTuple inDict;
-static HTuple outQueue;
-static QueueHandle inQueue;
-
-#define DEFHalconForPr                                          \
-    HTuple hv_GenParamValue, hv_Index;                          \
-    HTuple hv_ControlHandle, hv_ControlType, hv_ID, hv_X, hv_Y; \
-    HTuple hv_CX, hv_CY, hv_pName, hv_Text;                     \
-    GetDictParam(inDict, "keys", HTuple(), &hv_GenParamValue);  \
-    HTuple end_val8 = hv_GenParamValue.TupleLength() - 1;       \
-    HTuple step_val8 = 1;                                       \
+#define DEFHalconForPr                                                 \
+    HTuple hv_GenParamValue, hv_Index;                                 \
+    HTuple hv_ControlHandle, hv_ControlType, hv_ID, hv_X, hv_Y;        \
+    HTuple hv_CX, hv_CY, hv_pName, hv_Text;                            \
+    GetDictParam(params->inDict, "keys", HTuple(), &hv_GenParamValue); \
+    HTuple end_val8 = hv_GenParamValue.TupleLength() - 1;              \
+    HTuple step_val8 = 1;                                              \
     for (hv_Index = 0; hv_Index.Continue(end_val8, step_val8); hv_Index += step_val8)
 
-#define GetDictTuple_hv_ID_hv_X_hv_Y_hv_CX_hv_CY_hv_pName_hv_Text \
-    GetDictTuple(hv_ControlHandle, u8"控件ID", &hv_ID);           \
-    GetDictTuple(hv_ControlHandle, "X", &hv_X);                   \
-    GetDictTuple(hv_ControlHandle, "Y", &hv_Y);                   \
-    GetDictTuple(hv_ControlHandle, "CX", &hv_CX);                 \
-    GetDictTuple(hv_ControlHandle, "CY", &hv_CY);                 \
-    GetDictTuple(hv_ControlHandle, u8"标题", &hv_pName);          \
-    GetDictTuple(hv_ControlHandle, u8"默认内容", &hv_Text);
+#define HGetDictTuples                                  \
+    GetDictTuple(hv_ControlHandle, u8"控件ID", &hv_ID); \
+    GetDictTuple(hv_ControlHandle, "X", &hv_X);         \
+    GetDictTuple(hv_ControlHandle, "Y", &hv_Y);         \
+    GetDictTuple(hv_ControlHandle, "CX", &hv_CX);       \
+    GetDictTuple(hv_ControlHandle, "CY", &hv_CY);       \
+    GetDictTuple(hv_ControlHandle, u8"标题", &hv_pName);
 
 // 基类声明
 
@@ -45,6 +40,8 @@ public:
     HTuple 权限;
     HTuple 参数类型;
     HTuple 参数限制;
+    HTuple outQueue;
+
     参数修改对话框类(HWINDOW m_hWindows, HTuple hv_ParmDict, HTuple hv_Key_Tuple, const wchar_t *TiteString)
     {
         父窗口 = m_hWindows;
@@ -356,6 +353,7 @@ public:
     const wchar_t *标题栏图标;
     HTuple 数据库序号;
     HFONTX 字体资源;
+    HTuple outQueue;
     参数设置对话框类(HWINDOW m_hWindows, HTuple hv_ParmDict, HTuple hv_ID, const wchar_t *TiteString, const wchar_t *IocPath)
     {
         父窗口 = m_hWindows;
@@ -459,13 +457,12 @@ private:
     }
     int 导出参数按钮按下事件(BOOL *pbHandled)
     {
-        
 
         return 0;
     }
     int 导入参数按钮按下事件(BOOL *pbHandled)
     {
-        
+
         HTuple json;
         char *errmsg;
         DictToJson(参数字典, HTuple(), HTuple(), &json);
@@ -547,19 +544,69 @@ private:
     }
 };
 
+class 窗口类
+{
+public:
+    HWINDOW m_hWindow;
+    int x, y, cx, cy;
+    HTuple outQueue;
+    QueueHandle inQueue;
+
+    窗口类(HTuple in_x, HTuple in_y, HTuple in_cx, HTuple in_cy, HTuple outQueue_, QueueHandle inQueue_)
+        : x(in_x.L()), y(in_y.L()), cx(in_cx.L()), cy(in_cy.L()), outQueue(outQueue_), inQueue(inQueue_)
+    {
+        Create();
+    }
+
+    ~窗口类()
+    {
+    }
+
+private:
+    void Create()
+    {
+        m_hWindow = XWnd_Create(0, 0, 1920, 1040, L"YouEyE", NULL, window_style_caption | window_style_border | window_style_center | window_style_icon | window_style_title | window_style_btn_min | window_style_btn_close); // 创建窗口
+        XWnd_RegEventCPP(m_hWindow, WM_CLOSE, &窗口类::WM_Close_Event);
+        // XWnd_RegEventCPP(m_hWindow, WM_CREATE,&窗口类::WM_CREATE_Event);
+    }
+    int WM_Close_Event(UINT nFlags, POINT *pPt, BOOL *pbHandled)
+    {
+        int ret = MessageBoxA(XWnd_GetHWND(m_hWindow), u8"确认关闭吗？", u8"关闭确认", MB_YESNO);
+        if (ret == IDYES)
+        {
+            HTuple hv_Message;
+            CreateMessage(&hv_Message);
+            SetMessageTuple(hv_Message, "CMD", 0);
+            EnqueueMessage(outQueue, hv_Message, HTuple(), HTuple());
+            ClearMessage(hv_Message);
+        }
+        else
+        {
+            *pbHandled = TRUE;
+        }
+        return 0;
+    }
+    // int WM_CREATE_Event( UINT nFlags, POINT *pPt, BOOL *pbHandled)
+    //{
+
+    // return 0;
+    //}
+};
+
 class 控件类
 {
 public:
     HWINDOW m_hWindow;
-    HELE m_hButton;
+    HELE m_HELE;
     int C_ID, x, y, cx, cy;
     HTuple Pname;
+    HTuple outQueue;
 
     // 基类构造函数（不调用Create，留给派生类决定）
     控件类(HWINDOW in_m_hWindow, HTuple in_C_ID, HTuple in_x, HTuple in_y,
-           HTuple in_cx, HTuple in_cy, HTuple in_Pname)
+           HTuple in_cx, HTuple in_cy, HTuple in_Pname, HTuple outQueue_)
         : m_hWindow(in_m_hWindow), C_ID(in_C_ID.L()), x(in_x.L()), y(in_y.L()),
-          cx(in_cx.L()), cy(in_cy.L()), Pname(in_Pname)
+          cx(in_cx.L()), cy(in_cy.L()), Pname(in_Pname), outQueue(outQueue_)
     {
     }
 
@@ -574,8 +621,8 @@ class 按钮类 : public 控件类
 public:
     // 派生类手动写构造函数，显式调用Create
     按钮类(HWINDOW in_m_hWindow, HTuple in_C_ID, HTuple in_x, HTuple in_y,
-           HTuple in_cx, HTuple in_cy, HTuple in_Pname)
-        : 控件类(in_m_hWindow, in_C_ID, in_x, in_y, in_cx, in_cy, in_Pname)
+           HTuple in_cx, HTuple in_cy, HTuple in_Pname, HTuple outQueue_)
+        : 控件类(in_m_hWindow, in_C_ID, in_x, in_y, in_cx, in_cy, in_Pname, outQueue_)
     {
         Create(); // 关键：在这里调用派生类的Create
     }
@@ -583,8 +630,8 @@ public:
 protected:
     void Create() override
     {
-        m_hButton = XBtn_Create(x, y, cx, cy, XC_utf8tow(Pname.S()), m_hWindow);
-        XEle_RegEventCPP(m_hButton, XE_BNCLICK, &按钮类::OnEventBtnClick);
+        m_HELE = XBtn_Create(x, y, cx, cy, Pname.S().TextW(), m_hWindow);
+        XEle_RegEventCPP(m_HELE, XE_BNCLICK, &按钮类::OnEventBtnClick);
     }
 
 private:
@@ -597,4 +644,196 @@ private:
         ClearMessage(hv_Message);
         return 0; // 事件的返回值
     }
+};
+
+class 参数类
+{
+public:
+    HWINDOW m_hWindow;
+    HELE 参数值容器;
+    int C_ID, x, y, cx, cy;
+    HTuple Pname;
+    HTuple outQueue;
+    HTuple 默认值;
+    HTuple 数据类型;
+    HTuple 参数限制;
+    // 派生类手动写构造函数，显式调用Create
+    参数类(HWINDOW in_m_hWindow, HTuple in_C_ID, HTuple in_x, HTuple in_y,
+           HTuple in_cx, HTuple in_cy, HTuple in_Pname, HTuple outQueue_, HTuple 默认值_, HTuple 数据类型_, HTuple 限制_)
+    {
+        m_hWindow = in_m_hWindow;
+        C_ID = in_C_ID.L();
+        x = in_x.L();
+        y = in_y.L();
+        cx = in_cx.L();
+        cy = in_cy.L();
+        Pname = in_Pname;
+        outQueue = outQueue_;
+        默认值 = 默认值_;
+        数据类型 = 数据类型_;
+        参数限制 = 限制_;
+        Create(); // 关键：在这里调用派生类的Create
+    }
+
+private:
+    void Create()
+    {
+        HELE m_Tite = XEdit_Create(x, y, 60, cy, m_hWindow);
+        XEdit_SetText(m_Tite, Pname.S().TextW());
+        XEdit_EnableReadOnly(m_Tite, true);
+        HELE m_hButton = XBtn_Create(x + cx - 30, y, 30, cy, L"应用", m_hWindow);
+        参数值容器 = XEdit_Create(x + 61, y, cx - 61 - 29, cy, m_hWindow);
+        if (数据类型.S() == "string")
+        {
+            XEdit_SetText(参数值容器, 默认值.S().TextW());
+        }
+        else if (数据类型.S() == "int")
+        {
+            HTuple 参数值I;
+            TupleString(默认值, ".0f", &参数值I);
+            XEdit_SetText(参数值容器, 参数值I.S().TextW());
+        }
+        else if (数据类型.S() == "double")
+        {
+            HTuple 参数值D;
+            TupleString(默认值, ".3f", &参数值D);
+            XEdit_SetText(参数值容器, 参数值D.S().TextW());
+        }
+
+        XEle_RegEventCPP(m_hButton, XE_BNCLICK, &参数类::OnEventBtnClick);
+    }
+
+    int OnEventBtnClick(BOOL *pbHandled) // 按钮点击事件响应
+    {
+        HTuple hv_Message;
+        CreateMessage(&hv_Message);
+        SetMessageTuple(hv_Message, "CMD", C_ID);
+        wchar_t pOut[32];
+        int len = XEdit_GetText(参数值容器, pOut, 32);
+        if (数据类型.S() == "string")
+        {
+
+        }
+        else if (数据类型.S() == "int")
+        {
+           HTuple hv_TupleV;
+           HTuple hv_TupleVChar(pOut);
+           TupleNumber(hv_TupleVChar, &hv_TupleV);
+           SetMessageTuple(hv_Message, "Data", hv_TupleV);
+
+        }
+        else if (数据类型.S() == "double")
+        {
+            
+        }
+
+        EnqueueMessage(outQueue, hv_Message, HTuple(), HTuple());
+        ClearMessage(hv_Message);
+        return 0; // 事件的返回值
+    }
+
+    // int 整数类型文本框值改变(BOOL *pbHandled)
+    // {
+    //     int ret;
+    //     wchar_t pOut[6];
+    //     int len = XEdit_GetText(参数值容器, pOut, 6);
+    //     // ret = MessageBox(NULL, pOut, u8"参数显示", MB_YESNO);
+    //     HTuple hv_TupleV;
+    //     HTuple hv_TupleVChar(pOut);
+
+    //     TupleNumber(hv_TupleVChar, &hv_TupleV);
+    //     if (hv_TupleV.L() < 参数限制[0].L() || hv_TupleV.L() > 参数限制[1].L())
+    //     {
+
+    //         ret = MessageBox(NULL, u8"参数不合规", u8"参数显示", MB_YESNO);
+    //         return 0;
+    //     }
+    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
+    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
+    //     return 0;
+    // }
+    // int 浮点类型文本框值改变(BOOL *pbHandled)
+    // {
+    //     int ret;
+    //     wchar_t pOut[16];
+    //     int len = XEdit_GetText(参数值容器, pOut, 16);
+    //     HTuple hv_TupleV;
+    //     HTuple hv_TupleVChar(pOut);
+    //     // ret = MessageBox(NULL, pOut, u8"参数显示", MB_YESNO);
+    //     TupleNumber(hv_TupleVChar, &hv_TupleV);
+
+    //     if (hv_TupleV.D() < 参数限制[0].D() || hv_TupleV.D() > 参数限制[1].D())
+    //     {
+    //         ret = MessageBox(NULL, u8"参数不合规，请看上方提示", u8"参数显示", MB_YESNO);
+    //         return 0;
+    //     }
+    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
+    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
+    //     return 0;
+    // }
+    // int 字符串枚举选择框值改变(BOOL *pbHandled)
+    // {
+    //     int ret;
+    //     wchar_t pOut[16];
+    //     int len = XEdit_GetText(参数值容器, pOut, 16);
+    //     // ret = MessageBox(NULL, pOut, u8"完成参数修改", MB_YESNO);
+    //     HTuple hv_TupleV(pOut);
+    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
+    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
+    //     return 0;
+    // }
+    // int 整数枚举选择框值改变(BOOL *pbHandled)
+    // {
+    //     int ret;
+    //     wchar_t pOut[6];
+    //     int len = XEdit_GetText(参数值容器, pOut, 6);
+    //     HTuple hv_TupleV;
+    //     HTuple hv_TupleVChar(pOut);
+    //     TupleNumber(hv_TupleVChar, &hv_TupleV);
+    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
+    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
+    //     return 0;
+    // }
+    // int 浮点数枚举选择框值改变(BOOL *pbHandled)
+    // {
+    //     int ret;
+    //     wchar_t pOut[16];
+    //     int len = XEdit_GetText(参数值容器, pOut, 16);
+    //     HTuple hv_TupleV;
+    //     HTuple hv_TupleVChar(pOut);
+    //     TupleNumber(hv_TupleVChar, &hv_TupleV);
+    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
+    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
+    //     return 0;
+    // }
+    // int 字符串类型文本框改变(BOOL *pbHandled)
+    // {
+    //     int ret;
+    //     wchar_t pOut[256];
+    //     int len = XEdit_GetText(参数值容器, pOut, 256);
+    //     HTuple hv_TupleV(pOut);
+    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
+    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
+    //     return 0;
+    // }
+    // int 文件路径改变(BOOL *pbHandled)
+    // {
+    //     int ret;
+    //     wchar_t pOut[256];
+    //     int len = XEdit_GetText(参数值容器, pOut, 256);
+    //     HTuple hv_TupleV(pOut);
+    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
+    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
+    //     return 0;
+    // }
+    // int 文件夹路径改变(BOOL *pbHandled)
+    // {
+    //     int ret;
+    //     wchar_t pOut[256];
+    //     int len = XEdit_GetText(参数值容器, pOut, 256);
+    //     HTuple hv_TupleV(pOut);
+    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
+    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
+    //     return 0;
+    // }
 };
