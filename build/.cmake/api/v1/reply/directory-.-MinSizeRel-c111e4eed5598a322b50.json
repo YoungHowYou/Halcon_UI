@@ -1,0 +1,181 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"HALCON_AddExtensionPackage"
+		],
+		"files" : 
+		[
+			"C:/Users/young/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 59,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 316,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 363,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 473,
+				"parent" : 1
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/help",
+			"paths" : 
+			[
+				"build/help/operators_en_US.idx",
+				"build/help/operators_en_US.key",
+				"build/help/operators_en_US.num",
+				"build/help/operators_en_US.ref",
+				"build/help/operators_en_US.sta"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/doc/html/reference",
+			"paths" : 
+			[
+				"build/doc/html/reference/index.html",
+				"build/doc/html/reference/index_by_name.html",
+				"build/doc/html/reference/index_classes.html",
+				"build/doc/html/reference/HIKap.html",
+				"build/doc/html/reference/toc_userextensions.html"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/lib/x64-win64",
+			"paths" : 
+			[
+				"C:/Users/young/Desktop/Source/Halcon_Extension/Halcon_UI/bin/MinSizeRel/Halcon_UI.lib"
+			],
+			"targetId" : "Halcon_UI::@6890427a1f51a3e7e1df",
+			"targetIndex" : 1,
+			"targetIsImportLibrary" : true,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/bin/x64-win64",
+			"paths" : 
+			[
+				"C:/Users/young/Desktop/Source/Halcon_Extension/Halcon_UI/bin/MinSizeRel/Halcon_UI.dll"
+			],
+			"targetId" : "Halcon_UI::@6890427a1f51a3e7e1df",
+			"targetIndex" : 1,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/lib/x64-win64",
+			"paths" : 
+			[
+				"C:/Users/young/Desktop/Source/Halcon_Extension/Halcon_UI/bin/MinSizeRel/Halcon_UIc.lib"
+			],
+			"targetId" : "Halcon_UIcint::@6890427a1f51a3e7e1df",
+			"targetIndex" : 5,
+			"targetIsImportLibrary" : true,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/bin/x64-win64",
+			"paths" : 
+			[
+				"C:/Users/young/Desktop/Source/Halcon_Extension/Halcon_UI/bin/MinSizeRel/Halcon_UIc.dll"
+			],
+			"targetId" : "Halcon_UIcint::@6890427a1f51a3e7e1df",
+			"targetIndex" : 5,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/include",
+			"paths" : 
+			[
+				"build/HCHalcon_UI.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/lib/x64-win64",
+			"paths" : 
+			[
+				"C:/Users/young/Desktop/Source/Halcon_Extension/Halcon_UI/bin/MinSizeRel/Halcon_UIcpp.lib"
+			],
+			"targetId" : "Halcon_UIcppint::@6890427a1f51a3e7e1df",
+			"targetIndex" : 6,
+			"targetIsImportLibrary" : true,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/bin/x64-win64",
+			"paths" : 
+			[
+				"C:/Users/young/Desktop/Source/Halcon_Extension/Halcon_UI/bin/MinSizeRel/Halcon_UIcpp.dll"
+			],
+			"targetId" : "Halcon_UIcppint::@6890427a1f51a3e7e1df",
+			"targetIndex" : 6,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/include",
+			"paths" : 
+			[
+				"build/HCPPHalcon_UI.h"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	}
+}

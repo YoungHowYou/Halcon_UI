@@ -1,0 +1,17 @@
+Open_Frameworkwindows(DictHandle,OutQueueHandle)
+short.ascii=Laplace Filter.
+keywords=UserExtensions
+module=0 Foundation
+parameter=DictHandle
+parameter_class=input_control
+type_list=handle
+default_type=handle
+sem_type=handle
+multivalue=false
+parameter=OutQueueHandle
+parameter_class=input_control
+type_list=handle
+default_type=handle
+sem_type=handle
+multivalue=false
+

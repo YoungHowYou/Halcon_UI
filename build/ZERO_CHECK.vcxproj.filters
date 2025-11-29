@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\young\Desktop\Source\Halcon_Extension\Halcon_UI\build\CMakeFiles\5f7dd76f1fa82d576d3671ac7ed2d342\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{5520371C-2DE1-3CFB-8EE6-1AB4039EDDFF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

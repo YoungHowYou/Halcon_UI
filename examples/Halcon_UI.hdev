@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="24.11.1.0">
+<procedure name="main">
+<interface/>
+<body>
+<l>create_dict (DictHandle)</l>
+<l>create_message_queue (OutQueueHandle)</l>
+<l>create_Control (DictHandle, 2, '按钮', 200, 200, 100, 20, '按钮1', 'Text')</l>
+<c></c>
+<l>create_Control (DictHandle, 3, '按钮', 200, 400, 100, 20, '按钮1', 'Text')</l>
+<c></c>
+<c></c>
+<l>Open_Frameworkwindows (DictHandle, OutQueueHandle)</l>
+<l>dequeue_message (OutQueueHandle, 'timeout', 1, MessageHandle)</l>
+<l>get_message_tuple (MessageHandle, 'CMD', TupleData)</l>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+<procedure name="create_Control">
+<interface>
+<ic>
+<par name="FatherHandle" base_type="ctrl" dimension="0"/>
+<par name="ID" base_type="ctrl" dimension="0"/>
+<par name="Type" base_type="ctrl" dimension="0"/>
+<par name="X" base_type="ctrl" dimension="0"/>
+<par name="Y" base_type="ctrl" dimension="0"/>
+<par name="CX" base_type="ctrl" dimension="0"/>
+<par name="CY" base_type="ctrl" dimension="0"/>
+<par name="pName" base_type="ctrl" dimension="0"/>
+<par name="Text" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<l>create_dict (Handle)</l>
+<l>if (ID&lt;2 and ID&gt;512)</l>
+<l>    throw ('ID要大于2，小于512')</l>
+<l>endif</l>
+<l>set_dict_tuple (Handle, '控件ID', ID)</l>
+<l>set_dict_tuple (Handle, '控件类型', Type)</l>
+<l>set_dict_tuple (Handle, 'X', X)</l>
+<l>set_dict_tuple (Handle, 'Y', Y)</l>
+<l>set_dict_tuple (Handle, 'CX', CX)</l>
+<l>set_dict_tuple (Handle, 'CY', CY)</l>
+<l>set_dict_tuple (Handle, '标题', pName)</l>
+<l>set_dict_tuple (Handle, '默认内容', Text)</l>
+<l>set_dict_tuple (FatherHandle, '控件'+ID, Handle)</l>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="create_Control">
+<parameters>
+<parameter id="CX"/>
+<parameter id="CY"/>
+<parameter id="FatherHandle"/>
+<parameter id="ID">
+<default_type>integer</default_type>
+<default_value>2</default_value>
+<description lang="zh_CN">控件的ID，是控件的唯一标号，0给了窗口关闭按钮，1给了窗口，所以从2开始到512结束</description>
+<mixed_type>false</mixed_type>
+<multivalue>false</multivalue>
+<sem_type>integer</sem_type>
+<type_list>
+<item>integer</item>
+</type_list>
+<value_max>65535</value_max>
+<value_min>2</value_min>
+</parameter>
+<parameter id="Text"/>
+<parameter id="Type">
+<default_type>string</default_type>
+<default_value>'按钮'</default_value>
+<description lang="zh_CN">目前只支持这么多控件类型'按钮','文件','文件夹','图片','参数','树型'</description>
+<mixed_type>false</mixed_type>
+<multivalue>false</multivalue>
+<sem_type>string</sem_type>
+<type_list>
+<item>string</item>
+</type_list>
+<values>
+<item>'按钮'</item>
+<item>'文件'</item>
+<item>'文件夹'</item>
+<item>'图片'</item>
+<item>'参数'</item>
+<item>'树型'</item>
+</values>
+</parameter>
+<parameter id="X">
+<default_type>integer</default_type>
+<default_value>0</default_value>
+<description lang="zh_CN">控件X坐标</description>
+<multivalue>false</multivalue>
+<sem_type>integer</sem_type>
+<type_list>
+<item>integer</item>
+</type_list>
+<value_max>1920</value_max>
+<value_min>0</value_min>
+<values>
+<item>0</item>
+<item>1920</item>
+</values>
+</parameter>
+<parameter id="Y">
+<default_type>integer</default_type>
+<default_value>0</default_value>
+<description lang="zh_CN">控件Y坐标</description>
+<mixed_type>false</mixed_type>
+<multivalue>true</multivalue>
+<sem_type>integer</sem_type>
+<type_list>
+<item>integer</item>
+</type_list>
+<value_max>1030</value_max>
+<value_min>0</value_min>
+<values>
+<item>0</item>
+<item>1030</item>
+</values>
+</parameter>
+<parameter id="pName">
+<default_type>string</default_type>
+<default_value>'控件1'</default_value>
+<description lang="zh_CN">控件的标题，会显示在控件上</description>
+<mixed_type>false</mixed_type>
+<multivalue>false</multivalue>
+<sem_type>string</sem_type>
+<type_list>
+<item>string</item>
+</type_list>
+<values>
+<item>'开始'</item>
+<item>'结束'</item>
+<item>'启动'</item>
+<item>'查找'</item>
+</values>
+</parameter>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

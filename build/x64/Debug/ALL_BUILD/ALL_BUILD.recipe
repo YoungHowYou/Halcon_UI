@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\young\Desktop\Source\Halcon_Extension\Halcon_UI\build\x64\Debug\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\young\Desktop\Source\Halcon_Extension\Halcon_UI\build\x64\Debug\Halcon_UI_help_en_US</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\young\Desktop\Source\Halcon_Extension\Halcon_UI\build\x64\Debug\Halcon_UI_help</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\young\Desktop\Source\Halcon_Extension\Halcon_UI\build\x64\Debug\Halcon_UI_html</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\young\Desktop\Source\Halcon_Extension\Halcon_UI\bin\Halcon_UI.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\young\Desktop\Source\Halcon_Extension\Halcon_UI\bin\Halcon_UIc.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\young\Desktop\Source\Halcon_Extension\Halcon_UI\bin\Halcon_UIcpp.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\young\Desktop\Source\Halcon_Extension\Halcon_UI\build\x64\Debug\ALL_BUILD</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
