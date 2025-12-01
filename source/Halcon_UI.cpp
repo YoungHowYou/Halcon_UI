@@ -33,8 +33,17 @@ DWORD WINAPI ThreadFunc(LPVOID lpParam)
 
     // 初始化
     // HWINDOW hWindow = XWnd_Create(0, 0, 1920, 1040, L"YouEyE", NULL, window_style_caption | window_style_border | window_style_center | window_style_icon | window_style_title | window_style_btn_min | window_style_btn_close); // 创建窗口
-    窗口类 窗口(0, 0, 1920, 1040, params->outQueue, params->inQueue);
+     HTuple hv_WVAL,hv_HVAL;
+    GetDictTuple(params->inDict, u8"宽", &hv_WVAL);
+    GetDictTuple(params->inDict, u8"高", &hv_HVAL);
+    int W=hv_WVAL;
+    int H=hv_HVAL;
+    窗口类 窗口(0, 0, W, H, params->outQueue, params->inQueue);
+    RemoveDictKey(params->inDict, u8"宽");
+    RemoveDictKey(params->inDict, u8"高");
 
+    HTuple hv_Message;
+    CreateMessage(&hv_Message);
     std::vector<按钮类> buttons;
     buttons.reserve(64); // 预分配空间
     std::vector<参数类> Prams;
@@ -93,17 +102,51 @@ DWORD WINAPI ThreadFunc(LPVOID lpParam)
         else if (0 != (int(hv_ControlType == HTuple(u8"图片"))))
         {
             HGetDictTuples
+                HTuple hv_mode,
+                HwindowsHandle;
+            GetDictTuple(hv_ControlHandle, u8"模式", &hv_mode);
+
+            OpenWindow(hv_Y,  // x坐标
+                       hv_X,  // y坐标
+                       hv_CX, // 宽度
+                       hv_CY, // 高度
+                       (_int64)XWnd_GetHWND(窗口.m_hWindow),
+                       hv_mode,
+                       "",
+                       &HwindowsHandle);
+            SetMessageTuple(hv_Message, hv_pName + "_" + hv_ID, HwindowsHandle);
+            
         }
         else if (0 != (int(hv_ControlType == HTuple(u8"文本"))))
         {
             HGetDictTuples
+                HTuple hv_mode,
+                hv_BorderWidth, hv_BorderColour, hv_BackgroundColour, HTextwindowsHandle;
+
+            GetDictTuple(hv_ControlHandle, u8"模式", &hv_mode);
+            GetDictTuple(hv_ControlHandle, u8"线框", &hv_BorderWidth);
+            GetDictTuple(hv_ControlHandle, u8"线框色", &hv_BorderColour);
+            GetDictTuple(hv_ControlHandle, u8"背景色", &hv_BackgroundColour);
+            OpenTextwindow(hv_Y,  // x坐标
+                           hv_X,  // y坐标
+                           hv_CX, // 宽度
+                           hv_CY, // 高度
+                           hv_BorderWidth,
+                           hv_BorderColour,
+                           hv_BackgroundColour,
+                           (_int64)XWnd_GetHWND(窗口.m_hWindow),
+                           hv_mode,
+                           "",
+                           &HTextwindowsHandle);
+            //ClearWindow(HTextwindowsHandle);
+
+
+            SetMessageTuple(hv_Message, hv_pName + "_" + hv_ID, HTextwindowsHandle);
         }
     }
 
     XWnd_ShowWindow(窗口.m_hWindow, SW_SHOW);
     // 通知初始化完成
-    HTuple hv_Message;
-    CreateMessage(&hv_Message);
     SetMessageTuple(hv_Message, "CMD", 1);
     EnqueueMessage(params->outQueue, hv_Message, HTuple(), HTuple());
     ClearMessage(hv_Message);

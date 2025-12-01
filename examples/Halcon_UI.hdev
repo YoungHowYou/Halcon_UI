@@ -3,16 +3,35 @@
 <procedure name="main">
 <interface/>
 <body>
-<l>create_dict (DictHandle)</l>
-<l>create_message_queue (OutQueueHandle)</l>
-<c></c>
-<l>Create_Button (DictHandle, '开始检测', 2, 100, 100, 40, 20)</l>
-<l>Create_Parm (DictHandle, '速度', 3, 100, 125, 200, 20, 100, 'int', [0,5])</l>
-<c></c>
-<c></c>
+<l>Create_Windows (1200, 900, DictHandle, OutQueueHandle)</l>
+<l>Create_Button (DictHandle, '开始检测', 2, 100, 100, 60, 20)</l>
+<l>Create_Parm (DictHandle, '速度', 3, 100, 125, 200, 20, 100, 'int', [0,500])</l>
+<l>Create_ImageWindows (DictHandle, '显示', 4, 500, 50, 256, 256, 'visible')</l>
+<l>Create_TextWindows (DictHandle, '文本', 5, 800, 50, 256, 256, 2, 'black', 'white', 'visible')</l>
 <l>Open_Frameworkwindows (DictHandle, OutQueueHandle)</l>
 <l>dequeue_message (OutQueueHandle, 'timeout', 1, MessageHandle)</l>
 <l>get_message_tuple (MessageHandle, 'CMD', TupleData)</l>
+<l>get_message_tuple (MessageHandle, '显示_4', TupleData1)</l>
+<l>get_message_tuple (MessageHandle, '文本_5', TupleData2)</l>
+<c></c>
+<c></c>
+<l>read_image (Image, 'printer_chip/printer_chip_01')</l>
+<l>disp_obj (Image, TupleData1)</l>
+<l>write_string (TupleData2, 'hello')</l>
+<c></c>
+<l>while(1)</l>
+<l>    try</l>
+<l>        dequeue_message (OutQueueHandle, 'timeout', 1, MessageHandle)</l>
+<l>        get_message_tuple (MessageHandle, 'CMD', TupleData)</l>
+<l>        if(TupleData=0)</l>
+<l>            break</l>
+<l>        endif</l>
+<c></c>
+<l>    catch (Exception)</l>
+<l>    endtry</l>
+<c></c>
+<l>endwhile</l>
+<l>* clear_window (TupleData2)</l>
 </body>
 <docu id="main">
 <parameters/>
@@ -210,6 +229,107 @@
 <parameter id="X"/>
 <parameter id="Y"/>
 <parameter id="pName"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="Create_ImageWindows">
+<interface>
+<ic>
+<par name="DictHandle" base_type="ctrl" dimension="0"/>
+<par name="pName" base_type="ctrl" dimension="0"/>
+<par name="ID" base_type="ctrl" dimension="0"/>
+<par name="X" base_type="ctrl" dimension="0"/>
+<par name="Y" base_type="ctrl" dimension="0"/>
+<par name="CX" base_type="ctrl" dimension="0"/>
+<par name="CY" base_type="ctrl" dimension="0"/>
+<par name="mode" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<l>create_dict (Handle)</l>
+<l>create_Control (Handle, DictHandle, ID, '图片', X, Y, CX, CY, pName)</l>
+<l>set_dict_tuple (Handle, '模式',mode)</l>
+<l>return ()</l>
+</body>
+<docu id="Create_ImageWindows">
+<parameters>
+<parameter id="CX"/>
+<parameter id="CY"/>
+<parameter id="DictHandle"/>
+<parameter id="ID"/>
+<parameter id="X"/>
+<parameter id="Y"/>
+<parameter id="mode"/>
+<parameter id="pName"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="Create_TextWindows">
+<interface>
+<ic>
+<par name="DictHandle" base_type="ctrl" dimension="0"/>
+<par name="pName" base_type="ctrl" dimension="0"/>
+<par name="ID" base_type="ctrl" dimension="0"/>
+<par name="X" base_type="ctrl" dimension="0"/>
+<par name="Y" base_type="ctrl" dimension="0"/>
+<par name="CX" base_type="ctrl" dimension="0"/>
+<par name="CY" base_type="ctrl" dimension="0"/>
+<par name="BorderWidth" base_type="ctrl" dimension="0"/>
+<par name="BorderColour" base_type="ctrl" dimension="0"/>
+<par name="BackgroundColour" base_type="ctrl" dimension="0"/>
+<par name="mode" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<l>create_dict (Handle)</l>
+<c></c>
+<l>create_Control (Handle, DictHandle, ID, '图片', X, Y, CX, CY, pName)</l>
+<l>set_dict_tuple (Handle, '线框',BorderWidth)</l>
+<l>set_dict_tuple (Handle, '线框色',BorderColour)</l>
+<l>set_dict_tuple (Handle, '背景色',BackgroundColour)</l>
+<l>set_dict_tuple (Handle, '模式',mode)</l>
+<l>return ()</l>
+</body>
+<docu id="Create_TextWindows">
+<parameters>
+<parameter id="BackgroundColour"/>
+<parameter id="BorderColour"/>
+<parameter id="BorderWidth"/>
+<parameter id="CX"/>
+<parameter id="CY"/>
+<parameter id="DictHandle"/>
+<parameter id="ID"/>
+<parameter id="X"/>
+<parameter id="Y"/>
+<parameter id="mode"/>
+<parameter id="pName"/>
+</parameters>
+</docu>
+</procedure>
+<procedure name="Create_Windows">
+<interface>
+<ic>
+<par name="W" base_type="ctrl" dimension="0"/>
+<par name="H" base_type="ctrl" dimension="0"/>
+</ic>
+<oc>
+<par name="DictHandle" base_type="ctrl" dimension="0"/>
+<par name="OutQueueHandle" base_type="ctrl" dimension="0"/>
+</oc>
+</interface>
+<body>
+<l>create_dict (DictHandle)</l>
+<l>create_message_queue (OutQueueHandle)</l>
+<l>set_dict_tuple (DictHandle, '宽', W)</l>
+<l>set_dict_tuple (DictHandle, '高', H)</l>
+<l>return ()</l>
+</body>
+<docu id="Create_Windows">
+<parameters>
+<parameter id="DictHandle"/>
+<parameter id="H"/>
+<parameter id="OutQueueHandle"/>
+<parameter id="W"/>
 </parameters>
 </docu>
 </procedure>

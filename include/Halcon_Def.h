@@ -544,6 +544,274 @@ private:
     }
 };
 
+#define 图像窗口尺寸 960
+#define 缩放倍数 0.05
+class 图像放大镜类 
+{
+	public:
+		HWINDOW 放大镜窗口;
+		HTuple 图像窗口句柄;
+		HObject 图像;
+		HTuple 初始位置行, 初始位置列;
+		HTuple 当前显示区域行1, 当前显示区域列1, 当前显示区域行2, 当前显示区域列2;
+		bool 鼠标左键按下标志 = false;
+		bool 鼠标右键按下标志 = false;
+		HTuple 图像的高;
+		HTuple 图像的宽;
+		HTuple 最小显示区域宽度=64; // 设置最小显示区域宽度
+		HTuple 最小显示区域高度=64; // 设置最小显示区域高度
+		HTuple 最大显示区域宽度=65535; // 设置最大显示区域宽度
+		HTuple 最大显示区域高度=65535; // 设置最大显示区域高度
+		图像放大镜类(HWINDOW 父窗口句柄, HObject 输入图像, HTuple 纵坐标, HTuple 横坐标) 
+		{
+			图像 = 输入图像;
+			放大镜窗口 = XModalWnd_Create(图像窗口尺寸 + 18, 图像窗口尺寸 + 40, L"放大镜", XWnd_GetHWND(父窗口句柄));//, window_style_btn_close | window_style_title | window_style_icon | window_style_center | window_style_caption | window_style_border | WS_EX_TOPMOST);
+			OpenWindow(31, 9, 图像窗口尺寸, 图像窗口尺寸, (_int64)XWnd_GetHWND(放大镜窗口), "visible", "", &图像窗口句柄);
+			SetPart(图像窗口句柄, 纵坐标 - (图像窗口尺寸 / 8), 横坐标 - (图像窗口尺寸 / 8), 纵坐标 + (图像窗口尺寸 / 8), 横坐标 + (图像窗口尺寸 / 8));
+			DispObj(图像, 图像窗口句柄);
+			GetImageSize(图像, &图像的宽, &图像的高);
+			XWnd_RegEventCPP(放大镜窗口, WM_MOUSEWHEEL, &图像放大镜类::鼠标滚动事件);
+			XWnd_RegEventCPP(放大镜窗口, WM_LBUTTONDOWN, &图像放大镜类::鼠标左键按下事件);
+			XWnd_RegEventCPP(放大镜窗口, WM_MOUSEMOVE, &图像放大镜类::鼠标移动事件);
+			XWnd_RegEventCPP(放大镜窗口, WM_LBUTTONUP, &图像放大镜类::鼠标左键抬起事件);
+			XWnd_RegEventCPP(放大镜窗口, WM_RBUTTONDOWN, &图像放大镜类::鼠标右键按下事件);
+			XWnd_RegEventCPP(放大镜窗口, WM_RBUTTONUP, &图像放大镜类::鼠标右键抬起事件);
+			XWnd_RegEventCPP(放大镜窗口, WM_LBUTTONDBLCLK, &图像放大镜类::鼠标左键双击事件);
+
+			
+			int nResult = XModalWnd_DoModal(放大镜窗口);
+		}
+
+		~图像放大镜类() 
+		{
+			CloseWindow(图像窗口句柄);
+		}
+
+private:
+	int 鼠标滚动事件(UINT nFlags, POINT* pPt, BOOL* pbHandled)
+	{
+		try
+		{
+			HTuple 轮数 = GET_WHEEL_DELTA_WPARAM(nFlags);
+			GetPart(图像窗口句柄, &当前显示区域行1, &当前显示区域列1, &当前显示区域行2, &当前显示区域列2);
+			HTuple 显示区域宽度 = 当前显示区域行2 - 当前显示区域行1;
+			HTuple 显示区域高度 = 当前显示区域列2 - 当前显示区域列1;
+
+			HTuple 新显示区域行1, 新显示区域列1, 新显示区域行2, 新显示区域列2;
+			if (轮数 > 0) 
+			{
+				新显示区域行1 = 当前显示区域行1 + 显示区域高度 * 缩放倍数;
+				新显示区域列1 = 当前显示区域列1 + 显示区域宽度 * 缩放倍数;
+				新显示区域行2 = 当前显示区域行2 - 显示区域高度 * 缩放倍数;
+				新显示区域列2 = 当前显示区域列2 - 显示区域宽度 * 缩放倍数;
+			}
+			else 
+			{
+				新显示区域行1 = 当前显示区域行1 - 显示区域高度 * 缩放倍数;
+				新显示区域列1 = 当前显示区域列1 - 显示区域宽度 * 缩放倍数;
+				新显示区域行2 = 当前显示区域行2 + 显示区域高度 * 缩放倍数;
+				新显示区域列2 = 当前显示区域列2 + 显示区域宽度 * 缩放倍数;
+			}
+
+			// 限制显示区域大小
+			if (新显示区域行2 - 新显示区域行1 < 最小显示区域高度) 
+			{
+				新显示区域行1 = 当前显示区域行1;
+				新显示区域行2 = 当前显示区域行2;
+			}
+			if (新显示区域列2 - 新显示区域列1 < 最小显示区域宽度) 
+			{
+				新显示区域列1 = 当前显示区域列1;
+				新显示区域列2 = 当前显示区域列2;
+			}
+			if (新显示区域行2 - 新显示区域行1 > 最大显示区域高度) 
+			{
+				新显示区域行1 = 当前显示区域行1;
+				新显示区域行2 = 当前显示区域行2;
+			}
+			if (新显示区域列2 - 新显示区域列1 > 最大显示区域宽度) 
+			{
+				新显示区域列1 = 当前显示区域列1;
+				新显示区域列2 = 当前显示区域列2;
+			}
+
+			SetPart(图像窗口句柄, 新显示区域行1, 新显示区域列1, 新显示区域行2, 新显示区域列2);
+			ClearWindow(图像窗口句柄);
+			DispObj(图像, 图像窗口句柄);
+		}
+		catch (HException& HDevExpDefaultException)
+		{
+
+		}
+		return 0;
+	}
+	int 鼠标左键按下事件(UINT nFlags, POINT* pPt, BOOL* pbHandled)
+	{
+		try
+		{
+			HTuple 按键类型;
+			GetMposition(图像窗口句柄, &初始位置行, &初始位置列, &按键类型);
+			GetPart(图像窗口句柄, &当前显示区域行1, &当前显示区域列1, &当前显示区域行2, &当前显示区域列2);
+
+			鼠标左键按下标志 = true;
+		}
+		catch (HException& HDevExpDefaultException)
+		{
+
+		}
+		return 0;
+	}
+	int 鼠标右键按下事件(UINT nFlags, POINT* pPt, BOOL* pbHandled)
+	{
+		鼠标右键按下标志 = true;
+
+		try
+		{
+
+			HTuple 纵坐标, 横坐标,按键类型;
+			GetMposition(图像窗口句柄, &纵坐标, &横坐标, &按键类型);
+			HTuple 灰度值, 标题栏;
+			GetGrayval(图像, 纵坐标, 横坐标, &灰度值);
+			switch (灰度值.Length())
+			{
+				case 2:
+					标题栏 = HTuple(u8"纵坐标:") + 纵坐标 + HTuple(u8"\n横坐标:") + 横坐标 + HTuple(u8"\n 灰度:") + 灰度值[0] + HTuple(u8"\n 灰度:") + 灰度值[1];
+					break;
+				case 3:
+					标题栏 = HTuple(u8"纵坐标:") + 纵坐标 + HTuple(u8"\n横坐标:") + 横坐标 + HTuple(u8"\n 灰度R:") + 灰度值[0] + HTuple(u8"\n 灰度G:") + 灰度值[1] + HTuple(u8"\n 灰度B:") + 灰度值[2];
+					break;
+				default:
+					标题栏 = HTuple(u8"纵坐标:") + 纵坐标 + HTuple(u8"\n横坐标:") + 横坐标 + HTuple(u8"\n 灰度:") + 灰度值;
+					break;
+			}
+
+			HTuple W纵坐标, W横坐标;
+			ConvertCoordinatesImageToWindow(图像窗口句柄, 纵坐标, 横坐标+8, &W纵坐标, &W横坐标);
+			DispText(图像窗口句柄, 标题栏, "window", W纵坐标, W横坐标, "black", HTuple(), HTuple());
+		}
+		catch (HException& HDevExpDefaultException)
+		{
+
+		}
+		return 0;
+	}
+	int 鼠标右键抬起事件(UINT nFlags, POINT* pPt, BOOL* pbHandled)
+	{
+		鼠标右键按下标志 = false;
+
+		try
+		{
+			GetPart(图像窗口句柄, &当前显示区域行1, &当前显示区域列1, &当前显示区域行2, &当前显示区域列2);
+			ClearWindow(图像窗口句柄);
+			SetPart(图像窗口句柄, 当前显示区域行1, 当前显示区域列1, 当前显示区域行2, 当前显示区域列2);
+			DispObj(图像,图像窗口句柄);
+		}
+		catch (HException& HDevExpDefaultException)
+		{
+
+		}
+		return 0;
+
+	}
+	int 鼠标左键抬起事件(UINT nFlags, POINT* pPt, BOOL* pbHandled)
+	{
+		鼠标左键按下标志 = false;
+		return 0;
+	}
+	int 鼠标移动事件(UINT nFlags, POINT* pPt, BOOL* pbHandled)
+	{
+		if (鼠标左键按下标志)
+		{
+			
+			try
+			{
+				HTuple 按键类型, 目前位置行, 目前位置列;
+				GetMposition(图像窗口句柄, &目前位置行, &目前位置列, &按键类型);
+				HTuple 移动行数 = 目前位置行 - 初始位置行;
+				HTuple 移动列数 = 目前位置列 - 初始位置列;
+				SetPart(图像窗口句柄, 当前显示区域行1 - 移动行数, 当前显示区域列1 - 移动列数, 当前显示区域行2 - 移动行数, 当前显示区域列2 - 移动列数);
+				ClearWindow(图像窗口句柄);
+				DispObj(图像, 图像窗口句柄);
+				GetMposition(图像窗口句柄, &初始位置行, &初始位置列, &按键类型);
+				GetPart(图像窗口句柄, &当前显示区域行1, &当前显示区域列1, &当前显示区域行2, &当前显示区域列2);
+
+			}
+			// catch (Exception) 
+			catch (HException& HDevExpDefaultException)
+			{
+				鼠标左键按下标志 = false;
+
+			}
+
+		}
+		else if (鼠标右键按下标志)
+		{
+			try
+			{
+				HTuple 纵坐标, 横坐标, 按键类型;
+				GetMposition(图像窗口句柄, &纵坐标, &横坐标, &按键类型);
+				HTuple 灰度值, 标题栏;
+				GetGrayval(图像, 纵坐标, 横坐标, &灰度值);
+				switch (灰度值.Length())
+				{
+				case 2:
+					标题栏 = HTuple(u8"纵坐标:") + 纵坐标 + HTuple(u8"\n横坐标:") + 横坐标 + HTuple(u8"\n 灰度:") + 灰度值[0] + HTuple(u8"\n 灰度:") + 灰度值[1];
+					break;
+				case 3:
+					标题栏 = HTuple(u8"纵坐标:") + 纵坐标 + HTuple(u8"\n横坐标:") + 横坐标 + HTuple(u8"\n 灰度R:") + 灰度值[0] + HTuple(u8"\n 灰度G:") + 灰度值[1] + HTuple(u8"\n 灰度B:") + 灰度值[2];
+					break;
+				default:
+					标题栏 = HTuple(u8"纵坐标:") + 纵坐标 + HTuple(u8"\n横坐标:") + 横坐标 + HTuple(u8"\n 灰度:") + 灰度值;
+					break;
+				}
+
+				HTuple W纵坐标, W横坐标;
+				ConvertCoordinatesImageToWindow(图像窗口句柄, 纵坐标, 横坐标 + 8, &W纵坐标, &W横坐标);
+				GetPart(图像窗口句柄, &当前显示区域行1, &当前显示区域列1, &当前显示区域行2, &当前显示区域列2);
+				ClearWindow(图像窗口句柄);
+				SetPart(图像窗口句柄, 当前显示区域行1, 当前显示区域列1, 当前显示区域行2, 当前显示区域列2);
+				DispObj(图像, 图像窗口句柄);
+				DispText(图像窗口句柄, 标题栏, "window", W纵坐标, W横坐标, "black", HTuple(), HTuple());
+
+			}
+			// catch (Exception) 
+			catch (HException& HDevExpDefaultException)
+			{
+				鼠标右键按下标志 = false;
+
+			}
+		}
+		return 0;
+	}
+	int 鼠标左键双击事件(UINT nFlags, POINT* pPt, BOOL* pbHandled)
+	{
+		HTuple ROW1;
+		HTuple COL1;
+		if ((图像的高.L() - 图像的宽.L()) > 0)
+		{ 
+			ROW1 = 0;
+			COL1 = abs(图像的高.L() - 图像的宽.L()) / 2;
+		}
+		else
+		{ 
+			ROW1 = abs(图像的高.L() - 图像的宽.L()) / 2;
+			COL1 = 0;
+		}
+
+		SetPart(图像窗口句柄, -ROW1.L(), -COL1.L(), max(图像的高.L(), 图像的宽.L()) - ROW1.L(), max(图像的高.L(), 图像的宽.L()) - COL1.L());
+		//SetPart(图像窗口句柄, 0, 0, max(图像的高.L(), 图像的宽.L()), max(图像的高.L(), 图像的宽.L()));
+		ClearWindow(图像窗口句柄);
+		DispObj(图像, 图像窗口句柄);
+		return 0;
+
+	}
+
+};
+
+
+
+
+
 class 窗口类
 {
 public:
@@ -565,7 +833,9 @@ public:
 private:
     void Create()
     {
-        m_hWindow = XWnd_Create(0, 0, 1920, 1040, L"YouEyE", NULL, window_style_caption | window_style_border | window_style_center | window_style_icon | window_style_title | window_style_btn_min | window_style_btn_close); // 创建窗口
+        m_hWindow = XWnd_Create(0, 0, cx, cy, L"YouEyE", NULL, window_style_caption | window_style_border | window_style_center |
+																					window_style_icon | window_style_title | window_style_btn_min | 
+																						window_style_btn_close); // 创建窗口
         XWnd_RegEventCPP(m_hWindow, WM_CLOSE, &窗口类::WM_Close_Event);
         // XWnd_RegEventCPP(m_hWindow, WM_CREATE,&窗口类::WM_CREATE_Event);
     }
@@ -683,6 +953,7 @@ private:
         XEdit_EnableReadOnly(m_Tite, true);
         HELE m_hButton = XBtn_Create(x + cx - 30, y, 30, cy, L"应用", m_hWindow);
         参数值容器 = XEdit_Create(x + 61, y, cx - 61 - 29, cy, m_hWindow);
+
         if (数据类型.S() == "string")
         {
             XEdit_SetText(参数值容器, 默认值.S().TextW());
@@ -712,128 +983,46 @@ private:
         int len = XEdit_GetText(参数值容器, pOut, 32);
         if (数据类型.S() == "string")
         {
-
+            HTuple hv_TupleVChar(pOut);
+            SetMessageTuple(hv_Message, "Data", hv_TupleVChar);
         }
         else if (数据类型.S() == "int")
         {
-           HTuple hv_TupleV;
-           HTuple hv_TupleVChar(pOut);
-           TupleNumber(hv_TupleVChar, &hv_TupleV);
-           SetMessageTuple(hv_Message, "Data", hv_TupleV);
+            HTuple hv_TupleV;
+            HTuple hv_TupleVChar(pOut);
+            TupleNumber(hv_TupleVChar, &hv_TupleV);
+            if (hv_TupleV.L() < 参数限制[0].L() || hv_TupleV.L() > 参数限制[1].L())
+            {
+                HTuple 参数值I;
+                TupleString(默认值, ".0f", &参数值I);
+                XEdit_SetText(参数值容器, 参数值I.S().TextW());
 
+                int ret = MessageBox(NULL, u8"参数不合规", u8"参数显示", MB_YESNO);
+                return 0;
+            }
+            默认值 = hv_TupleV;
+            SetMessageTuple(hv_Message, "Data", hv_TupleV);
         }
         else if (数据类型.S() == "double")
         {
-            
+            HTuple hv_TupleV;
+            HTuple hv_TupleVChar(pOut);
+            TupleNumber(hv_TupleVChar, &hv_TupleV);
+            if (hv_TupleV.L() < 参数限制[0].L() || hv_TupleV.L() > 参数限制[1].L())
+            {
+
+                HTuple 参数值D;
+                TupleString(默认值, ".3f", &参数值D);
+                XEdit_SetText(参数值容器, 参数值D.S().TextW());
+                int ret = MessageBox(NULL, u8"参数不合规", u8"参数显示", MB_YESNO);
+                return 0;
+            }
+            默认值 = hv_TupleV;
+            SetMessageTuple(hv_Message, "Data", hv_TupleV);
         }
 
         EnqueueMessage(outQueue, hv_Message, HTuple(), HTuple());
         ClearMessage(hv_Message);
         return 0; // 事件的返回值
     }
-
-    // int 整数类型文本框值改变(BOOL *pbHandled)
-    // {
-    //     int ret;
-    //     wchar_t pOut[6];
-    //     int len = XEdit_GetText(参数值容器, pOut, 6);
-    //     // ret = MessageBox(NULL, pOut, u8"参数显示", MB_YESNO);
-    //     HTuple hv_TupleV;
-    //     HTuple hv_TupleVChar(pOut);
-
-    //     TupleNumber(hv_TupleVChar, &hv_TupleV);
-    //     if (hv_TupleV.L() < 参数限制[0].L() || hv_TupleV.L() > 参数限制[1].L())
-    //     {
-
-    //         ret = MessageBox(NULL, u8"参数不合规", u8"参数显示", MB_YESNO);
-    //         return 0;
-    //     }
-    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
-    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
-    //     return 0;
-    // }
-    // int 浮点类型文本框值改变(BOOL *pbHandled)
-    // {
-    //     int ret;
-    //     wchar_t pOut[16];
-    //     int len = XEdit_GetText(参数值容器, pOut, 16);
-    //     HTuple hv_TupleV;
-    //     HTuple hv_TupleVChar(pOut);
-    //     // ret = MessageBox(NULL, pOut, u8"参数显示", MB_YESNO);
-    //     TupleNumber(hv_TupleVChar, &hv_TupleV);
-
-    //     if (hv_TupleV.D() < 参数限制[0].D() || hv_TupleV.D() > 参数限制[1].D())
-    //     {
-    //         ret = MessageBox(NULL, u8"参数不合规，请看上方提示", u8"参数显示", MB_YESNO);
-    //         return 0;
-    //     }
-    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
-    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
-    //     return 0;
-    // }
-    // int 字符串枚举选择框值改变(BOOL *pbHandled)
-    // {
-    //     int ret;
-    //     wchar_t pOut[16];
-    //     int len = XEdit_GetText(参数值容器, pOut, 16);
-    //     // ret = MessageBox(NULL, pOut, u8"完成参数修改", MB_YESNO);
-    //     HTuple hv_TupleV(pOut);
-    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
-    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
-    //     return 0;
-    // }
-    // int 整数枚举选择框值改变(BOOL *pbHandled)
-    // {
-    //     int ret;
-    //     wchar_t pOut[6];
-    //     int len = XEdit_GetText(参数值容器, pOut, 6);
-    //     HTuple hv_TupleV;
-    //     HTuple hv_TupleVChar(pOut);
-    //     TupleNumber(hv_TupleVChar, &hv_TupleV);
-    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
-    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
-    //     return 0;
-    // }
-    // int 浮点数枚举选择框值改变(BOOL *pbHandled)
-    // {
-    //     int ret;
-    //     wchar_t pOut[16];
-    //     int len = XEdit_GetText(参数值容器, pOut, 16);
-    //     HTuple hv_TupleV;
-    //     HTuple hv_TupleVChar(pOut);
-    //     TupleNumber(hv_TupleVChar, &hv_TupleV);
-    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
-    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
-    //     return 0;
-    // }
-    // int 字符串类型文本框改变(BOOL *pbHandled)
-    // {
-    //     int ret;
-    //     wchar_t pOut[256];
-    //     int len = XEdit_GetText(参数值容器, pOut, 256);
-    //     HTuple hv_TupleV(pOut);
-    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
-    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
-    //     return 0;
-    // }
-    // int 文件路径改变(BOOL *pbHandled)
-    // {
-    //     int ret;
-    //     wchar_t pOut[256];
-    //     int len = XEdit_GetText(参数值容器, pOut, 256);
-    //     HTuple hv_TupleV(pOut);
-    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
-    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
-    //     return 0;
-    // }
-    // int 文件夹路径改变(BOOL *pbHandled)
-    // {
-    //     int ret;
-    //     wchar_t pOut[256];
-    //     int len = XEdit_GetText(参数值容器, pOut, 256);
-    //     HTuple hv_TupleV(pOut);
-    //     SetDictTuple(参数值容器字典, "Value", hv_TupleV);
-    //     ret = MessageBox(NULL, u8"完成参数修改", u8"完成参数修改", MB_YESNO);
-    //     return 0;
-    // }
 };
