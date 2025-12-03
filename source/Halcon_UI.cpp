@@ -36,9 +36,9 @@ DWORD WINAPI ThreadFunc(LPVOID lpParam)
      HTuple hv_WVAL,hv_HVAL;
     GetDictTuple(params->inDict, u8"宽", &hv_WVAL);
     GetDictTuple(params->inDict, u8"高", &hv_HVAL);
-    int W=hv_WVAL;
-    int H=hv_HVAL;
-    窗口类 窗口(0, 0, W, H, params->outQueue, params->inQueue);
+
+   
+    窗口类 窗口(0, 0, hv_WVAL, hv_HVAL, params->outQueue, params->inQueue);
     RemoveDictKey(params->inDict, u8"宽");
     RemoveDictKey(params->inDict, u8"高");
 
@@ -114,6 +114,7 @@ DWORD WINAPI ThreadFunc(LPVOID lpParam)
                        hv_mode,
                        "",
                        &HwindowsHandle);
+          
             SetMessageTuple(hv_Message, hv_pName + "_" + hv_ID, HwindowsHandle);
             
         }
