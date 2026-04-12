@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\Desktop\Source\Halcon_Extension\Halcon_UI\build\HCPPHalcon_UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\Desktop\Source\Halcon_Extension\Halcon_UI\build\HCPPHalcon_UI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Desktop\Source\Halcon_Extension\Halcon_UI\build\CMakeFiles\38633fc21ffd4cb8dc13ff24ff381537\HCPPHalcon_UI.cpp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Desktop\Source\Halcon_Extension\Halcon_UI\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{FBA70483-7799-36E2-A24D-EF4FC231280E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{F76F6DA4-773E-398A-84F3-556F6FA3B67D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{B487F226-BC5E-3FC0-B53A-F43FFB1261DB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

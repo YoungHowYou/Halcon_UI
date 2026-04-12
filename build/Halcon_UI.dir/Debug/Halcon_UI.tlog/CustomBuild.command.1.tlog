@@ -1,0 +1,24 @@
+^D:\DESKTOP\SOURCE\HALCON_EXTENSION\HALCON_UI\BUILD\CMAKEFILES\38633FC21FFD4CB8DC13FF24FF381537\HHALCON_UI.C.RULE
+setlocal
+cd D:\Desktop\Source\Halcon_Extension\Halcon_UI\build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Users\younghowyou\AppData\Local\Programs\MVTec\HALCON-24.11-Progress-Steady\bin\x64-win64\hcomp.exe -u -H -pHalcon_UI D:\Desktop\Source\Halcon_Extension\Halcon_UI\def\Halcon_UI.def
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\DESKTOP\SOURCE\HALCON_EXTENSION\HALCON_UI\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Desktop/Source/Halcon_Extension/Halcon_UI -BD:/Desktop/Source/Halcon_Extension/Halcon_UI/build --check-stamp-file D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

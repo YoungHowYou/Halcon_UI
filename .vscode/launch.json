@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "附加到 HDevelop",
+      "type": "cppvsdbg",
+      "request": "attach",
+      "processId": "${command:pickProcess}",
+      "symbolSearchPath": "${workspaceFolder}/bin",
+      "sourceFileMap": {}
+    },
+    {
+      "name": "附加到 hrun",
+      "type": "cppvsdbg",
+      "request": "attach",
+      "processId": "${command:pickProcess}",
+      "symbolSearchPath": "${workspaceFolder}/bin",
+      "sourceFileMap": {}
+    },
+    {
+      "name": "hrun 启动调试",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${env:HALCONROOT}/bin/x64-win64/hrun.exe",
+      "args": ["-j", "${workspaceFolder}/examples/test_connection.hdev"],
+      "cwd": "${workspaceFolder}",
+      "environment": [
+        {
+          "name": "HALCONEXTENSIONS",
+          "value": "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
+        }
+      ],
+      "symbolSearchPath": "${workspaceFolder}/bin"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Halcon_UI</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Halcon_UI Stream Server</h2>
+  <div class="toolbar">
+    <button id="btnStream" onclick="toggleStream()">Start Stream</button>
+    <button onclick="sendCmd(100)">CMD=100</button>
+    <button onclick="sendCmd(200)">CMD=200</button>
+    <button class="danger" onclick="sendCmd(999)">CMD=999 Exit</button>
+  </div>
+  <!-- 多窗口容器：JS 会根据图像的 id 字段动态创建 -->
+  <div id="windows"></div>
+  <div id="log"></div>
+  <script src="app.js"></script>
+</body>
+</html>

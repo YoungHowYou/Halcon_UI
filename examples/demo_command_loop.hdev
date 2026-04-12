@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="24.11.1.0">
+<procedure name="main">
+<interface/>
+<body>
+<c>* ============================================================</c>
+<c>* Halcon_UI 示例：双向通信 — 接收前端命令并返回结果</c>
+<c>*</c>
+<c>* 使用方法：</c>
+<c>*   1. 运行本脚本</c>
+<c>*   2. 浏览器打开 http://127.0.0.1:9090</c>
+<c>*   3. 点击 Start Stream（接收服务器推送）</c>
+<c>*   4. 点击 CMD=100 请求图像 / CMD=200 查询状态</c>
+<c>*   5. 点击 CMD=999 退出</c>
+<c>* ============================================================</c>
+<c></c>
+<l>dev_update_off ()</l>
+<l>dev_close_window ()</l>
+<l>dev_open_window (0, 0, 640, 480, 'black', WindowHandle)</l>
+<l>set_display_font (WindowHandle, 16, 'mono', 'true', 'false')</l>
+<c></c>
+<c>* --- 1. 启动服务器 ---</c>
+<l>WCreateWebServer (9090, ServerID)</l>
+<l>disp_message (WindowHandle, 'HTTP 服务器已启动 (端口 9090)', 'window', 12, 12, 'lime green', 'false')</l>
+<l>disp_message (WindowHandle, '浏览器打开 http://127.0.0.1:9090', 'window', 42, 12, 'white', 'false')</l>
+<l>disp_message (WindowHandle, '等待前端命令...', 'window', 72, 12, 'yellow', 'false')</l>
+<c></c>
+<c>* --- 2. 主循环 ---</c>
+<l>Running := true</l>
+<l>while (Running)</l>
+<l>    create_dict (RecvDict)</l>
+<l>    try</l>
+<l>        WRecvWebData (ServerID, 1000, RecvDict)</l>
+<l>    catch (Exception)</l>
+<l>        continue</l>
+<l>    endtry</l>
+<c></c>
+<l>    get_dict_tuple (RecvDict, '命令', CmdJson)</l>
+<l>    get_dict_tuple (CmdJson, 'CMD', CMD)</l>
+<c></c>
+<l>    if (CMD == 100)</l>
+<c>        * CMD=100: 返回一张图像</c>
+<l>        read_image (Image, 'fabrik')</l>
+<l>        get_image_size (Image, W, H)</l>
+<l>        count_channels (Image, Ch)</l>
+<c></c>
+<l>        create_dict (Reply)</l>
+<l>        create_dict (ReplyCmd)</l>
+<l>        create_dict (ReplyData)</l>
+<l>        set_dict_tuple (ReplyCmd, 'CMD', 0)</l>
+<l>        set_dict_tuple (ReplyData, '宽', W)</l>
+<l>        set_dict_tuple (ReplyData, '高', H)</l>
+<l>        set_dict_tuple (ReplyData, '位深', 1)</l>
+<l>        set_dict_tuple (ReplyData, '通道', Ch)</l>
+<l>        set_dict_tuple (ReplyCmd, 'Data', ReplyData)</l>
+<l>        set_dict_tuple (Reply, '命令', ReplyCmd)</l>
+<l>        set_dict_object (Image, Reply, '图')</l>
+<l>        WSendWebData (ServerID, Reply)</l>
+<c></c>
+<l>        dev_display (Image)</l>
+<l>        disp_message (WindowHandle, '已回复图像 ' + W + 'x' + H, 'window', 12, 12, 'lime green', 'true')</l>
+<c></c>
+<l>    elseif (CMD == 200)</l>
+<c>        * CMD=200: 返回状态</c>
+<l>        create_dict (Reply)</l>
+<l>        create_dict (ReplyCmd)</l>
+<l>        create_dict (ReplyData)</l>
+<l>        set_dict_tuple (ReplyCmd, 'CMD', 200)</l>
+<l>        set_dict_tuple (ReplyData, 'status', 'running')</l>
+<l>        set_dict_tuple (ReplyData, 'uptime', 12345)</l>
+<l>        set_dict_tuple (ReplyCmd, 'Data', ReplyData)</l>
+<l>        set_dict_tuple (Reply, '命令', ReplyCmd)</l>
+<l>        WSendWebData (ServerID, Reply)</l>
+<l>        disp_message (WindowHandle, '已回复状态查询', 'window', 12, 12, 'cyan', 'true')</l>
+<c></c>
+<l>    elseif (CMD == 999)</l>
+<l>        disp_message (WindowHandle, '收到退出命令', 'window', 12, 12, 'red', 'true')</l>
+<l>        Running := false</l>
+<c></c>
+<l>    else</l>
+<l>        disp_message (WindowHandle, '未知命令: CMD=' + CMD, 'window', 12, 12, 'yellow', 'true')</l>
+<l>    endif</l>
+<l>endwhile</l>
+<c></c>
+<c>* --- 3. 关闭 ---</c>
+<l>WCloseWebServer (ServerID)</l>
+<l>disp_message (WindowHandle, '服务器已关闭', 'window', 42, 12, 'red', 'true')</l>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+</hdevelop>

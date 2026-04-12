@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmake --build . --config Debug --clean-first)",
+      "Bash(python3 -c \"print\\('hello'\\)\")",
+      "Bash(python -c \"print\\('hello'\\)\")",
+      "Bash(python -c ':*)"
+    ]
+  }
+}

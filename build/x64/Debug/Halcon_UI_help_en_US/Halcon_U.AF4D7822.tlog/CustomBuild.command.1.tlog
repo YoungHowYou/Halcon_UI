@@ -1,0 +1,30 @@
+^D:\DESKTOP\SOURCE\HALCON_EXTENSION\HALCON_UI\BUILD\CMAKEFILES\106101BCFD20AE8882E8281CAAC28C49\OPERATORS_EN_US.IDX.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/help
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E chdir D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/help C:/Users/younghowyou/AppData/Local/Programs/MVTec/HALCON-24.11-Progress-Steady/bin/x64-win64/hcomp.exe -u -M -pHalcon_UI -len_US D:\Desktop\Source\Halcon_Extension\Halcon_UI\def\Halcon_UI.def
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\DESKTOP\SOURCE\HALCON_EXTENSION\HALCON_UI\BUILD\CMAKEFILES\271E5DA81CBEC109CA32EB5E78112A77\HALCON_UI_HELP_EN_US.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\DESKTOP\SOURCE\HALCON_EXTENSION\HALCON_UI\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Desktop/Source/Halcon_Extension/Halcon_UI -BD:/Desktop/Source/Halcon_Extension/Halcon_UI/build --check-stamp-file D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
