@@ -8,9 +8,10 @@
 <c></c>
 <l>WCreateWebServer (9090, ServerID)</l>
 <l>stop ()</l>
-<c></c>
 <c>* 发一条 JSON 命令到前端</c>
 <l>create_dict (SendDict)</l>
+<l>WRecvWebData (ServerID, 1000, SendDict)</l>
+<c></c>
 <l>create_dict (CmdDict)</l>
 <l>set_dict_tuple (CmdDict, 'CMD', 1)</l>
 <l>create_dict (DataDict)</l>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="24.11.1.0">
+<procedure name="main">
+<interface/>
+<body>
+<c>* ============================================================</c>
+<c>* Halcon_UI 例程：WebSocket 推图（单向，最简）</c>
+<c>*</c>
+<c>* 步骤：</c>
+<c>*   1. 启动 WebSocket 服务器（端口 3000）</c>
+<c>*   2. 浏览器打开 http://127.0.0.1:3000，等前端连上</c>
+<c>*   3. 按 F5 开始循环推图，浏览器实时显示</c>
+<c>*</c>
+<c>* 关键约定：</c>
+<c>*   - CMD=0  表示二进制体是图像，前端按宽/高/位深/通道渲染</c>
+<c>*   - 后端会自动把图像编码为 JPEG 再走 WebSocket 二进制帧</c>
+<c>* ============================================================</c>
+<c></c>
+<l>dev_update_off ()</l>
+<l>dev_close_window ()</l>
+<l>dev_open_window (0, 0, 800, 600, 'black', WindowHandle)</l>
+<l>set_display_font (WindowHandle, 14, 'mono', 'true', 'false')</l>
+<c></c>
+<c>* ---------- 1. 启动服务器 ----------</c>
+<l>Port := 3000</l>
+<l>WCreateWebServer (Port, ServerID)</l>
+<l>disp_message (WindowHandle, 'WebSocket 已启动 (端口 ' + Port + ')', 'window', 12, 12, 'lime green', 'false')</l>
+<l>disp_message (WindowHandle, '浏览器打开 http://127.0.0.1:' + Port, 'window', 36, 12, 'white', 'false')</l>
+<l>disp_message (WindowHandle, '前端连上后按 F5 开始推图', 'window', 60, 12, 'yellow', 'false')</l>
+<l>stop ()</l>
+<c></c>
+<c>* ---------- 2. 准备图像（HALCON 自带样本，循环播放） ----------</c>
+<l>ImgNames := ['fabrik', 'mreut', 'monkey', 'patras', 'particle']</l>
+<l>NumImgs := |ImgNames|</l>
+<c></c>
+<c>* ---------- 3. 推图循环 ----------</c>
+<l>FrameSeq := 0</l>
+<l>NumLoops := 100</l>
+<l>for I := 0 to NumLoops - 1 by 1</l>
+<l>    read_image (Image, ImgNames[I % NumImgs])</l>
+<l>    get_image_size (Image, W, H)</l>
+<l>    count_channels (Image, Ch)</l>
+<c></c>
+<c>    * 构造发送字典：CMD=0 + 图像元数据，图像本体放在 '图' 字段</c>
+<l>    create_dict (SendDict)</l>
+<l>    create_dict (CmdDict)</l>
+<l>    create_dict (DataDict)</l>
+<l>    set_dict_tuple (CmdDict, 'CMD', 0)</l>
+<l>    set_dict_tuple (DataDict, 'id', 0)</l>
+<l>    set_dict_tuple (DataDict, 'seq', FrameSeq)</l>
+<l>    set_dict_tuple (DataDict, '宽', W)</l>
+<l>    set_dict_tuple (DataDict, '高', H)</l>
+<l>    set_dict_tuple (DataDict, '位深', 1)</l>
+<l>    set_dict_tuple (DataDict, '通道', Ch)</l>
+<l>    set_dict_tuple (CmdDict, 'Data', DataDict)</l>
+<l>    set_dict_tuple (SendDict, '命令', CmdDict)</l>
+<l>    set_dict_object (Image, SendDict, '图')</l>
+<c></c>
+<l>    WSendWebData (ServerID, SendDict)</l>
+<l>    FrameSeq := FrameSeq + 1</l>
+<c></c>
+<l>    dev_display (Image)</l>
+<l>    disp_message (WindowHandle, '推送 #' + FrameSeq + '  ' + W + 'x' + H + ' Ch=' + Ch, 'window', 12, 12, 'lime green', 'true')</l>
+<c></c>
+<c>    * 控制 ~5 fps</c>
+<l>    wait_seconds (0.2)</l>
+<l>endfor</l>
+<c></c>
+<l>disp_message (WindowHandle, '推送完毕，按 F5 关闭服务器', 'window', 36, 12, 'yellow', 'true')</l>
+<l>stop ()</l>
+<c></c>
+<c>* ---------- 4. 关闭 ----------</c>
+<l>WCloseWebServer (ServerID)</l>
+<l>disp_message (WindowHandle, '服务器已关闭', 'window', 60, 12, 'red', 'true')</l>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+</hdevelop>
