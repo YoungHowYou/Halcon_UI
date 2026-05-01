@@ -1,0 +1,65 @@
+WCloseWebServer(server_id)
+short.ascii=Close WebSocket server.
+keywords=UserExtensionsWebSocketCloseServer
+module=0 Foundation
+parameter=server_id
+parameter_class=input_control
+type_list=integer
+default_type=integer
+sem_type=number
+multivalue=false
+WSendWebData(server_id,DictHandle)
+short.ascii=Send data to WebSocket clients.
+keywords=UserExtensionsWebSocketSendJSONImage
+module=0 Foundation
+parameter=server_id
+parameter_class=input_control
+type_list=integer
+default_type=integer
+sem_type=number
+multivalue=false
+parameter=DictHandle
+parameter_class=input_control
+type_list=handle
+default_type=handle
+sem_type=handle
+multivalue=false
+WRecvWebData(server_id,timeout,DictHandle)
+short.ascii=Receive data from WebSocket client.
+keywords=UserExtensionsWebSocketReceiveJSONImage
+module=0 Foundation
+parameter=server_id
+parameter_class=input_control
+type_list=integer
+default_type=integer
+sem_type=number
+multivalue=false
+parameter=timeout
+parameter_class=input_control
+type_list=integer
+default_type=integer
+sem_type=number
+multivalue=false
+parameter=DictHandle
+parameter_class=input_control
+type_list=handle
+default_type=handle
+sem_type=handle
+multivalue=false
+WCreateWebServer(port,server_id)
+short.ascii=Create WebSocket server.
+keywords=UserExtensionsWebSocketServerNetwork
+module=0 Foundation
+parameter=port
+parameter_class=input_control
+type_list=integer
+default_type=integer
+sem_type=number
+multivalue=false
+parameter=server_id
+parameter_class=output_control
+type_list=integer
+default_type=integer
+sem_type=number
+multivalue=false
+
