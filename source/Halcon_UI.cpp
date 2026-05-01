@@ -4,48 +4,59 @@
 #include "HalconCpp.h"
 using namespace HalconCpp;
 
-// ==================== GDI+ JPEG 编码 ====================
-#include <objbase.h>
-#include <gdiplus.h>
-#pragma comment(lib, "gdiplus.lib")
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
-static ULONG_PTR g_gdip_token = 0;
-static bool g_gdip_init = false;
+// ==================== JPEG 编码（跨平台）====================
+#ifdef _WIN32
+  // Windows: 使用 GDI+
+  #include <objbase.h>
+  #include <gdiplus.h>
+  #pragma comment(lib, "gdiplus.lib")
 
-static void EnsureGdiPlus() {
-    if (!g_gdip_init) {
-        Gdiplus::GdiplusStartupInput si;
-        Gdiplus::GdiplusStartup(&g_gdip_token, &si, NULL);
-        g_gdip_init = true;
-    }
-}
+  static ULONG_PTR g_gdip_token = 0;
+  static bool g_gdip_init = false;
 
-// 缓存 JPEG Encoder CLSID（只查一次）
-static CLSID g_jpeg_clsid = {0};
-static bool g_jpeg_clsid_found = false;
+  static void EnsureGdiPlus() {
+      if (!g_gdip_init) {
+          Gdiplus::GdiplusStartupInput si;
+          Gdiplus::GdiplusStartup(&g_gdip_token, &si, NULL);
+          g_gdip_init = true;
+      }
+  }
 
-static int GetJpegClsid(CLSID* pClsid) {
-    if (g_jpeg_clsid_found) {
-        *pClsid = g_jpeg_clsid;
-        return 0;
-    }
-    UINT num = 0, size = 0;
-    Gdiplus::GetImageEncodersSize(&num, &size);
-    if (size == 0) return -1;
-    Gdiplus::ImageCodecInfo* info = (Gdiplus::ImageCodecInfo*)malloc(size);
-    Gdiplus::GetImageEncoders(num, size, info);
-    for (UINT i = 0; i < num; i++) {
-        if (wcscmp(info[i].MimeType, L"image/jpeg") == 0) {
-            *pClsid = info[i].Clsid;
-            g_jpeg_clsid = info[i].Clsid;
-            g_jpeg_clsid_found = true;
-            free(info);
-            return 0;
-        }
-    }
-    free(info);
-    return -1;
-}
+  // 缓存 JPEG Encoder CLSID（只查一次）
+  static CLSID g_jpeg_clsid = {0};
+  static bool g_jpeg_clsid_found = false;
+
+  static int GetJpegClsid(CLSID* pClsid) {
+      if (g_jpeg_clsid_found) {
+          *pClsid = g_jpeg_clsid;
+          return 0;
+      }
+      UINT num = 0, size = 0;
+      Gdiplus::GetImageEncodersSize(&num, &size);
+      if (size == 0) return -1;
+      Gdiplus::ImageCodecInfo* info = (Gdiplus::ImageCodecInfo*)malloc(size);
+      Gdiplus::GetImageEncoders(num, size, info);
+      for (UINT i = 0; i < num; i++) {
+          if (wcscmp(info[i].MimeType, L"image/jpeg") == 0) {
+              *pClsid = info[i].Clsid;
+              g_jpeg_clsid = info[i].Clsid;
+              g_jpeg_clsid_found = true;
+              free(info);
+              return 0;
+          }
+      }
+      free(info);
+      return -1;
+  }
+#else
+  // Linux: 使用 libjpeg
+  #include <stdio.h>
+  #include <jpeglib.h>
+#endif
 
 // 将 Halcon planar 图像编码为 JPEG
 // rPtr: R通道(灰度时为唯一通道), gPtr/bPtr: G/B通道(灰度时为NULL)
@@ -53,8 +64,10 @@ static int GetJpegClsid(CLSID* pClsid) {
 static char* EncodeJpeg(const unsigned char* rPtr, const unsigned char* gPtr, const unsigned char* bPtr,
                         int w, int h, int channels, int quality, size_t* outSize)
 {
-    EnsureGdiPlus();
     *outSize = 0;
+
+#ifdef _WIN32
+    EnsureGdiPlus();
 
     // Halcon planar → GDI+ interleaved BGR
     int stride = ((w * 3 + 3) & ~3); // 4字节对齐
@@ -120,6 +133,65 @@ static char* EncodeJpeg(const unsigned char* rPtr, const unsigned char* gPtr, co
     }
     stream->Release();
     return jpeg;
+#else
+    // Linux: libjpeg in-memory 编码
+    struct jpeg_compress_struct cinfo;
+    struct jpeg_error_mgr jerr;
+    cinfo.err = jpeg_std_error(&jerr);
+    jpeg_create_compress(&cinfo);
+
+    unsigned char* outbuf = nullptr;   // jpeg_mem_dest 会 malloc/realloc
+    unsigned long  outlen = 0;
+    jpeg_mem_dest(&cinfo, &outbuf, &outlen);
+
+    cinfo.image_width      = w;
+    cinfo.image_height     = h;
+    cinfo.input_components = (channels == 1) ? 1 : 3;
+    cinfo.in_color_space   = (channels == 1) ? JCS_GRAYSCALE : JCS_RGB;
+
+    jpeg_set_defaults(&cinfo);
+    jpeg_set_quality(&cinfo, quality, TRUE);
+    jpeg_start_compress(&cinfo, TRUE);
+
+    // 行缓冲：planar → interleaved
+    int row_bytes = (channels == 1) ? w : (w * 3);
+    unsigned char* row = (unsigned char*)malloc((size_t)row_bytes);
+    if (!row) {
+        jpeg_destroy_compress(&cinfo);
+        if (outbuf) free(outbuf);
+        return nullptr;
+    }
+
+    for (int y = 0; y < h; y++) {
+        if (channels == 1) {
+            memcpy(row, rPtr + (size_t)y * w, (size_t)w);
+        } else {
+            const unsigned char* sr = rPtr + (size_t)y * w;
+            const unsigned char* sg = gPtr + (size_t)y * w;
+            const unsigned char* sb = bPtr + (size_t)y * w;
+            for (int x = 0; x < w; x++) {
+                row[x * 3]     = sr[x];
+                row[x * 3 + 1] = sg[x];
+                row[x * 3 + 2] = sb[x];
+            }
+        }
+        JSAMPROW rp = row;
+        jpeg_write_scanlines(&cinfo, &rp, 1);
+    }
+
+    free(row);
+    jpeg_finish_compress(&cinfo);
+    jpeg_destroy_compress(&cinfo);
+
+    // libjpeg 用自己的 malloc，复制一份让调用方统一用 free()
+    char* jpeg = (char*)malloc(outlen);
+    if (jpeg) {
+        memcpy(jpeg, outbuf, outlen);
+        *outSize = (size_t)outlen;
+    }
+    if (outbuf) free(outbuf);
+    return jpeg;
+#endif
 }
 
 // ==================== 创建 HTTP 服务器 ====================
@@ -144,10 +216,10 @@ Herror HRecvWebData(Hproc_handle proc_handle)
     HGetSPar(proc_handle, 1, LONG_PAR, &server_id, 1);
     HGetSPar(proc_handle, 2, LONG_PAR, &timeout_ms, 1);
 
-    Hcpar *dict;
+    const Hcpar *dict;
     INT4_8 num;
     HGetPPar(proc_handle, 3, &dict, &num);
-    HTuple hv_DictHandle(dict, 1);
+    HTuple hv_DictHandle(const_cast<Hcpar*>(dict), 1);
 
     char *jsontext = nullptr;
     char *data = nullptr;
@@ -180,9 +252,9 @@ Herror HRecvWebData(Hproc_handle proc_handle)
         if (通道.L() == 1)
         {
             if (位深.L() == 1)
-                GenImage1(&Image, "byte", 宽.L(), 高.L(), (__int64)data);
+                GenImage1(&Image, "byte", 宽.L(), 高.L(), (int64_t)data);
             else
-                GenImage1(&Image, "uint2", 宽.L(), 高.L(), (__int64)data);
+                GenImage1(&Image, "uint2", 宽.L(), 高.L(), (int64_t)data);
         }
         else
         {
@@ -190,15 +262,15 @@ Herror HRecvWebData(Hproc_handle proc_handle)
             HObject ImageR, ImageG, ImageB;
             if (位深.L() == 1)
             {
-                GenImage1(&ImageR, "byte", 宽.L(), 高.L(), (__int64)data);
-                GenImage1(&ImageG, "byte", 宽.L(), 高.L(), (__int64)(data + Tw));
-                GenImage1(&ImageB, "byte", 宽.L(), 高.L(), (__int64)(data + Tw * 2));
+                GenImage1(&ImageR, "byte", 宽.L(), 高.L(), (int64_t)data);
+                GenImage1(&ImageG, "byte", 宽.L(), 高.L(), (int64_t)(data + Tw));
+                GenImage1(&ImageB, "byte", 宽.L(), 高.L(), (int64_t)(data + Tw * 2));
             }
             else
             {
-                GenImage1(&ImageR, "uint2", 宽.L(), 高.L(), (__int64)data);
-                GenImage1(&ImageG, "uint2", 宽.L(), 高.L(), (__int64)(data + Tw));
-                GenImage1(&ImageB, "uint2", 宽.L(), 高.L(), (__int64)(data + Tw * 2));
+                GenImage1(&ImageR, "uint2", 宽.L(), 高.L(), (int64_t)data);
+                GenImage1(&ImageG, "uint2", 宽.L(), 高.L(), (int64_t)(data + Tw));
+                GenImage1(&ImageB, "uint2", 宽.L(), 高.L(), (int64_t)(data + Tw * 2));
             }
             Compose3(ImageR, ImageG, ImageB, &Image);
         }
@@ -220,11 +292,11 @@ Herror HSendWebData(Hproc_handle proc_handle)
     Hcpar server_id;
     HGetSPar(proc_handle, 1, LONG_PAR, &server_id, 1);
 
-    Hcpar *dict;
+    const Hcpar *dict;
     INT4_8 num;
     HGetPPar(proc_handle, 2, &dict, &num);
 
-    HTuple hv_DictHandle(dict, 1);
+    HTuple hv_DictHandle(const_cast<Hcpar*>(dict), 1);
     HTuple dict_json;
     GetDictTuple(hv_DictHandle, u8"命令", &dict_json);
 

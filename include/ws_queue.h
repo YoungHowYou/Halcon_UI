@@ -1,9 +1,9 @@
 #ifndef WS_QUEUE_H
 #define WS_QUEUE_H
 
-#include <windows.h>
 #include <mutex>
 #include <condition_variable>
+#include <chrono>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
