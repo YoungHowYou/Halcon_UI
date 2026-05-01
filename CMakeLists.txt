@@ -132,15 +132,26 @@ else()
         message(FATAL_ERROR "Could not find halconcpp library. Set HALCONROOT correctly.")
     endif()
 
-    find_package(JPEG REQUIRED)
+    # 优先使用 lib/x64-linux/ 里 bundled 的 libjpeg，
+    # 没有再回退到系统包 (sudo apt install libjpeg-dev)。
+    set(_BUNDLED_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/x64-linux")
+    find_library(JPEG_LIB NAMES jpeg PATHS ${_BUNDLED_LIB_DIR} NO_DEFAULT_PATH)
+    if(NOT JPEG_LIB)
+        find_package(JPEG REQUIRED)
+        set(JPEG_LIB ${JPEG_LIBRARIES})
+    else()
+        message(STATUS "Using bundled libjpeg: ${JPEG_LIB}")
+    endif()
 
     target_link_libraries(${ProjectName}
         ${HALCON_LIB}
-        ${JPEG_LIBRARIES}
+        ${JPEG_LIB}
         Threads::Threads
         ${CMAKE_DL_LIBS}
     )
-    target_include_directories(${ProjectName} PRIVATE ${JPEG_INCLUDE_DIR})
+    if(JPEG_INCLUDE_DIR)
+        target_include_directories(${ProjectName} PRIVATE ${JPEG_INCLUDE_DIR})
+    endif()
 
     # 隐藏默认符号可见性，仅 EXPORTS_API 标记的导出（与 Windows .def 行为对齐）
     set_target_properties(${ProjectName} PROPERTIES
