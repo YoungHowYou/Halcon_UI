@@ -266,14 +266,8 @@ Halcon_UI_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 Halcon_UI_SOURCE_DIR:STATIC=/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI
 
-//Path to a file.
-JPEG_INCLUDE_DIR:PATH=/usr/include
-
 //Path to a library.
-JPEG_LIBRARY_DEBUG:FILEPATH=JPEG_LIBRARY_DEBUG-NOTFOUND
-
-//Path to a library.
-JPEG_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libjpeg.so
+JPEG_LIB:FILEPATH=/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/lib/x64-linux/libjpeg.so
 
 //Do not run HDevelop to export code
 WITHOUT_CODE_EXPORT:BOOL=OFF
@@ -435,8 +429,6 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding HALCON
 FIND_PACKAGE_MESSAGE_DETAILS_HALCON:INTERNAL=[/home/njsc/MVTec/HALCON-24.11-Progress-Steady/include][/home/njsc/MVTec/HALCON-24.11-Progress-Steady/lib/x64-linux/libhalcon.so][cfound components: HDevelop ][v24.11.1.0()]
-//Details about finding JPEG
-FIND_PACKAGE_MESSAGE_DETAILS_JPEG:INTERNAL=[/usr/lib/x86_64-linux-gnu/libjpeg.so][/usr/include][v80()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //HALCON version
@@ -449,12 +441,6 @@ HALCON_VERSION_MINOR:INTERNAL=11
 HALCON_VERSION_PATCH:INTERNAL=1
 //HALCON hotfix version
 HALCON_VERSION_TWEAK:INTERNAL=0
-//ADVANCED property for variable: JPEG_INCLUDE_DIR
-JPEG_INCLUDE_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: JPEG_LIBRARY_DEBUG
-JPEG_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: JPEG_LIBRARY_RELEASE
-JPEG_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 

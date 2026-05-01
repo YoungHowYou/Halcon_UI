@@ -103,7 +103,7 @@ Halcon_UIcint_EXTERNAL_OBJECTS =
 /home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so: /home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UI.so
 /home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so: /home/njsc/MVTec/HALCON-24.11-Progress-Steady/lib/x64-linux/libhalconc.so
 /home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so: /home/njsc/MVTec/HALCON-24.11-Progress-Steady/lib/x64-linux/libhalconcpp.so
-/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so: /usr/lib/x86_64-linux-gnu/libjpeg.so
+/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so: /home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/lib/x64-linux/libjpeg.so
 /home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so: /home/njsc/MVTec/HALCON-24.11-Progress-Steady/lib/x64-linux/libhalcon.so
 /home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so: CMakeFiles/Halcon_UIcint.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/build_linux/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C shared library /home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so"
