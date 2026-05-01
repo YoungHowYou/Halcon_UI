@@ -16,24 +16,52 @@
 #include <string.h>
 #include <stdarg.h>
 #include <ctype.h>
-#include <process.h>
 #include <atomic>
 #include <vector>
 #include <chrono>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
-#include <bcrypt.h>
-#include <wincrypt.h>
+#ifdef _WIN32
+  #include <bcrypt.h>
+  #include <wincrypt.h>
+  #pragma comment(lib, "ws2_32.lib")
+  #pragma comment(lib, "bcrypt.lib")
+  #pragma comment(lib, "crypt32.lib")
+#else
+  #include <signal.h>
+  #include <strings.h>
+  #include <dlfcn.h>
+  #include <limits.h>
+  #include <sys/stat.h>
+  static int _stricmp(const char* a, const char* b) { return strcasecmp(a, b); }
+#endif
 
-#pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "bcrypt.lib")
-#pragma comment(lib, "crypt32.lib")
+// ==================== 平台抽象 ====================
+#ifdef _WIN32
+  using thread_id_t = std::thread;
+  static int CloseSocketCompat(SOCKET s) { return closesocket(s); }
+  static int ShutdownBoth(SOCKET s)      { return shutdown(s, SD_BOTH); }
+  static void SleepMs(int ms)            { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
+#else
+  static int CloseSocketCompat(SOCKET s) { return ::close(s); }
+  static int ShutdownBoth(SOCKET s)      { return shutdown(s, SHUT_RDWR); }
+  static void SleepMs(int ms)            { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
+#endif
 
 // ==================== 调试日志 ====================
 static FILE* g_log = nullptr;
 static std::mutex g_log_mtx;
 static void wslog(const char* fmt, ...) {
     std::lock_guard<std::mutex> lk(g_log_mtx);
-    if (!g_log) g_log = fopen("D:/halcon_ui_ws.log", "w");
+    if (!g_log) {
+#ifdef _WIN32
+        g_log = fopen("D:/halcon_ui_ws.log", "w");
+#else
+        g_log = fopen("/tmp/halcon_ui_ws.log", "w");
+#endif
+    }
     if (!g_log) return;
     va_list ap; va_start(ap, fmt);
     vfprintf(g_log, fmt, ap);
@@ -46,7 +74,7 @@ static void wslog(const char* fmt, ...) {
 static int SendAll(SOCKET sock, const char* buf, size_t len) {
     size_t sent = 0;
     while (sent < len) {
-        int n = send(sock, buf + sent, (int)(len - sent), 0);
+        int n = (int)send(sock, buf + sent, (int)(len - sent), 0);
         if (n <= 0) return -1;
         sent += n;
     }
@@ -56,7 +84,7 @@ static int SendAll(SOCKET sock, const char* buf, size_t len) {
 static int RecvAll(SOCKET sock, char* buf, size_t len) {
     size_t got = 0;
     while (got < len) {
-        int n = recv(sock, buf + got, (int)(len - got), 0);
+        int n = (int)recv(sock, buf + got, (int)(len - got), 0);
         if (n <= 0) return -1;
         got += n;
     }
@@ -74,10 +102,6 @@ static inline uint32_t Hton32(uint32_t v) {
            ((v & 0x00FF0000u) >> 8)  | ((v & 0xFF000000u) >> 24);
 }
 static inline uint32_t Ntoh32(uint32_t v) { return Hton32(v); }
-static inline uint64_t Hton64(uint64_t v) {
-    return ((uint64_t)Hton32((uint32_t)(v & 0xFFFFFFFFu)) << 32) |
-           (uint64_t)Hton32((uint32_t)(v >> 32));
-}
 
 // ==================== HTTP 请求结构（仅用于 Upgrade 握手与静态文件）====================
 typedef struct {
@@ -93,7 +117,7 @@ static bool ParseHttpRequest(SOCKET sock, HttpRequest* req) {
     char header_buf[4096];
     int total = 0;
     while (total < (int)sizeof(header_buf) - 1) {
-        int n = recv(sock, header_buf + total, (int)(sizeof(header_buf) - 1 - total), 0);
+        int n = (int)recv(sock, header_buf + total, (int)(sizeof(header_buf) - 1 - total), 0);
         if (n <= 0) return false;
         total += n;
         header_buf[total] = '\0';
@@ -168,6 +192,107 @@ static bool ParseHttpRequest(SOCKET sock, HttpRequest* req) {
     return true;
 }
 
+// ==================== SHA1 + Base64（跨平台实现）====================
+// SHA1 (RFC 3174)：用于 WebSocket 握手 accept 计算。
+namespace {
+struct Sha1Ctx {
+    uint32_t state[5];
+    uint64_t bitlen;
+    uint8_t  buf[64];
+    size_t   buflen;
+};
+
+static inline uint32_t Rol32(uint32_t x, int n) { return (x << n) | (x >> (32 - n)); }
+
+static void Sha1Init(Sha1Ctx* c) {
+    c->state[0] = 0x67452301u;
+    c->state[1] = 0xEFCDAB89u;
+    c->state[2] = 0x98BADCFEu;
+    c->state[3] = 0x10325476u;
+    c->state[4] = 0xC3D2E1F0u;
+    c->bitlen = 0;
+    c->buflen = 0;
+}
+
+static void Sha1Block(Sha1Ctx* c, const uint8_t blk[64]) {
+    uint32_t w[80];
+    for (int i = 0; i < 16; i++) {
+        w[i] = ((uint32_t)blk[i*4] << 24) | ((uint32_t)blk[i*4+1] << 16) |
+               ((uint32_t)blk[i*4+2] << 8) | (uint32_t)blk[i*4+3];
+    }
+    for (int i = 16; i < 80; i++) {
+        w[i] = Rol32(w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16], 1);
+    }
+    uint32_t a = c->state[0], b = c->state[1], cc = c->state[2], d = c->state[3], e = c->state[4];
+    for (int i = 0; i < 80; i++) {
+        uint32_t f, k;
+        if (i < 20)      { f = (b & cc) | ((~b) & d);     k = 0x5A827999u; }
+        else if (i < 40) { f = b ^ cc ^ d;                k = 0x6ED9EBA1u; }
+        else if (i < 60) { f = (b & cc) | (b & d) | (cc & d); k = 0x8F1BBCDCu; }
+        else             { f = b ^ cc ^ d;                k = 0xCA62C1D6u; }
+        uint32_t t = Rol32(a, 5) + f + e + k + w[i];
+        e = d; d = cc; cc = Rol32(b, 30); b = a; a = t;
+    }
+    c->state[0] += a; c->state[1] += b; c->state[2] += cc; c->state[3] += d; c->state[4] += e;
+}
+
+static void Sha1Update(Sha1Ctx* c, const uint8_t* data, size_t len) {
+    c->bitlen += (uint64_t)len * 8;
+    while (len > 0) {
+        size_t take = 64 - c->buflen;
+        if (take > len) take = len;
+        memcpy(c->buf + c->buflen, data, take);
+        c->buflen += take;
+        data += take;
+        len  -= take;
+        if (c->buflen == 64) {
+            Sha1Block(c, c->buf);
+            c->buflen = 0;
+        }
+    }
+}
+
+static void Sha1Final(Sha1Ctx* c, uint8_t out[20]) {
+    c->buf[c->buflen++] = 0x80;
+    if (c->buflen > 56) {
+        while (c->buflen < 64) c->buf[c->buflen++] = 0;
+        Sha1Block(c, c->buf);
+        c->buflen = 0;
+    }
+    while (c->buflen < 56) c->buf[c->buflen++] = 0;
+    uint64_t bl = c->bitlen;
+    for (int i = 7; i >= 0; i--) c->buf[c->buflen++] = (uint8_t)(bl >> (i * 8));
+    Sha1Block(c, c->buf);
+    for (int i = 0; i < 5; i++) {
+        out[i*4]   = (uint8_t)(c->state[i] >> 24);
+        out[i*4+1] = (uint8_t)(c->state[i] >> 16);
+        out[i*4+2] = (uint8_t)(c->state[i] >> 8);
+        out[i*4+3] = (uint8_t)(c->state[i]);
+    }
+}
+
+static const char B64_TBL[] =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+// 输出 base64（不含换行），最大长度 = ((len+2)/3)*4 + 1。返回写入字符数（不含 \0）。
+static size_t Base64Encode(const uint8_t* in, size_t len, char* out, size_t out_size) {
+    size_t need = ((len + 2) / 3) * 4 + 1;
+    if (out_size < need) return 0;
+    size_t o = 0;
+    for (size_t i = 0; i < len; i += 3) {
+        uint32_t v = (uint32_t)in[i] << 16;
+        if (i + 1 < len) v |= (uint32_t)in[i + 1] << 8;
+        if (i + 2 < len) v |= (uint32_t)in[i + 2];
+        out[o++] = B64_TBL[(v >> 18) & 0x3F];
+        out[o++] = B64_TBL[(v >> 12) & 0x3F];
+        out[o++] = (i + 1 < len) ? B64_TBL[(v >> 6) & 0x3F] : '=';
+        out[o++] = (i + 2 < len) ? B64_TBL[v & 0x3F]        : '=';
+    }
+    out[o] = '\0';
+    return o;
+}
+} // namespace
+
 // ==================== WebSocket 握手 ====================
 // 计算 Sec-WebSocket-Accept = base64(sha1(key + GUID))
 static bool ComputeWsAccept(const char* key, char* out, size_t out_size) {
@@ -175,33 +300,13 @@ static bool ComputeWsAccept(const char* key, char* out, size_t out_size) {
     char concat[256];
     snprintf(concat, sizeof(concat), "%s%s", key, GUID_STR);
 
-    BYTE digest[20];
-    BCRYPT_ALG_HANDLE alg = nullptr;
-    BCRYPT_HASH_HANDLE hash = nullptr;
-    DWORD obj_len = 0, dummy = 0;
-    BYTE* obj = nullptr;
-    bool ok = false;
+    Sha1Ctx ctx;
+    uint8_t digest[20];
+    Sha1Init(&ctx);
+    Sha1Update(&ctx, (const uint8_t*)concat, strlen(concat));
+    Sha1Final(&ctx, digest);
 
-    if (BCryptOpenAlgorithmProvider(&alg, BCRYPT_SHA1_ALGORITHM, nullptr, 0) != 0) goto done;
-    if (BCryptGetProperty(alg, BCRYPT_OBJECT_LENGTH, (PUCHAR)&obj_len, sizeof(DWORD), &dummy, 0) != 0) goto done;
-    obj = (BYTE*)malloc(obj_len);
-    if (!obj) goto done;
-    if (BCryptCreateHash(alg, &hash, obj, obj_len, nullptr, 0, 0) != 0) goto done;
-    if (BCryptHashData(hash, (PUCHAR)concat, (ULONG)strlen(concat), 0) != 0) goto done;
-    if (BCryptFinishHash(hash, digest, 20, 0) != 0) goto done;
-
-    {
-        DWORD b64_len = (DWORD)out_size;
-        if (!CryptBinaryToStringA(digest, 20, CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF,
-                                  out, &b64_len)) goto done;
-        ok = true;
-    }
-
-done:
-    if (hash) BCryptDestroyHash(hash);
-    if (obj)  free(obj);
-    if (alg)  BCryptCloseAlgorithmProvider(alg, 0);
-    return ok;
+    return Base64Encode(digest, 20, out, out_size) > 0;
 }
 
 static bool SendWsHandshake(SOCKET sock, const char* ws_key) {
@@ -360,8 +465,8 @@ typedef struct WsClient {
     SOCKET sock;
     int slot;             // 在 server.clients 中的索引
     int server_id;
-    HANDLE read_thread;
-    HANDLE write_thread;
+    std::thread read_thread;
+    std::thread write_thread;
     std::atomic<bool> alive;
     std::atomic<int64_t> last_pong_ms;
     WsPacketQueue send_queue;
@@ -376,8 +481,8 @@ typedef struct {
     ServerState state;
     std::atomic<bool> running;
 
-    HANDLE accept_thread;
-    HANDLE ping_thread;
+    std::thread accept_thread;
+    std::thread ping_thread;
 
     std::vector<WsClient*> clients;
     std::mutex clients_mtx;
@@ -388,13 +493,22 @@ typedef struct {
 #define MAX_SERVERS 16
 static WsServerSlot g_servers[MAX_SERVERS];
 static std::mutex g_server_mtx;
-static bool g_winsock_initialized = false;
 
-static bool InitWinSock() {
+static bool InitSockets() {
+#ifdef _WIN32
+    static bool g_winsock_initialized = false;
     if (g_winsock_initialized) return true;
     WSADATA wsa;
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) return false;
     g_winsock_initialized = true;
+#else
+    // 写已断开的 socket 时不要触发 SIGPIPE，让 send() 返回 EPIPE
+    static bool g_signal_set = false;
+    if (!g_signal_set) {
+        signal(SIGPIPE, SIG_IGN);
+        g_signal_set = true;
+    }
+#endif
     return true;
 }
 
@@ -409,6 +523,7 @@ static char g_web_root[512] = {0};
 
 static void InitWebRoot() {
     if (g_web_root[0]) return;
+#ifdef _WIN32
     HMODULE hm = NULL;
     GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
                        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
@@ -420,6 +535,25 @@ static void InitWebRoot() {
     last_sep = strrchr(dll_path, '\\');
     if (last_sep) *last_sep = '\0';
     snprintf(g_web_root, sizeof(g_web_root), "%s\\web", dll_path);
+#else
+    // 用 dladdr 拿到当前 .so 的真实路径，再回溯两级到工程根
+    Dl_info info;
+    char so_path[PATH_MAX];
+    if (dladdr((void*)&InitWebRoot, &info) && info.dli_fname) {
+        // dli_fname 可能是相对路径，先 realpath
+        if (!realpath(info.dli_fname, so_path)) {
+            strncpy(so_path, info.dli_fname, sizeof(so_path) - 1);
+            so_path[sizeof(so_path) - 1] = '\0';
+        }
+    } else {
+        strcpy(so_path, ".");
+    }
+    char* last_sep = strrchr(so_path, '/');
+    if (last_sep) *last_sep = '\0';
+    last_sep = strrchr(so_path, '/');
+    if (last_sep) *last_sep = '\0';
+    snprintf(g_web_root, sizeof(g_web_root), "%s/web", so_path);
+#endif
     wslog("Web root: %s", g_web_root);
 }
 
@@ -470,7 +604,11 @@ static bool ServeStaticFile(SOCKET sock, const char* url_path) {
         rel_path[sizeof(rel_path) - 1] = '\0';
     }
     char full_path[1024];
+#ifdef _WIN32
     snprintf(full_path, sizeof(full_path), "%s\\%s", g_web_root, rel_path);
+#else
+    snprintf(full_path, sizeof(full_path), "%s/%s", g_web_root, rel_path);
+#endif
 
     FILE* f = fopen(full_path, "rb");
     if (!f) return false;
@@ -489,24 +627,24 @@ static bool ServeStaticFile(SOCKET sock, const char* url_path) {
 // ==================== 客户端读写线程 ====================
 
 // 注销并释放某个客户端
-static void DropClient(WsServerSlot* svr, WsClient* cli) {
+static void DropClient(WsServerSlot* /*svr*/, WsClient* cli) {
     cli->alive = false;
     if (cli->sock != INVALID_SOCKET) {
-        shutdown(cli->sock, SD_BOTH);
-        closesocket(cli->sock);
+        ShutdownBoth(cli->sock);
+        CloseSocketCompat(cli->sock);
         cli->sock = INVALID_SOCKET;
     }
     WsQueueStop(&cli->send_queue);
 }
 
-static unsigned __stdcall ClientReadThread(void* arg) {
-    WsClient* cli = (WsClient*)arg;
+static void ClientReadThread(WsClient* cli) {
     WsServerSlot* svr = &g_servers[cli->server_id];
 
     char* msg_buf = nullptr;
     size_t msg_cap = 0;
     size_t msg_len = 0;
     int    msg_opcode = 0;
+    (void)msg_opcode;
 
     while (svr->running && cli->alive) {
         char* payload = nullptr;
@@ -574,11 +712,9 @@ static unsigned __stdcall ClientReadThread(void* arg) {
     if (msg_buf) free(msg_buf);
     DropClient(svr, cli);
     wslog("Read thread exit (slot=%d)", cli->slot);
-    return 0;
 }
 
-static unsigned __stdcall ClientWriteThread(void* arg) {
-    WsClient* cli = (WsClient*)arg;
+static void ClientWriteThread(WsClient* cli) {
     WsServerSlot* svr = &g_servers[cli->server_id];
 
     while (svr->running && cli->alive) {
@@ -606,7 +742,6 @@ static unsigned __stdcall ClientWriteThread(void* arg) {
 
     DropClient(svr, cli);
     wslog("Write thread exit (slot=%d)", cli->slot);
-    return 0;
 }
 
 // ==================== 服务器线程：accept / ping ====================
@@ -633,40 +768,23 @@ static void ReapDeadClients(WsServerSlot* svr) {
         WsClient* cli = svr->clients[i];
         if (!cli) continue;
         if (!cli->alive.load()) {
-            // 等待两个线程都退出（短超时，避免阻塞 accept）
-            if (cli->read_thread) {
-                if (WaitForSingleObject(cli->read_thread, 100) == WAIT_OBJECT_0) {
-                    CloseHandle(cli->read_thread);
-                    cli->read_thread = nullptr;
-                }
-            }
-            if (cli->write_thread) {
-                if (WaitForSingleObject(cli->write_thread, 100) == WAIT_OBJECT_0) {
-                    CloseHandle(cli->write_thread);
-                    cli->write_thread = nullptr;
-                }
-            }
-            if (!cli->read_thread && !cli->write_thread) {
-                WsQueueClear(&cli->send_queue);
-                delete cli;
-                svr->clients[i] = nullptr;
-            }
+            if (cli->read_thread.joinable())  cli->read_thread.join();
+            if (cli->write_thread.joinable()) cli->write_thread.join();
+            WsQueueClear(&cli->send_queue);
+            delete cli;
+            svr->clients[i] = nullptr;
         }
     }
 }
 
 // 处理一个新 TCP 连接：读 HTTP，决定是 WS 升级还是静态文件
-static unsigned __stdcall HandleConnectionThread(void* arg) {
-    struct Args { SOCKET sock; int server_id; };
-    Args a = *(Args*)arg;
-    free(arg);
-
-    WsServerSlot* svr = &g_servers[a.server_id];
+static void HandleConnectionThread(SOCKET client_sock, int server_id) {
+    WsServerSlot* svr = &g_servers[server_id];
 
     HttpRequest req;
-    if (!ParseHttpRequest(a.sock, &req)) {
-        closesocket(a.sock);
-        return 0;
+    if (!ParseHttpRequest(client_sock, &req)) {
+        CloseSocketCompat(client_sock);
+        return;
     }
 
     wslog("HTTP %s %s upgrade=%d", req.method, req.path, (int)req.is_upgrade);
@@ -680,24 +798,22 @@ static unsigned __stdcall HandleConnectionThread(void* arg) {
             for (auto* c : svr->clients) if (c && c->alive.load()) alive_count++;
             if (alive_count >= WS_MAX_CLIENTS) {
                 wslog("Reject WS upgrade: max clients reached (%d)", alive_count);
-                SendHttpResponse(a.sock, 503, "text/plain", "Too many clients", 16);
-                closesocket(a.sock);
-                return 0;
+                SendHttpResponse(client_sock, 503, "text/plain", "Too many clients", 16);
+                CloseSocketCompat(client_sock);
+                return;
             }
         }
 
-        if (!SendWsHandshake(a.sock, req.ws_key)) {
+        if (!SendWsHandshake(client_sock, req.ws_key)) {
             wslog("WS handshake failed");
-            closesocket(a.sock);
-            return 0;
+            CloseSocketCompat(client_sock);
+            return;
         }
 
         // 注册客户端
         WsClient* cli = new WsClient();
-        cli->sock = a.sock;
-        cli->server_id = a.server_id;
-        cli->read_thread = nullptr;
-        cli->write_thread = nullptr;
+        cli->sock = client_sock;
+        cli->server_id = server_id;
         cli->alive = true;
         cli->last_pong_ms = NowMs();
         WsQueueInit(&cli->send_queue);
@@ -705,32 +821,33 @@ static unsigned __stdcall HandleConnectionThread(void* arg) {
         RegisterClient(svr, cli);
         wslog("WS client connected (slot=%d)", cli->slot);
 
-        cli->read_thread  = (HANDLE)_beginthreadex(nullptr, 0, ClientReadThread,  cli, 0, nullptr);
-        cli->write_thread = (HANDLE)_beginthreadex(nullptr, 0, ClientWriteThread, cli, 0, nullptr);
-        return 0;  // 客户端线程接管
+        cli->read_thread  = std::thread(ClientReadThread,  cli);
+        cli->write_thread = std::thread(ClientWriteThread, cli);
+        return;  // 客户端线程接管
     }
 
     // 静态文件
     if (strcmp(req.method, "GET") == 0) {
-        if (!ServeStaticFile(a.sock, req.path)) {
-            SendHttpResponse(a.sock, 404, "text/plain", "Not Found", 9);
+        if (!ServeStaticFile(client_sock, req.path)) {
+            SendHttpResponse(client_sock, 404, "text/plain", "Not Found", 9);
         }
     } else {
-        SendHttpResponse(a.sock, 400, "text/plain", "Bad Request", 11);
+        SendHttpResponse(client_sock, 400, "text/plain", "Bad Request", 11);
     }
-    closesocket(a.sock);
-    return 0;
+    CloseSocketCompat(client_sock);
 }
 
-static unsigned __stdcall AcceptThreadFunc(void* arg) {
-    int server_id = *(int*)arg;
-    free(arg);
+static void AcceptThreadFunc(int server_id) {
     WsServerSlot* svr = &g_servers[server_id];
     wslog("AcceptThread started (server_id=%d)", server_id);
 
     while (svr->running) {
         struct sockaddr_in addr;
+#ifdef _WIN32
         int addr_len = sizeof(addr);
+#else
+        socklen_t addr_len = sizeof(addr);
+#endif
         SOCKET fd = accept(svr->listen_fd, (struct sockaddr*)&addr, &addr_len);
         if (fd == INVALID_SOCKET) {
             if (!svr->running) break;
@@ -739,27 +856,18 @@ static unsigned __stdcall AcceptThreadFunc(void* arg) {
         // 顺手回收已死客户端
         ReapDeadClients(svr);
 
-        struct Args { SOCKET sock; int server_id; };
-        Args* a = (Args*)malloc(sizeof(Args));
-        if (!a) { closesocket(fd); continue; }
-        a->sock = fd;
-        a->server_id = server_id;
-        HANDLE ht = (HANDLE)_beginthreadex(nullptr, 0, HandleConnectionThread, a, 0, nullptr);
-        if (ht) CloseHandle(ht); else { free(a); closesocket(fd); }
+        std::thread(HandleConnectionThread, fd, server_id).detach();
     }
     wslog("AcceptThread exit (server_id=%d)", server_id);
-    return 0;
 }
 
-static unsigned __stdcall PingThreadFunc(void* arg) {
-    int server_id = *(int*)arg;
-    free(arg);
+static void PingThreadFunc(int server_id) {
     WsServerSlot* svr = &g_servers[server_id];
     wslog("PingThread started (server_id=%d)", server_id);
 
     int64_t last_ping = NowMs();
     while (svr->running) {
-        Sleep(500);
+        SleepMs(500);
         int64_t now = NowMs();
         if (now - last_ping < WS_PING_INTERVAL_MS) continue;
         last_ping = now;
@@ -778,14 +886,13 @@ static unsigned __stdcall PingThreadFunc(void* arg) {
         }
     }
     wslog("PingThread exit (server_id=%d)", server_id);
-    return 0;
 }
 
 // ==================== 对外 API ====================
 
 int CreateWebServer(uint16_t port) {
     std::unique_lock<std::mutex> lock(g_server_mtx);
-    if (!InitWinSock()) return -1;
+    if (!InitSockets()) return -1;
 
     int slot = FindFreeServerSlot();
     if (slot < 0) return -1;
@@ -794,16 +901,15 @@ int CreateWebServer(uint16_t port) {
     svr->listen_fd     = INVALID_SOCKET;
     svr->state         = SERVER_IDLE;
     svr->running       = false;
-    svr->accept_thread = nullptr;
-    svr->ping_thread   = nullptr;
     svr->clients.clear();
     WsQueueInit(&svr->recv_queue);
+    WsQueueResume(&svr->recv_queue);
 
     svr->listen_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (svr->listen_fd == INVALID_SOCKET) return -1;
 
-    BOOL opt = TRUE;
-    setsockopt(svr->listen_fd, SOL_SOCKET, SO_REUSEADDR, (char*)&opt, sizeof(opt));
+    int opt = 1;
+    setsockopt(svr->listen_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&opt, sizeof(opt));
 
     struct sockaddr_in saddr;
     memset(&saddr, 0, sizeof(saddr));
@@ -812,29 +918,17 @@ int CreateWebServer(uint16_t port) {
     saddr.sin_port        = htons(port);
 
     if (bind(svr->listen_fd, (struct sockaddr*)&saddr, sizeof(saddr)) == SOCKET_ERROR) {
-        closesocket(svr->listen_fd); svr->listen_fd = INVALID_SOCKET; return -1;
+        CloseSocketCompat(svr->listen_fd); svr->listen_fd = INVALID_SOCKET; return -1;
     }
     if (listen(svr->listen_fd, WS_DEFAULT_BACKLOG) == SOCKET_ERROR) {
-        closesocket(svr->listen_fd); svr->listen_fd = INVALID_SOCKET; return -1;
+        CloseSocketCompat(svr->listen_fd); svr->listen_fd = INVALID_SOCKET; return -1;
     }
 
     svr->state   = SERVER_RUNNING;
     svr->running = true;
 
-    int* arg1 = (int*)malloc(sizeof(int)); *arg1 = slot;
-    svr->accept_thread = (HANDLE)_beginthreadex(nullptr, 0, AcceptThreadFunc, arg1, 0, nullptr);
-
-    int* arg2 = (int*)malloc(sizeof(int)); *arg2 = slot;
-    svr->ping_thread = (HANDLE)_beginthreadex(nullptr, 0, PingThreadFunc, arg2, 0, nullptr);
-
-    if (!svr->accept_thread || !svr->ping_thread) {
-        svr->running = false;
-        closesocket(svr->listen_fd); svr->listen_fd = INVALID_SOCKET;
-        if (svr->accept_thread) { WaitForSingleObject(svr->accept_thread, 1000); CloseHandle(svr->accept_thread); svr->accept_thread = nullptr; }
-        if (svr->ping_thread)   { WaitForSingleObject(svr->ping_thread, 1000);   CloseHandle(svr->ping_thread);   svr->ping_thread = nullptr; }
-        svr->state = SERVER_IDLE;
-        return -1;
-    }
+    svr->accept_thread = std::thread(AcceptThreadFunc, slot);
+    svr->ping_thread   = std::thread(PingThreadFunc,   slot);
 
     wslog("CreateWebServer OK: slot=%d, port=%d", slot, (int)port);
     return slot;
@@ -854,7 +948,6 @@ int SendWebData(int server_id, const char* jsontext, const char* data, size_t le
 
     // 广播到每个活跃客户端：每个客户端独立 packet 副本
     std::lock_guard<std::mutex> lk(svr->clients_mtx);
-    int delivered = 0;
     for (auto* cli : svr->clients) {
         if (!cli || !cli->alive.load()) continue;
         WsPacket* pkt = (WsPacket*)calloc(1, sizeof(WsPacket));
@@ -873,7 +966,6 @@ int SendWebData(int server_id, const char* jsontext, const char* data, size_t le
             memcpy(pkt->binary_data, data, dl);
         }
         WsQueuePush(&cli->send_queue, pkt);
-        delivered++;
     }
     // 即使当前没有客户端，也算 OK：业务层发送不该因无连接而失败
     return 0;
@@ -907,7 +999,7 @@ void CloseWebServer(int server_id) {
     svr->running = false;
 
     if (svr->listen_fd != INVALID_SOCKET) {
-        closesocket(svr->listen_fd);
+        CloseSocketCompat(svr->listen_fd);
         svr->listen_fd = INVALID_SOCKET;
     }
 
@@ -924,24 +1016,16 @@ void CloseWebServer(int server_id) {
     }
 
     // 等待 accept / ping 线程退出
-    if (svr->accept_thread) {
-        WaitForSingleObject(svr->accept_thread, 3000);
-        CloseHandle(svr->accept_thread);
-        svr->accept_thread = nullptr;
-    }
-    if (svr->ping_thread) {
-        WaitForSingleObject(svr->ping_thread, 3000);
-        CloseHandle(svr->ping_thread);
-        svr->ping_thread = nullptr;
-    }
+    if (svr->accept_thread.joinable()) svr->accept_thread.join();
+    if (svr->ping_thread.joinable())   svr->ping_thread.join();
 
     // 等待客户端线程退出，释放资源
     {
         std::lock_guard<std::mutex> lk(svr->clients_mtx);
         for (auto* cli : svr->clients) {
             if (!cli) continue;
-            if (cli->read_thread)  { WaitForSingleObject(cli->read_thread, 2000);  CloseHandle(cli->read_thread); }
-            if (cli->write_thread) { WaitForSingleObject(cli->write_thread, 2000); CloseHandle(cli->write_thread); }
+            if (cli->read_thread.joinable())  cli->read_thread.join();
+            if (cli->write_thread.joinable()) cli->write_thread.join();
             WsQueueClear(&cli->send_queue);
             delete cli;
         }
