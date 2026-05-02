@@ -32,10 +32,10 @@ parameter
 
 parameter
   server_id:          output_control;
-  default_type:       integer;
+  default_type:       handle;
   multivalue:         false;
-  sem_type:           number;
-  type_list:          integer;
+  sem_type:           handle;
+  type_list:          handle;
 
 
 WRecvWebData<- CRecvWebData[::server_id,timeout,DictHandle:]
@@ -65,10 +65,10 @@ parallelization
 
 parameter
   server_id:          input_control;
-  default_type:       integer;
+  default_type:       handle;
   multivalue:         false;
-  sem_type:           number;
-  type_list:          integer;
+  sem_type:           handle;
+  type_list:          handle;
 
 parameter
   timeout:            input_control;
@@ -112,10 +112,10 @@ parallelization
 
 parameter
   server_id:          input_control;
-  default_type:       integer;
+  default_type:       handle;
   multivalue:         false;
-  sem_type:           number;
-  type_list:          integer;
+  sem_type:           handle;
+  type_list:          handle;
 
 parameter
   DictHandle:         input_control;
@@ -152,7 +152,7 @@ parallelization
 
 parameter
   server_id:          input_control;
-  default_type:       integer;
+  default_type:       handle;
   multivalue:         false;
-  sem_type:           number;
-  type_list:          integer;
+  sem_type:           handle;
+  type_list:          handle;

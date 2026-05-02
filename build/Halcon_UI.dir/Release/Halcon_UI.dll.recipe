@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>D:\Desktop\Source\Halcon_Extension\Halcon_UI\build\x64\Release\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>D:\Desktop\Source\Halcon_Extension\Halcon_UI\build\x64\Release\Halcon_UI_help_en_US</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>D:\Desktop\Source\Halcon_Extension\Halcon_UI\build\x64\Release\Halcon_UI_help</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>D:\Desktop\Source\Halcon_Extension\Halcon_UI\build\x64\Release\Halcon_UI_html</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>D:\Desktop\Source\Halcon_Extension\Halcon_UI\bin\Halcon_UI.dll</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

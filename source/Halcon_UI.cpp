@@ -8,6 +8,30 @@ using namespace HalconCpp;
 #include <stdlib.h>
 #include <string.h>
 
+#define H_WebServer_TAG 0xC0FFEE50 
+#define H_WebServer_SEM_TYPE "WebServer"
+
+extern "C"
+{
+    typedef struct
+    {
+        int server_id;
+        bool closed;
+    } HWebServerHandleData;
+
+    static Herror HWebServerHandleDestructor(Hproc_handle ph, HWebServerHandleData *data)
+    {
+        if (!data->closed && data->server_id >= 0)
+        {
+            CloseWebServer(data->server_id);
+            data->closed = true;
+        }
+        return HFree(ph, data);
+    }
+    // 句柄类型描述符
+    const HHandleInfo HandleTypeWebServer = HANDLE_INFO_INITIALIZER_NOSER(H_WebServer_TAG, H_WebServer_SEM_TYPE, HWebServerHandleDestructor, NULL, NULL);
+}
+
 // ==================== JPEG 编码（跨平台）====================
 #ifdef _WIN32
   // Windows: 使用 GDI+
@@ -203,20 +227,26 @@ Herror HCreateWebServer(Hproc_handle proc_handle)
     int ret = CreateWebServer((uint16_t)port.par.l);
     if (ret < 0) return 10000 - ret;
 
-    int64_t server_id = (int64_t)ret;
-    HPutElem(proc_handle, 1, &server_id, 1, LONG_PAR);
+    HWebServerHandleData **handle_data;
+    // 分配输出句柄
+    HCkP(HAllocOutputHandle(proc_handle, 1, &handle_data, &HandleTypeWebServer));
+    // 分配并初始化用户数据
+    HCkP(HAlloc(proc_handle, sizeof(HWebServerHandleData), (void **)handle_data));
+    (*handle_data)->server_id = ret;
+    (*handle_data)->closed = false;
     return H_MSG_TRUE;
 }
 
 // ==================== 接收数据 ====================
 Herror HRecvWebData(Hproc_handle proc_handle)
 {
-    Hcpar server_id;
+    HWebServerHandleData *handle_data;
+    HGetCElemH1(proc_handle, 1, &HandleTypeWebServer, &handle_data);
+
     Hcpar timeout_ms;
-    HGetSPar(proc_handle, 1, LONG_PAR, &server_id, 1);
     HGetSPar(proc_handle, 2, LONG_PAR, &timeout_ms, 1);
 
-    const Hcpar *dict;
+     Hcpar *dict;
     INT4_8 num;
     HGetPPar(proc_handle, 3, &dict, &num);
     HTuple hv_DictHandle(const_cast<Hcpar*>(dict), 1);
@@ -225,7 +255,7 @@ Herror HRecvWebData(Hproc_handle proc_handle)
     char *data = nullptr;
     size_t out_length = 0;
 
-    int ret = RecvWebData(server_id.par.l, &jsontext, &data, &out_length, timeout_ms.par.l);
+    int ret = RecvWebData(handle_data->server_id, &jsontext, &data, &out_length, timeout_ms.par.l);
     if (ret != 0) return 10000 + (-ret);
 
     HTuple h_jsontext(jsontext);
@@ -240,10 +270,10 @@ Herror HRecvWebData(Hproc_handle proc_handle)
         HTuple Data;
         GetDictTuple(dict_json, "Data", &Data);
 
-        HTuple 宽, 高, 位深, 通道;
+        HTuple 宽, 高, 图号, 通道;
         GetDictTuple(Data, u8"宽", &宽);
         GetDictTuple(Data, u8"高", &高);
-        GetDictTuple(Data, u8"位深", &位深);
+        GetDictTuple(Data, u8"图号", &图号);
         GetDictTuple(Data, u8"通道", &通道);
 
         SetDictTuple(hv_DictHandle, u8"命令", dict_json);
@@ -251,27 +281,18 @@ Herror HRecvWebData(Hproc_handle proc_handle)
         HObject Image;
         if (通道.L() == 1)
         {
-            if (位深.L() == 1)
-                GenImage1(&Image, "byte", 宽.L(), 高.L(), (int64_t)data);
-            else
-                GenImage1(&Image, "uint2", 宽.L(), 高.L(), (int64_t)data);
+            GenImage1(&Image, "byte", 宽.L(), 高.L(), (int64_t)data);
+          
         }
         else
         {
-            int64_t Tw = 宽.L() * 高.L() * 位深.L();
+            int64_t Tw = 宽.L() * 高.L() ;
             HObject ImageR, ImageG, ImageB;
-            if (位深.L() == 1)
-            {
-                GenImage1(&ImageR, "byte", 宽.L(), 高.L(), (int64_t)data);
-                GenImage1(&ImageG, "byte", 宽.L(), 高.L(), (int64_t)(data + Tw));
-                GenImage1(&ImageB, "byte", 宽.L(), 高.L(), (int64_t)(data + Tw * 2));
-            }
-            else
-            {
-                GenImage1(&ImageR, "uint2", 宽.L(), 高.L(), (int64_t)data);
-                GenImage1(&ImageG, "uint2", 宽.L(), 高.L(), (int64_t)(data + Tw));
-                GenImage1(&ImageB, "uint2", 宽.L(), 高.L(), (int64_t)(data + Tw * 2));
-            }
+          
+            GenImage1(&ImageR, "byte", 宽.L(), 高.L(), (int64_t)data);
+            GenImage1(&ImageG, "byte", 宽.L(), 高.L(), (int64_t)(data + Tw));
+            GenImage1(&ImageB, "byte", 宽.L(), 高.L(), (int64_t)(data + Tw * 2));
+          
             Compose3(ImageR, ImageG, ImageB, &Image);
         }
         SetDictObject(Image, hv_DictHandle, u8"图");
@@ -289,10 +310,10 @@ Herror HRecvWebData(Hproc_handle proc_handle)
 // ==================== 发送数据（图像自动 JPEG 压缩）====================
 Herror HSendWebData(Hproc_handle proc_handle)
 {
-    Hcpar server_id;
-    HGetSPar(proc_handle, 1, LONG_PAR, &server_id, 1);
+    HWebServerHandleData *handle_data;
+    HGetCElemH1(proc_handle, 1, &HandleTypeWebServer, &handle_data);
 
-    const Hcpar *dict;
+     Hcpar *dict;
     INT4_8 num;
     HGetPPar(proc_handle, 2, &dict, &num);
 
@@ -313,9 +334,9 @@ Herror HSendWebData(Hproc_handle proc_handle)
         HTuple Data;
         GetDictTuple(dict_json, "Data", &Data);
 
-        HTuple 宽, 高, TYPE位深, 位深, 通道;
+        HTuple 宽, 高, TYPE位深, 图号, 通道;
         GetDictTuple(Data, u8"通道", &通道);
-        GetDictTuple(Data, u8"位深", &位深);
+        GetDictTuple(Data, u8"图号", &图号);
 
         // 在 Data 字典中标记编码格式，前端据此解码
         SetDictTuple(Data, "fmt", HTuple("jpeg"));
@@ -346,7 +367,7 @@ Herror HSendWebData(Hproc_handle proc_handle)
 
         if (jpegData)
         {
-            ret = SendWebData(server_id.par.l, Text_json.S(), jpegData, jpegSize);
+            ret = SendWebData(handle_data->server_id, Text_json.S(), jpegData, jpegSize);
             free(jpegData);
         }
 
@@ -357,7 +378,7 @@ Herror HSendWebData(Hproc_handle proc_handle)
         // 非图像命令，只发 JSON
         HTuple Text_json;
         DictToJson(dict_json, HTuple(), HTuple(), &Text_json);
-        ret = SendWebData(server_id.par.l, Text_json.S(), nullptr, 0);
+        ret = SendWebData(handle_data->server_id, Text_json.S(), nullptr, 0);
         if (ret != 0) return 10000 + (-ret);
     }
 
@@ -367,8 +388,13 @@ Herror HSendWebData(Hproc_handle proc_handle)
 // ==================== 关闭服务器 ====================
 Herror HCloseWebServer(Hproc_handle proc_handle)
 {
-    Hcpar server_id;
-    HGetSPar(proc_handle, 1, LONG_PAR, &server_id, 1);
-    CloseWebServer((int)server_id.par.l);
+    HWebServerHandleData *handle_data;
+    HGetCElemH1(proc_handle, 1, &HandleTypeWebServer, &handle_data);
+
+    if (!handle_data->closed && handle_data->server_id >= 0)
+    {
+        CloseWebServer(handle_data->server_id);
+        handle_data->closed = true;
+    }
     return H_MSG_TRUE;
 }

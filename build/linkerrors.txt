@@ -1,0 +1,8 @@
+================================================================================
+Linker Errors
+Generated: 2026-05-02T02:00:23.021Z
+Total Errors: 1
+================================================================================
+
+[LNK1104] (MSVC)
+无法打开文件“D:\Desktop\Source\Halcon_Extension\Halcon_UI\bin\Halcon_UI.dll” [D:\Desktop\Source\Halcon_Extension\Halcon_UI\build\Halcon_UI.vcxproj]
