@@ -1083,31 +1083,29 @@ toggleLanguage(new_lang,1);return;}
 </div>
 <!--OP_REF_HEADER_END-->
 <h1 id="sec_name">
-<span data-if="hdevelop" style="display:inline;">WCreateWebServer</span><span data-if="c" style="display:none;">WCreateWebServer</span><span data-if="cpp" style="display:none;">WCreateWebServer</span><span data-if="dotnet" style="display:none;">WCreateWebServer</span><span data-if="python" style="display:none;">WCreateWebServer</span> (Operator)</h1>
+<span data-if="hdevelop" style="display:inline;">WCreateWebServer</span><span data-if="c" style="display:none;">T_WCreateWebServer</span><span data-if="cpp" style="display:none;">WCreateWebServer</span><span data-if="dotnet" style="display:none;">WCreateWebServer</span><span data-if="python" style="display:none;">WCreateWebServer</span> (Operator)</h1>
 <h2>Name</h2>
-<p><code><span data-if="hdevelop" style="display:inline;">WCreateWebServer</span><span data-if="c" style="display:none;">WCreateWebServer</span><span data-if="cpp" style="display:none;">WCreateWebServer</span><span data-if="dotnet" style="display:none;">WCreateWebServer</span><span data-if="python" style="display:none;">WCreateWebServer</span></code> — Create WebSocket server.</p>
+<p><code><span data-if="hdevelop" style="display:inline;">WCreateWebServer</span><span data-if="c" style="display:none;">T_WCreateWebServer</span><span data-if="cpp" style="display:none;">WCreateWebServer</span><span data-if="dotnet" style="display:none;">WCreateWebServer</span><span data-if="python" style="display:none;">WCreateWebServer</span></code> — Create WebSocket server.</p>
 <h2 id="sec_synopsis">Signature</h2>
 <div data-if="hdevelop" style="display:inline;">
 <p>
-<code><b>WCreateWebServer</b>( :  : <a href="#port"><i>port</i></a> : <a href="#server_id"><i>server_id</i></a>)</code></p>
+<code><b>WCreateWebServer</b>( :  : <a href="#port"><i>port</i></a>, <a href="#web_root"><i>web_root</i></a> : <a href="#server_id"><i>server_id</i></a>)</code></p>
 </div>
 <div data-if="c" style="display:none;">
 <p>
-<code>Herror <b>WCreateWebServer</b>(const Hlong <a href="#port"><i>port</i></a>, Hlong* <a href="#server_id"><i>server_id</i></a>)</code></p>
-<p>
-<code>Herror <b>T_WCreateWebServer</b>(const Htuple <a href="#port"><i>port</i></a>, Htuple* <a href="#server_id"><i>server_id</i></a>)</code></p>
+<code>Herror <b>T_WCreateWebServer</b>(const Htuple <a href="#port"><i>port</i></a>, const Htuple <a href="#web_root"><i>web_root</i></a>, Htuple* <a href="#server_id"><i>server_id</i></a>)</code></p>
 </div>
 <div data-if="cpp" style="display:none;">
 <p>
-<code>void <b>WCreateWebServer</b>(const HTuple&amp; <a href="#port"><i>port</i></a>, HTuple* <a href="#server_id"><i>server_id</i></a>)</code></p>
+<code>void <b>WCreateWebServer</b>(const HTuple&amp; <a href="#port"><i>port</i></a>, const HTuple&amp; <a href="#web_root"><i>web_root</i></a>, HTuple* <a href="#server_id"><i>server_id</i></a>)</code></p>
 </div>
 <div data-if="dotnet" style="display:none;">
 <p>
-<code>static void <a href="HHalconUI.html">HHalconUI</a>.<b>WCreateWebServer</b>(<a href="HTuple.html">HTuple</a> <a href="#port"><i>port</i></a>, out <a href="HTuple.html">HTuple</a> <a href="#server_id"><i>serverId</i></a>)</code></p>
+<code>static void <a href="HHalconUI.html">HHalconUI</a>.<b>WCreateWebServer</b>(<a href="HTuple.html">HTuple</a> <a href="#port"><i>port</i></a>, <a href="HTuple.html">HTuple</a> <a href="#web_root"><i>webRoot</i></a>, out <a href="HTuple.html">HTuple</a> <a href="#server_id"><i>serverId</i></a>)</code></p>
 </div>
 <div data-if="python" style="display:none;">
 <p>
-<code>def <b>WCreateWebServer</b>(<a href="#port"><i>port</i></a>: int) -&gt; int</code></p>
+<code>def <b>WCreateWebServer</b>(<a href="#port"><i>port</i></a>: int, <a href="#web_root"><i>web_root</i></a>: str) -&gt; HHandle</code></p>
 </div>
 <h2 id="sec_execution">Execution Information</h2>
 <ul>
@@ -1115,6 +1113,7 @@ toggleLanguage(new_lang,1);return;}
 <li>Multithreading scope: global (may be called from any thread).</li>
   <li>Processed without parallelization.</li>
 </ul>
+<p>This operator returns a handle. Note that the state of an instance of this handle type may be changed by specific operators even though the handle is used as an input parameter by those operators.</p>
 <h2 id="sec_parameters">Parameters</h2>
   <div class="par">
 <div class="parhead">
@@ -1124,7 +1123,13 @@ toggleLanguage(new_lang,1);return;}
 </div>
   <div class="par">
 <div class="parhead">
-<span id="server_id" class="parname"><b><code><span data-if="hdevelop" style="display:inline">server_id</span><span data-if="c" style="display:none">server_id</span><span data-if="cpp" style="display:none">server_id</span><span data-if="dotnet" style="display:none">serverId</span><span data-if="python" style="display:none">server_id</span></code></b> (output_control)  </span><span>number <code>→</code> <span data-if="dotnet" style="display:none">HTuple</span><span data-if="python" style="display:none">int</span><span data-if="cpp" style="display:none">HTuple</span><span data-if="c" style="display:none">Htuple</span><span data-if="hdevelop" style="display:inline"> (integer)</span><span data-if="dotnet" style="display:none"> (<i>int</i> / </span><span data-if="dotnet" style="display:none">long)</span><span data-if="cpp" style="display:none"> (<i>Hlong</i>)</span><span data-if="c" style="display:none"> (<i>Hlong</i>)</span></span>
+<span id="web_root" class="parname"><b><code><span data-if="hdevelop" style="display:inline">web_root</span><span data-if="c" style="display:none">web_root</span><span data-if="cpp" style="display:none">web_root</span><span data-if="dotnet" style="display:none">webRoot</span><span data-if="python" style="display:none">web_root</span></code></b> (input_control)  </span><span>string <code>→</code> <span data-if="dotnet" style="display:none">HTuple</span><span data-if="python" style="display:none">str</span><span data-if="cpp" style="display:none">HTuple</span><span data-if="c" style="display:none">Htuple</span><span data-if="hdevelop" style="display:inline"> (string)</span><span data-if="dotnet" style="display:none"> (<i>string</i>)</span><span data-if="cpp" style="display:none"> (<i>HString</i>)</span><span data-if="c" style="display:none"> (<i>char*</i>)</span></span>
+</div>
+<p class="pardesc"></p>
+</div>
+  <div class="par">
+<div class="parhead">
+<span id="server_id" class="parname"><b><code><span data-if="hdevelop" style="display:inline">server_id</span><span data-if="c" style="display:none">server_id</span><span data-if="cpp" style="display:none">server_id</span><span data-if="dotnet" style="display:none">serverId</span><span data-if="python" style="display:none">server_id</span></code></b> (output_control)  </span><span>handle <code>→</code> <span data-if="dotnet" style="display:none">HTuple</span><span data-if="python" style="display:none">HHandle</span><span data-if="cpp" style="display:none">HTuple</span><span data-if="c" style="display:none">Htuple</span><span data-if="hdevelop" style="display:inline"> (handle)</span><span data-if="dotnet" style="display:none"> (<i>IntPtr</i>)</span><span data-if="cpp" style="display:none"> (<i>HHandle</i>)</span><span data-if="c" style="display:none"> (<i>handle</i>)</span></span>
 </div>
 <p class="pardesc"></p>
 </div>

@@ -29,8 +29,8 @@ HUserExport Herror T_WSendWebData(const Htuple server_id, const Htuple DictHandl
 HUserExport Herror WSendWebData(Hlong server_id, Hlong DictHandle);
 HUserExport Herror T_WRecvWebData(const Htuple server_id, const Htuple timeout, const Htuple DictHandle);
 HUserExport Herror WRecvWebData(Hlong server_id, Hlong timeout, Hlong DictHandle);
-HUserExport Herror T_WCreateWebServer(const Htuple port, Htuple *server_id);
-HUserExport Herror WCreateWebServer(Hlong port, Hlong *server_id);
+HUserExport Herror T_WCreateWebServer(const Htuple port, const Htuple web_root, Htuple *server_id);
+HUserExport Herror WCreateWebServer(Hlong port, const char *web_root, Hlong *server_id);
 
 
 #if defined(__cplusplus)

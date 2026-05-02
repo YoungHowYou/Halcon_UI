@@ -69,9 +69,8 @@
   "Data": {
     "宽": 1920,
     "高": 1080,
-    "位深": 1,
+    "图号": 0,
     "通道": 3,
-    "id": 0,
     "fmt": "jpeg"
   }
 }
@@ -81,14 +80,13 @@
 |------|------|------|
 | `Data.宽` | int | 图像宽度（像素） |
 | `Data.高` | int | 图像高度（像素） |
-| `Data.位深` | int | 每通道字节数：`1`=8bit, `2`=16bit |
+| `Data.图号` | int | 图像控件编号，前端据此路由到对应控件。`0`=主预览区，其他值动态创建额外窗口 |
 | `Data.通道` | int | `1`=灰度, `3`=RGB |
-| `Data.id` | int | 窗口 ID，默认 `0`（主预览区），其他值动态创建额外窗口 |
 | `Data.fmt` | string | `"jpeg"` = JPEG 压缩；不存在 = RAW 像素（Planar RGB） |
 
 二进制部分：
 - `fmt="jpeg"` 时为标准 JPEG 文件字节流
-- 无 `fmt` 时为 RAW 像素，灰度 `[W×H×位深]`，RGB Planar `[R][G][B]` 各 `W×H×位深`
+- 无 `fmt` 时为 RAW 像素（8bit/通道），灰度 `[W×H]`，RGB Planar `[R][G][B]` 各 `W×H`
 
 ---
 
@@ -541,7 +539,7 @@
   │                                         │
   │◄─── stream CMD=2 {rodId,source} ───────│  扫码器读到新编号
   │                                         │
-  │◄─── stream CMD=0 {图像 id=0} ─────────│  推送 NIR 图像
+  │◄─── stream CMD=0 {图像 图号=0} ───────│  推送 NIR 图像
   │                                         │
   │◄─── stream CMD=1 {result,defect,...} ──│  推送检测结果
   │                                         │

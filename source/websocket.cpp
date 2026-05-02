@@ -488,6 +488,8 @@ typedef struct {
     std::mutex clients_mtx;
 
     WsPacketQueue recv_queue;     // 所有客户端汇聚的接收队列
+
+    char web_root[1024];          // 静态资源根目录（每个服务器独立）
 } WsServerSlot;
 
 #define MAX_SERVERS 16
@@ -519,28 +521,22 @@ static int FindFreeServerSlot() {
 }
 
 // ==================== 静态文件服务 ====================
-static char g_web_root[512] = {0};
-
-static void InitWebRoot() {
-    if (g_web_root[0]) return;
+// 默认 web 根目录：DLL/SO 所在目录下的 "web" 子目录
+static void GetDefaultWebRoot(char* out, size_t out_size) {
 #ifdef _WIN32
     HMODULE hm = NULL;
     GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
                        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                       (LPCSTR)&InitWebRoot, &hm);
+                       (LPCSTR)&GetDefaultWebRoot, &hm);
     char dll_path[512];
     GetModuleFileNameA(hm, dll_path, sizeof(dll_path));
     char* last_sep = strrchr(dll_path, '\\');
     if (last_sep) *last_sep = '\0';
-    last_sep = strrchr(dll_path, '\\');
-    if (last_sep) *last_sep = '\0';
-    snprintf(g_web_root, sizeof(g_web_root), "%s\\web", dll_path);
+    snprintf(out, out_size, "%s\\web", dll_path);
 #else
-    // 用 dladdr 拿到当前 .so 的真实路径，再回溯两级到工程根
     Dl_info info;
     char so_path[PATH_MAX];
-    if (dladdr((void*)&InitWebRoot, &info) && info.dli_fname) {
-        // dli_fname 可能是相对路径，先 realpath
+    if (dladdr((void*)&GetDefaultWebRoot, &info) && info.dli_fname) {
         if (!realpath(info.dli_fname, so_path)) {
             strncpy(so_path, info.dli_fname, sizeof(so_path) - 1);
             so_path[sizeof(so_path) - 1] = '\0';
@@ -550,11 +546,8 @@ static void InitWebRoot() {
     }
     char* last_sep = strrchr(so_path, '/');
     if (last_sep) *last_sep = '\0';
-    last_sep = strrchr(so_path, '/');
-    if (last_sep) *last_sep = '\0';
-    snprintf(g_web_root, sizeof(g_web_root), "%s/web", so_path);
+    snprintf(out, out_size, "%s/web", so_path);
 #endif
-    wslog("Web root: %s", g_web_root);
 }
 
 static const char* GetContentType(const char* path) {
@@ -592,8 +585,7 @@ static void SendHttpResponse(SOCKET sock, int status, const char* content_type,
     if (body && body_len > 0) SendAll(sock, body, body_len);
 }
 
-static bool ServeStaticFile(SOCKET sock, const char* url_path) {
-    InitWebRoot();
+static bool ServeStaticFile(SOCKET sock, const char* url_path, const char* web_root) {
     char rel_path[512];
     if (strcmp(url_path, "/") == 0) {
         strcpy(rel_path, "index.html");
@@ -603,11 +595,11 @@ static bool ServeStaticFile(SOCKET sock, const char* url_path) {
         strncpy(rel_path, p, sizeof(rel_path) - 1);
         rel_path[sizeof(rel_path) - 1] = '\0';
     }
-    char full_path[1024];
+    char full_path[2048];
 #ifdef _WIN32
-    snprintf(full_path, sizeof(full_path), "%s\\%s", g_web_root, rel_path);
+    snprintf(full_path, sizeof(full_path), "%s\\%s", web_root, rel_path);
 #else
-    snprintf(full_path, sizeof(full_path), "%s/%s", g_web_root, rel_path);
+    snprintf(full_path, sizeof(full_path), "%s/%s", web_root, rel_path);
 #endif
 
     FILE* f = fopen(full_path, "rb");
@@ -828,7 +820,7 @@ static void HandleConnectionThread(SOCKET client_sock, int server_id) {
 
     // 静态文件
     if (strcmp(req.method, "GET") == 0) {
-        if (!ServeStaticFile(client_sock, req.path)) {
+        if (!ServeStaticFile(client_sock, req.path, svr->web_root)) {
             SendHttpResponse(client_sock, 404, "text/plain", "Not Found", 9);
         }
     } else {
@@ -890,7 +882,7 @@ static void PingThreadFunc(int server_id) {
 
 // ==================== 对外 API ====================
 
-int CreateWebServer(uint16_t port) {
+int CreateWebServer(uint16_t port, const char* web_root) {
     std::unique_lock<std::mutex> lock(g_server_mtx);
     if (!InitSockets()) return -1;
 
@@ -904,6 +896,15 @@ int CreateWebServer(uint16_t port) {
     svr->clients.clear();
     WsQueueInit(&svr->recv_queue);
     WsQueueResume(&svr->recv_queue);
+
+    // 解析 web 根目录：用户传入则用之，否则回退到默认（DLL 同目录的 web）
+    if (web_root && web_root[0]) {
+        strncpy(svr->web_root, web_root, sizeof(svr->web_root) - 1);
+        svr->web_root[sizeof(svr->web_root) - 1] = '\0';
+    } else {
+        GetDefaultWebRoot(svr->web_root, sizeof(svr->web_root));
+    }
+    wslog("Server slot=%d web_root=%s", slot, svr->web_root);
 
     svr->listen_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (svr->listen_fd == INVALID_SOCKET) return -1;

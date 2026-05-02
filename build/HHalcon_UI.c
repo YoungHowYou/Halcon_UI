@@ -88,11 +88,11 @@ static Herror HSystem0(int32_t xid)
   HCkP(HXPkgSetOpInfo(xid,2,HOIID_parallelMinCosts,0));
   HCkP(HXPkgSetOpInfo(xid,2,HOIID_parallelRegionsplit,0));
 
-  HCkP(HXPkgSetOpInfo(xid,3,HOIID_ParameterType,0,"i"));
+  HCkP(HXPkgSetOpInfo(xid,3,HOIID_ParameterType,0,"is"));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_ParameterType,1,"h"));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumInpObjPar,0));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumOutpObjPar,0));
-  HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumInpCtrlPar,1));
+  HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumInpCtrlPar,2));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumOutpCtrlPar,1));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_LogicalName,"WCreateWebServer"));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_PhysicalName,"CCreateWebServer"));

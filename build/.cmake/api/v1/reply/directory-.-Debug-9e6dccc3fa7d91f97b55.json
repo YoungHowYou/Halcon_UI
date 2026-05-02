@@ -8,7 +8,7 @@
 		],
 		"files" : 
 		[
-			"/home/njsc/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake",
+			"C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake",
 			"CMakeLists.txt"
 		],
 		"nodes" : 
@@ -37,10 +37,15 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 480,
+				"line" : 473,
 				"parent" : 1
 			}
 		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
 	},
 	"installers" : 
 	[
@@ -75,25 +80,51 @@
 		{
 			"backtrace" : 4,
 			"component" : "Unspecified",
-			"destination" : "Halcon_UI/lib/x64-linux",
+			"destination" : "Halcon_UI/lib/x64-win64",
 			"paths" : 
 			[
-				"/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UI.so"
+				"D:/Desktop/Source/Halcon_Extension/Halcon_UI/bin/Halcon_UI.lib"
 			],
 			"targetId" : "Halcon_UI::@6890427a1f51a3e7e1df",
-			"targetIndex" : 0,
+			"targetIndex" : 1,
+			"targetIsImportLibrary" : true,
 			"type" : "target"
 		},
 		{
 			"backtrace" : 4,
 			"component" : "Unspecified",
-			"destination" : "Halcon_UI/lib/x64-linux",
+			"destination" : "Halcon_UI/bin/x64-win64",
 			"paths" : 
 			[
-				"/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so"
+				"D:/Desktop/Source/Halcon_Extension/Halcon_UI/bin/Halcon_UI.dll"
+			],
+			"targetId" : "Halcon_UI::@6890427a1f51a3e7e1df",
+			"targetIndex" : 1,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/lib/x64-win64",
+			"paths" : 
+			[
+				"D:/Desktop/Source/Halcon_Extension/Halcon_UI/bin/Halcon_UIc.lib"
 			],
 			"targetId" : "Halcon_UIcint::@6890427a1f51a3e7e1df",
-			"targetIndex" : 4,
+			"targetIndex" : 5,
+			"targetIsImportLibrary" : true,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/bin/x64-win64",
+			"paths" : 
+			[
+				"D:/Desktop/Source/Halcon_Extension/Halcon_UI/bin/Halcon_UIc.dll"
+			],
+			"targetId" : "Halcon_UIcint::@6890427a1f51a3e7e1df",
+			"targetIndex" : 5,
 			"type" : "target"
 		},
 		{
@@ -109,13 +140,26 @@
 		{
 			"backtrace" : 4,
 			"component" : "Unspecified",
-			"destination" : "Halcon_UI/lib/x64-linux",
+			"destination" : "Halcon_UI/lib/x64-win64",
 			"paths" : 
 			[
-				"/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIcpp.so"
+				"D:/Desktop/Source/Halcon_Extension/Halcon_UI/bin/Halcon_UIcpp.lib"
 			],
 			"targetId" : "Halcon_UIcppint::@6890427a1f51a3e7e1df",
-			"targetIndex" : 5,
+			"targetIndex" : 6,
+			"targetIsImportLibrary" : true,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "Halcon_UI/bin/x64-win64",
+			"paths" : 
+			[
+				"D:/Desktop/Source/Halcon_Extension/Halcon_UI/bin/Halcon_UIcpp.dll"
+			],
+			"targetId" : "Halcon_UIcppint::@6890427a1f51a3e7e1df",
+			"targetIndex" : 6,
 			"type" : "target"
 		},
 		{

@@ -1089,23 +1089,23 @@ toggleLanguage(new_lang,1);return;}
 <h2 id="sec_synopsis">Signature</h2>
 <div data-if="hdevelop" style="display:inline;">
 <p>
-<code><b>WCreateWebServer</b>( :  : <a href="#port"><i>port</i></a> : <a href="#server_id"><i>server_id</i></a>)</code></p>
+<code><b>WCreateWebServer</b>( :  : <a href="#port"><i>port</i></a>, <a href="#web_root"><i>web_root</i></a> : <a href="#server_id"><i>server_id</i></a>)</code></p>
 </div>
 <div data-if="c" style="display:none;">
 <p>
-<code>Herror <b>T_WCreateWebServer</b>(const Htuple <a href="#port"><i>port</i></a>, Htuple* <a href="#server_id"><i>server_id</i></a>)</code></p>
+<code>Herror <b>T_WCreateWebServer</b>(const Htuple <a href="#port"><i>port</i></a>, const Htuple <a href="#web_root"><i>web_root</i></a>, Htuple* <a href="#server_id"><i>server_id</i></a>)</code></p>
 </div>
 <div data-if="cpp" style="display:none;">
 <p>
-<code>void <b>WCreateWebServer</b>(const HTuple&amp; <a href="#port"><i>port</i></a>, HTuple* <a href="#server_id"><i>server_id</i></a>)</code></p>
+<code>void <b>WCreateWebServer</b>(const HTuple&amp; <a href="#port"><i>port</i></a>, const HTuple&amp; <a href="#web_root"><i>web_root</i></a>, HTuple* <a href="#server_id"><i>server_id</i></a>)</code></p>
 </div>
 <div data-if="dotnet" style="display:none;">
 <p>
-<code>static void <a href="HHalconUI.html">HHalconUI</a>.<b>WCreateWebServer</b>(<a href="HTuple.html">HTuple</a> <a href="#port"><i>port</i></a>, out <a href="HTuple.html">HTuple</a> <a href="#server_id"><i>serverId</i></a>)</code></p>
+<code>static void <a href="HHalconUI.html">HHalconUI</a>.<b>WCreateWebServer</b>(<a href="HTuple.html">HTuple</a> <a href="#port"><i>port</i></a>, <a href="HTuple.html">HTuple</a> <a href="#web_root"><i>webRoot</i></a>, out <a href="HTuple.html">HTuple</a> <a href="#server_id"><i>serverId</i></a>)</code></p>
 </div>
 <div data-if="python" style="display:none;">
 <p>
-<code>def <b>WCreateWebServer</b>(<a href="#port"><i>port</i></a>: int) -&gt; HHandle</code></p>
+<code>def <b>WCreateWebServer</b>(<a href="#port"><i>port</i></a>: int, <a href="#web_root"><i>web_root</i></a>: str) -&gt; HHandle</code></p>
 </div>
 <h2 id="sec_execution">Execution Information</h2>
 <ul>
@@ -1118,6 +1118,12 @@ toggleLanguage(new_lang,1);return;}
   <div class="par">
 <div class="parhead">
 <span id="port" class="parname"><b><code><span data-if="hdevelop" style="display:inline">port</span><span data-if="c" style="display:none">port</span><span data-if="cpp" style="display:none">port</span><span data-if="dotnet" style="display:none">port</span><span data-if="python" style="display:none">port</span></code></b> (input_control)  </span><span>number <code>→</code> <span data-if="dotnet" style="display:none">HTuple</span><span data-if="python" style="display:none">int</span><span data-if="cpp" style="display:none">HTuple</span><span data-if="c" style="display:none">Htuple</span><span data-if="hdevelop" style="display:inline"> (integer)</span><span data-if="dotnet" style="display:none"> (<i>int</i> / </span><span data-if="dotnet" style="display:none">long)</span><span data-if="cpp" style="display:none"> (<i>Hlong</i>)</span><span data-if="c" style="display:none"> (<i>Hlong</i>)</span></span>
+</div>
+<p class="pardesc"></p>
+</div>
+  <div class="par">
+<div class="parhead">
+<span id="web_root" class="parname"><b><code><span data-if="hdevelop" style="display:inline">web_root</span><span data-if="c" style="display:none">web_root</span><span data-if="cpp" style="display:none">web_root</span><span data-if="dotnet" style="display:none">webRoot</span><span data-if="python" style="display:none">web_root</span></code></b> (input_control)  </span><span>string <code>→</code> <span data-if="dotnet" style="display:none">HTuple</span><span data-if="python" style="display:none">str</span><span data-if="cpp" style="display:none">HTuple</span><span data-if="c" style="display:none">Htuple</span><span data-if="hdevelop" style="display:inline"> (string)</span><span data-if="dotnet" style="display:none"> (<i>string</i>)</span><span data-if="cpp" style="display:none"> (<i>HString</i>)</span><span data-if="c" style="display:none"> (<i>char*</i>)</span></span>
 </div>
 <p class="pardesc"></p>
 </div>

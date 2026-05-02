@@ -104,9 +104,8 @@ DictHandle
 │   └── "Data" → DataDict
 │       ├── "宽"   → 图像宽度
 │       ├── "高"   → 图像高度
-│       ├── "位深"  → 1（8bit）或 2（16bit）
-│       ├── "通道"  → 1（灰度）或 3（RGB）
-│       └── "id"   → 窗口 ID（可选，默认 0）
+│       ├── "图号"  → 图像控件编号（整数，可选，默认 0）
+│       └── "通道"  → 1（灰度）或 3（RGB）
 └── "图" → HObject 图像（CMD=0 时必填）
 ```
 
@@ -195,15 +194,15 @@ stop ()
 
 ## 多窗口
 
-Halcon 端通过 `Data.id` 字段指定目标窗口：
+Halcon 端通过 `Data.图号` 字段指定目标图像控件：
 
 ```
-set_dict_tuple (DataDict, 'id', 0)   * 窗口 0
-set_dict_tuple (DataDict, 'id', 1)   * 窗口 1
-set_dict_tuple (DataDict, 'id', 2)   * 窗口 2
+set_dict_tuple (DataDict, '图号', 0)   * 主预览区
+set_dict_tuple (DataDict, '图号', 1)   * 控件 1
+set_dict_tuple (DataDict, '图号', 2)   * 控件 2
 ```
 
-前端根据 `id` 自动创建独立的 Canvas 窗口，每个窗口独立显示和统计 FPS。不设 `id` 时默认窗口 0。
+前端根据 `图号` 路由到对应控件：`图号=0` 显示在主预览区，其他整数动态创建独立 Canvas 窗口（每个窗口独立显示和统计 FPS）。不设 `图号` 时默认 `0`。
 
 ## 前端开发
 

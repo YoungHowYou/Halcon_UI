@@ -5,7 +5,7 @@ events:
     kind: "message-v1"
     backtrace:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineSystem.cmake:212 (message)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     message: |
       The system is: Windows - 10.0.26100 - AMD64
   -
@@ -16,7 +16,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     mode: "file"
     variable: "src_in"
     description: "Path to a file."
@@ -72,9 +72,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -83,6 +86,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       ENV{INCLUDE}:
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\include"
@@ -98,7 +102,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     message: |
       Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
       Compiler:  
@@ -108,7 +112,7 @@ events:
       The output was:
       0
       适用于 .NET Framework MSBuild 版本 17.14.40+3e7442088
-      生成启动时间为 2026/4/12 13:48:15。
+      生成启动时间为 2026/5/2 10:38:10。
       
       节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\4.2.0\\CompilerIdC\\CompilerIdC.vcxproj”(默认目标)。
       PrepareForBuild:
@@ -137,7 +141,7 @@ events:
           0 个警告
           0 个错误
       
-      已用时间 00:00:00.57
+      已用时间 00:00:00.40
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -154,7 +158,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:103 (__resolve_linker_path)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     mode: "program"
     variable: "_CMAKE_TOOL_WITH_PATH"
     description: "Path to a program."
@@ -206,9 +210,12 @@ events:
       - "D:/Desktop/Source/Halcon_Extension/Halcon_TcpWSL/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_YouloBe/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/"
       - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/"
+      - "C:/Program Files/nodejs/"
       - "C:/Users/younghowyou/.local/bin/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/"
@@ -216,6 +223,7 @@ events:
       - "C:/Users/younghowyou/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Microsoft VS Code/bin/"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/"
     searched_directories:
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/link.com"
@@ -259,9 +267,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -270,6 +281,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
   -
     kind: "find-v1"
@@ -278,7 +290,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:104 (__resolve_linker_path)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     mode: "program"
     variable: "_CMAKE_TOOL_WITH_PATH"
     description: "Path to a program."
@@ -330,9 +342,12 @@ events:
       - "D:/Desktop/Source/Halcon_Extension/Halcon_TcpWSL/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_YouloBe/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/"
       - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/"
+      - "C:/Program Files/nodejs/"
       - "C:/Users/younghowyou/.local/bin/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/"
@@ -340,6 +355,7 @@ events:
       - "C:/Users/younghowyou/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Microsoft VS Code/bin/"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/"
     searched_directories:
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lld-link.com"
@@ -453,15 +469,24 @@ events:
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/lld-link.com"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/lld-link.exe"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/lld-link"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/lld-link.com"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/lld-link.exe"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/lld-link"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/lld-link.com"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/lld-link.exe"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/lld-link"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/lld-link.com"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/lld-link.exe"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/lld-link"
       - "C:/Program Files/Git/cmd/lld-link.com"
       - "C:/Program Files/Git/cmd/lld-link.exe"
       - "C:/Program Files/Git/cmd/lld-link"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/lld-link.com"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/lld-link.exe"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/lld-link"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/lld-link.com"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/lld-link.exe"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/lld-link"
+      - "C:/Program Files/nodejs/lld-link.com"
+      - "C:/Program Files/nodejs/lld-link.exe"
+      - "C:/Program Files/nodejs/lld-link"
       - "C:/Users/younghowyou/.local/bin/lld-link.com"
       - "C:/Users/younghowyou/.local/bin/lld-link.exe"
       - "C:/Users/younghowyou/.local/bin/lld-link"
@@ -483,6 +508,9 @@ events:
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/lld-link.com"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/lld-link.exe"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/lld-link"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/lld-link.com"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/lld-link.exe"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/lld-link"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/lld-link.com"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/lld-link.exe"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/lld-link"
@@ -526,9 +554,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -537,13 +568,14 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
   -
     kind: "find-v1"
     backtrace:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     mode: "program"
     variable: "CMAKE_LINKER"
     description: "Path to a program."
@@ -595,9 +627,12 @@ events:
       - "D:/Desktop/Source/Halcon_Extension/Halcon_TcpWSL/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_YouloBe/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/"
       - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/"
+      - "C:/Program Files/nodejs/"
       - "C:/Users/younghowyou/.local/bin/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/"
@@ -605,6 +640,7 @@ events:
       - "C:/Users/younghowyou/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Microsoft VS Code/bin/"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/"
     searched_directories:
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/link.com"
@@ -648,9 +684,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -659,13 +698,14 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
   -
     kind: "find-v1"
     backtrace:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     mode: "program"
     variable: "CMAKE_MT"
     description: "Path to a program."
@@ -717,9 +757,12 @@ events:
       - "D:/Desktop/Source/Halcon_Extension/Halcon_TcpWSL/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_YouloBe/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/"
       - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/"
+      - "C:/Program Files/nodejs/"
       - "C:/Users/younghowyou/.local/bin/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/"
@@ -727,6 +770,7 @@ events:
       - "C:/Users/younghowyou/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Microsoft VS Code/bin/"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/"
     searched_directories:
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/mt.com"
@@ -788,9 +832,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -799,13 +846,14 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
   -
     kind: "find-v1"
     backtrace:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     mode: "program"
     variable: "CMAKE_AR"
     description: "Path to a program."
@@ -857,9 +905,12 @@ events:
       - "D:/Desktop/Source/Halcon_Extension/Halcon_TcpWSL/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_YouloBe/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/"
       - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/"
+      - "C:/Program Files/nodejs/"
       - "C:/Users/younghowyou/.local/bin/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/"
@@ -867,6 +918,7 @@ events:
       - "C:/Users/younghowyou/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Microsoft VS Code/bin/"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/"
     searched_directories:
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lib.com"
@@ -910,9 +962,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -921,6 +976,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
   -
     kind: "find-v1"
@@ -930,7 +986,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     mode: "file"
     variable: "src_in"
     description: "Path to a file."
@@ -986,9 +1042,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -997,6 +1056,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       ENV{INCLUDE}:
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\include"
@@ -1012,7 +1072,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     message: |
       Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
       Compiler:  
@@ -1022,7 +1082,7 @@ events:
       The output was:
       0
       适用于 .NET Framework MSBuild 版本 17.14.40+3e7442088
-      生成启动时间为 2026/4/12 13:48:16。
+      生成启动时间为 2026/5/2 10:38:11。
       
       节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\4.2.0\\CompilerIdCXX\\CompilerIdCXX.vcxproj”(默认目标)。
       PrepareForBuild:
@@ -1051,7 +1111,7 @@ events:
           0 个警告
           0 个错误
       
-      已用时间 00:00:00.41
+      已用时间 00:00:00.39
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -1068,7 +1128,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:104 (__resolve_linker_path)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     mode: "program"
     variable: "_CMAKE_TOOL_WITH_PATH"
     description: "Path to a program."
@@ -1120,9 +1180,12 @@ events:
       - "D:/Desktop/Source/Halcon_Extension/Halcon_TcpWSL/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_YouloBe/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/"
       - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/"
+      - "C:/Program Files/nodejs/"
       - "C:/Users/younghowyou/.local/bin/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/"
@@ -1130,6 +1193,7 @@ events:
       - "C:/Users/younghowyou/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Microsoft VS Code/bin/"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/"
     searched_directories:
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lld-link.com"
@@ -1243,15 +1307,24 @@ events:
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/lld-link.com"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/lld-link.exe"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/lld-link"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/lld-link.com"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/lld-link.exe"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/lld-link"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/lld-link.com"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/lld-link.exe"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/lld-link"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/lld-link.com"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/lld-link.exe"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/lld-link"
       - "C:/Program Files/Git/cmd/lld-link.com"
       - "C:/Program Files/Git/cmd/lld-link.exe"
       - "C:/Program Files/Git/cmd/lld-link"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/lld-link.com"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/lld-link.exe"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/lld-link"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/lld-link.com"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/lld-link.exe"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/lld-link"
+      - "C:/Program Files/nodejs/lld-link.com"
+      - "C:/Program Files/nodejs/lld-link.exe"
+      - "C:/Program Files/nodejs/lld-link"
       - "C:/Users/younghowyou/.local/bin/lld-link.com"
       - "C:/Users/younghowyou/.local/bin/lld-link.exe"
       - "C:/Users/younghowyou/.local/bin/lld-link"
@@ -1273,6 +1346,9 @@ events:
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/lld-link.com"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/lld-link.exe"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/lld-link"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/lld-link.com"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/lld-link.exe"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/lld-link"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/lld-link.com"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/lld-link.exe"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/lld-link"
@@ -1316,9 +1392,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -1327,6 +1406,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
   -
     kind: "find-v1"
@@ -1336,7 +1416,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows-MSVC.cmake:553 (__windows_compiler_msvc_enable_rc)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows-MSVC-C.cmake:5 (__windows_compiler_msvc)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeCInformation.cmake:48 (include)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     mode: "program"
     variable: "CMAKE_RC_COMPILER"
     description: "RC compiler"
@@ -1388,9 +1468,12 @@ events:
       - "D:/Desktop/Source/Halcon_Extension/Halcon_TcpWSL/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_YouloBe/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_SoftwarePackage/"
-      - "D:/Desktop/Source/Halcon_Extension/Halcon_MvCodeReader/"
       - "D:/Desktop/Source/Halcon_Extension/Halcon_Python/"
+      - "D:/Desktop/Source/Halcon_Extension/Halcon_UI/"
       - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win64_x64/"
+      - "C:/Program Files/Bluevision/BVCam/GenICam_v3_0/bin/Win32_i86/"
+      - "C:/Program Files/nodejs/"
       - "C:/Users/younghowyou/.local/bin/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Python/Python310/"
@@ -1398,6 +1481,7 @@ events:
       - "C:/Users/younghowyou/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/younghowyou/AppData/Local/Programs/Microsoft VS Code/bin/"
       - "C:/Users/younghowyou/AppData/Local/GitHubDesktop/bin/"
+      - "C:/Users/younghowyou/AppData/Roaming/npm/"
       - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/Common7/IDE/VC/Linux/bin/ConnectionManagerExe/"
       - "C:/Program Files/bin/"
       - "C:/Program Files/sbin/"
@@ -1471,9 +1555,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -1482,6 +1569,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -1494,12 +1582,12 @@ events:
     backtrace:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-edyeso"
-      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-edyeso"
+      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-6tynvq"
+      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-6tynvq"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od"
@@ -1508,39 +1596,39 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-edyeso'
+        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-6tynvq'
         
-        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_1a6bf.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_b0110.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         适用于 .NET Framework MSBuild 版本 17.14.40+3e7442088
-        生成启动时间为 2026/4/12 13:48:17。
+        生成启动时间为 2026/5/2 10:38:11。
         
-        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-edyeso\\cmTC_1a6bf.vcxproj”(默认目标)。
+        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6tynvq\\cmTC_b0110.vcxproj”(默认目标)。
         PrepareForBuild:
           已启用结构化输出。编译器诊断的格式设置将反映错误层次结构。有关详细信息，请参阅 https://aka.ms/cpp/structured-output。
-          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-edyeso\\Debug\\”。
-          正在创建目录“cmTC_1a6bf.dir\\Debug\\cmTC_1a6bf.tlog\\”。
+          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6tynvq\\Debug\\”。
+          正在创建目录“cmTC_b0110.dir\\Debug\\cmTC_b0110.tlog\\”。
         InitializeBuildStatus:
-          正在创建“cmTC_1a6bf.dir\\Debug\\cmTC_1a6bf.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
-          正在对“cmTC_1a6bf.dir\\Debug\\cmTC_1a6bf.tlog\\unsuccessfulbuild”执行 Touch 任务。
+          正在创建“cmTC_b0110.dir\\Debug\\cmTC_b0110.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+          正在对“cmTC_b0110.dir\\Debug\\cmTC_b0110.tlog\\unsuccessfulbuild”执行 Touch 任务。
         ClCompile:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_1a6bf.dir\\Debug\\\\" /Fd"cmTC_1a6bf.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_b0110.dir\\Debug\\\\" /Fd"cmTC_b0110.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCCompilerABI.c"
           用于 x64 的 Microsoft (R) C/C++ 优化编译器 19.44.35225 版
           版权所有(C) Microsoft Corporation。保留所有权利。
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_1a6bf.dir\\Debug\\\\" /Fd"cmTC_1a6bf.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCCompilerABI.c"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_b0110.dir\\Debug\\\\" /Fd"cmTC_b0110.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCCompilerABI.c"
           CMakeCCompilerABI.c
         Link:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-edyeso\\Debug\\cmTC_1a6bf.exe" /INCREMENTAL /ILK:"cmTC_1a6bf.dir\\Debug\\cmTC_1a6bf.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-edyeso/Debug/cmTC_1a6bf.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-edyeso/Debug/cmTC_1a6bf.lib" /MACHINE:X64 cmTC_1a6bf.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_1a6bf.vcxproj -> D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-edyeso\\Debug\\cmTC_1a6bf.exe
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6tynvq\\Debug\\cmTC_b0110.exe" /INCREMENTAL /ILK:"cmTC_b0110.dir\\Debug\\cmTC_b0110.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-6tynvq/Debug/cmTC_b0110.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-6tynvq/Debug/cmTC_b0110.lib" /MACHINE:X64 cmTC_b0110.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_b0110.vcxproj -> D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6tynvq\\Debug\\cmTC_b0110.exe
         FinalizeBuildStatus:
-          正在删除文件“cmTC_1a6bf.dir\\Debug\\cmTC_1a6bf.tlog\\unsuccessfulbuild”。
-          正在对“cmTC_1a6bf.dir\\Debug\\cmTC_1a6bf.tlog\\cmTC_1a6bf.lastbuildstate”执行 Touch 任务。
-        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-edyeso\\cmTC_1a6bf.vcxproj”(默认目标)的操作。
+          正在删除文件“cmTC_b0110.dir\\Debug\\cmTC_b0110.tlog\\unsuccessfulbuild”。
+          正在对“cmTC_b0110.dir\\Debug\\cmTC_b0110.tlog\\cmTC_b0110.lastbuildstate”执行 Touch 任务。
+        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6tynvq\\cmTC_b0110.vcxproj”(默认目标)的操作。
         
         已成功生成。
             0 个警告
             0 个错误
         
-        已用时间 00:00:00.39
+        已用时间 00:00:00.43
         
       exitCode: 0
   -
@@ -1548,7 +1636,7 @@ events:
     backtrace:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     message: |
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
@@ -1566,7 +1654,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/Internal/CMakeDetermineLinkerId.cmake:38 (message)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     message: |
       Running the C compiler's linker: "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe" "-v"
       Microsoft (R) Incremental Linker Version 14.44.35225.0
@@ -1576,12 +1664,12 @@ events:
     backtrace:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-8r97f2"
-      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-8r97f2"
+      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-fef195"
+      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-fef195"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Ob0 /Od"
@@ -1591,39 +1679,39 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-8r97f2'
+        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-fef195'
         
-        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_1c3d3.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_c853d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         适用于 .NET Framework MSBuild 版本 17.14.40+3e7442088
-        生成启动时间为 2026/4/12 13:48:17。
+        生成启动时间为 2026/5/2 10:38:12。
         
-        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-8r97f2\\cmTC_1c3d3.vcxproj”(默认目标)。
+        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fef195\\cmTC_c853d.vcxproj”(默认目标)。
         PrepareForBuild:
           已启用结构化输出。编译器诊断的格式设置将反映错误层次结构。有关详细信息，请参阅 https://aka.ms/cpp/structured-output。
-          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-8r97f2\\Debug\\”。
-          正在创建目录“cmTC_1c3d3.dir\\Debug\\cmTC_1c3d3.tlog\\”。
+          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fef195\\Debug\\”。
+          正在创建目录“cmTC_c853d.dir\\Debug\\cmTC_c853d.tlog\\”。
         InitializeBuildStatus:
-          正在创建“cmTC_1c3d3.dir\\Debug\\cmTC_1c3d3.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
-          正在对“cmTC_1c3d3.dir\\Debug\\cmTC_1c3d3.tlog\\unsuccessfulbuild”执行 Touch 任务。
+          正在创建“cmTC_c853d.dir\\Debug\\cmTC_c853d.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+          正在对“cmTC_c853d.dir\\Debug\\cmTC_c853d.tlog\\unsuccessfulbuild”执行 Touch 任务。
         ClCompile:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /Fo"cmTC_1c3d3.dir\\Debug\\\\" /Fd"cmTC_1c3d3.dir\\Debug\\vc143.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /Fo"cmTC_c853d.dir\\Debug\\\\" /Fd"cmTC_c853d.dir\\Debug\\vc143.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
           用于 x64 的 Microsoft (R) C/C++ 优化编译器 19.44.35225 版
           版权所有(C) Microsoft Corporation。保留所有权利。
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /Fo"cmTC_1c3d3.dir\\Debug\\\\" /Fd"cmTC_1c3d3.dir\\Debug\\vc143.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /Fo"cmTC_c853d.dir\\Debug\\\\" /Fd"cmTC_c853d.dir\\Debug\\vc143.pdb" /external:W1 /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-8r97f2\\Debug\\cmTC_1c3d3.exe" /INCREMENTAL /ILK:"cmTC_1c3d3.dir\\Debug\\cmTC_1c3d3.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-8r97f2/Debug/cmTC_1c3d3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-8r97f2/Debug/cmTC_1c3d3.lib" /MACHINE:X64 cmTC_1c3d3.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_1c3d3.vcxproj -> D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-8r97f2\\Debug\\cmTC_1c3d3.exe
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fef195\\Debug\\cmTC_c853d.exe" /INCREMENTAL /ILK:"cmTC_c853d.dir\\Debug\\cmTC_c853d.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-fef195/Debug/cmTC_c853d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-fef195/Debug/cmTC_c853d.lib" /MACHINE:X64 cmTC_c853d.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_c853d.vcxproj -> D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fef195\\Debug\\cmTC_c853d.exe
         FinalizeBuildStatus:
-          正在删除文件“cmTC_1c3d3.dir\\Debug\\cmTC_1c3d3.tlog\\unsuccessfulbuild”。
-          正在对“cmTC_1c3d3.dir\\Debug\\cmTC_1c3d3.tlog\\cmTC_1c3d3.lastbuildstate”执行 Touch 任务。
-        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-8r97f2\\cmTC_1c3d3.vcxproj”(默认目标)的操作。
+          正在删除文件“cmTC_c853d.dir\\Debug\\cmTC_c853d.tlog\\unsuccessfulbuild”。
+          正在对“cmTC_c853d.dir\\Debug\\cmTC_c853d.tlog\\cmTC_c853d.lastbuildstate”执行 Touch 任务。
+        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fef195\\cmTC_c853d.vcxproj”(默认目标)的操作。
         
         已成功生成。
             0 个警告
             0 个错误
         
-        已用时间 00:00:00.42
+        已用时间 00:00:00.41
         
       exitCode: 0
   -
@@ -1631,7 +1719,7 @@ events:
     backtrace:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     message: |
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
@@ -1649,7 +1737,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/Internal/CMakeDetermineLinkerId.cmake:38 (message)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
       - "C:/Program Files/CMake/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:31 (project)"
+      - "CMakeLists.txt:34 (project)"
     message: |
       Running the CXX compiler's linker: "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe" "-v"
       Microsoft (R) Incremental Linker Version 14.44.35225.0
@@ -1659,7 +1747,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:382 (find_library)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "library"
     variable: "HALCON_LIBRARY"
     description: "Path to a library."
@@ -1721,9 +1809,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -1732,6 +1823,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -1752,7 +1844,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:472 (find_path)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "path"
     variable: "HALCON_INCLUDE_DIR"
     description: "Path to a file."
@@ -1808,9 +1900,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -1819,6 +1914,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -1839,7 +1935,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:584 (find_file)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "file"
     variable: "HALCON_LIBRARY_RUNTIME"
     description: "Path to a file."
@@ -1895,9 +1991,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -1906,6 +2005,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -1926,7 +2026,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:630 (find_library)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "library"
     variable: "HALCON_CInt_LIBRARY"
     description: "Path to a library."
@@ -1983,9 +2083,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -1994,6 +2097,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2014,7 +2118,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:644 (find_file)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "file"
     variable: "HALCON_CInt_LIBRARY_RUNTIME"
     description: "Path to a file."
@@ -2070,9 +2174,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2081,6 +2188,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2101,7 +2209,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:673 (find_library)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "library"
     variable: "HALCON_CppInt_LIBRARY"
     description: "Path to a library."
@@ -2158,9 +2266,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2169,6 +2280,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2189,7 +2301,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:687 (find_file)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "file"
     variable: "HALCON_CppInt_LIBRARY_RUNTIME"
     description: "Path to a file."
@@ -2245,9 +2357,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2256,6 +2371,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2276,7 +2392,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:706 (find_library)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "library"
     variable: "HALCON_HDevEngine_LIBRARY"
     description: "Path to a library."
@@ -2333,9 +2449,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2344,6 +2463,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2364,7 +2484,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:721 (find_file)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "file"
     variable: "HALCON_HDevEngine_LIBRARY_RUNTIME"
     description: "Path to a file."
@@ -2420,9 +2540,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2431,6 +2554,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2451,7 +2575,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:751 (find_file)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "file"
     variable: "HALCON_DotNetInt_ASSEMBLY"
     description: "Path to a file."
@@ -2507,9 +2631,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2518,6 +2645,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2538,7 +2666,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:766 (find_file)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "file"
     variable: "HALCON_HDevEngineDotNet_ASSEMBLY"
     description: "Path to a file."
@@ -2594,9 +2722,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2605,6 +2736,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2625,7 +2757,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:980 (find_file)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "file"
     variable: "HALCON_HCanvas_MODULE"
     description: "Path to a file."
@@ -2681,9 +2813,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2692,6 +2827,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2712,7 +2848,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:1008 (find_file)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "file"
     variable: "HALCON_DL_MODULE"
     description: "Path to a file."
@@ -2768,9 +2904,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2779,6 +2918,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2799,7 +2939,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:1038 (find_program)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:33 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "program"
     variable: "HALCON_hcomp_EXECUTABLE"
     description: "Path to a program."
@@ -2857,9 +2997,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2868,6 +3011,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2880,7 +3024,7 @@ events:
     backtrace:
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/FindHALCON.cmake:1082 (find_program)"
       - "C:/Users/younghowyou/AppData/Roaming/MVTec/HALCON-24.11-Progress-Steady/examples/cmake/UseHALCON.cmake:40 (find_package)"
-      - "CMakeLists.txt:49 (include)"
+      - "CMakeLists.txt:65 (include)"
     mode: "program"
     variable: "HALCON_HDevelop_EXECUTABLE"
     description: "Path to a program."
@@ -2938,9 +3082,12 @@ events:
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_TcpWSL"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_YouloBe"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_SoftwarePackage"
-        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_MvCodeReader"
         - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_Python"
+        - "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI"
         - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win64_x64"
+        - "C:\\Program Files\\Bluevision\\BVCam\\GenICam_v3_0\\bin\\Win32_i86"
+        - "C:\\Program Files\\nodejs\\"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\.local\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
@@ -2949,6 +3096,7 @@ events:
         - "C:\\Users\\younghowyou\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\younghowyou\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
         - "C:\\Users\\younghowyou\\AppData\\Local\\GitHubDesktop\\bin"
+        - "C:\\Users\\younghowyou\\AppData\\Roaming\\npm"
         - "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\Common7\\IDE\\VC\\Linux\\bin\\ConnectionManagerExe"
       CMAKE_INSTALL_PREFIX: "C:/Program Files/Halcon_UI"
       CMAKE_SYSTEM_PREFIX_PATH:
@@ -2956,10 +3104,6 @@ events:
         - "C:/Program Files (x86)"
         - "C:/Program Files/CMake"
         - "C:/Program Files/Halcon_UI"
-...
-
----
-events:
   -
     kind: "try_compile-v1"
     backtrace:
@@ -2971,8 +3115,8 @@ events:
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-i17l0l"
-      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-i17l0l"
+      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-i1b94l"
+      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-i1b94l"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od"
@@ -2982,39 +3126,39 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-i17l0l'
+        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-i1b94l'
         
-        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_01c85.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_a62e2.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         适用于 .NET Framework MSBuild 版本 17.14.40+3e7442088
-        生成启动时间为 2026/5/1 14:53:54。
+        生成启动时间为 2026/5/2 10:38:12。
         
-        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\cmTC_01c85.vcxproj”(默认目标)。
+        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\cmTC_a62e2.vcxproj”(默认目标)。
         PrepareForBuild:
           已启用结构化输出。编译器诊断的格式设置将反映错误层次结构。有关详细信息，请参阅 https://aka.ms/cpp/structured-output。
-          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\Debug\\”。
-          正在创建目录“cmTC_01c85.dir\\Debug\\cmTC_01c85.tlog\\”。
+          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\Debug\\”。
+          正在创建目录“cmTC_a62e2.dir\\Debug\\cmTC_a62e2.tlog\\”。
         InitializeBuildStatus:
-          正在创建“cmTC_01c85.dir\\Debug\\cmTC_01c85.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
-          正在对“cmTC_01c85.dir\\Debug\\cmTC_01c85.tlog\\unsuccessfulbuild”执行 Touch 任务。
+          正在创建“cmTC_a62e2.dir\\Debug\\cmTC_a62e2.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+          正在对“cmTC_a62e2.dir\\Debug\\cmTC_a62e2.tlog\\unsuccessfulbuild”执行 Touch 任务。
         ClCompile:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_01c85.dir\\Debug\\\\" /Fd"cmTC_01c85.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\src.c"
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_a62e2.dir\\Debug\\\\" /Fd"cmTC_a62e2.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\src.c"
           用于 x64 的 Microsoft (R) C/C++ 优化编译器 19.44.35225 版
           版权所有(C) Microsoft Corporation。保留所有权利。
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_01c85.dir\\Debug\\\\" /Fd"cmTC_01c85.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\src.c"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_a62e2.dir\\Debug\\\\" /Fd"cmTC_a62e2.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\src.c"
           src.c
-        D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\src.c(1,10): error C1083: 无法打开包括文件: “pthread.h”: No such file or directory [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\cmTC_01c85.vcxproj]
-        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\cmTC_01c85.vcxproj”(默认目标)的操作 - 失败。
+        D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\src.c(1,10): error C1083: 无法打开包括文件: “pthread.h”: No such file or directory [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\cmTC_a62e2.vcxproj]
+        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\cmTC_a62e2.vcxproj”(默认目标)的操作 - 失败。
         
         生成失败。
         
-        “D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\cmTC_01c85.vcxproj”(默认目标) (1) ->
+        “D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\cmTC_a62e2.vcxproj”(默认目标) (1) ->
         (ClCompile 目标) -> 
-          D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\src.c(1,10): error C1083: 无法打开包括文件: “pthread.h”: No such file or directory [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i17l0l\\cmTC_01c85.vcxproj]
+          D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\src.c(1,10): error C1083: 无法打开包括文件: “pthread.h”: No such file or directory [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-i1b94l\\cmTC_a62e2.vcxproj]
         
             0 个警告
             1 个错误
         
-        已用时间 00:00:00.61
+        已用时间 00:00:00.26
         
       exitCode: 1
   -
@@ -3027,8 +3171,8 @@ events:
     checks:
       - "Looking for pthread_create in pthreads"
     directories:
-      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-5d89ay"
-      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-5d89ay"
+      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-pqu4yi"
+      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-pqu4yi"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od"
@@ -3038,41 +3182,41 @@ events:
       variable: "CMAKE_HAVE_PTHREADS_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-5d89ay'
+        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-pqu4yi'
         
-        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_2918f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_ecf98.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         适用于 .NET Framework MSBuild 版本 17.14.40+3e7442088
-        生成启动时间为 2026/5/1 14:53:55。
+        生成启动时间为 2026/5/2 10:38:13。
         
-        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5d89ay\\cmTC_2918f.vcxproj”(默认目标)。
+        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pqu4yi\\cmTC_ecf98.vcxproj”(默认目标)。
         PrepareForBuild:
           已启用结构化输出。编译器诊断的格式设置将反映错误层次结构。有关详细信息，请参阅 https://aka.ms/cpp/structured-output。
-          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5d89ay\\Debug\\”。
-          正在创建目录“cmTC_2918f.dir\\Debug\\cmTC_2918f.tlog\\”。
+          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pqu4yi\\Debug\\”。
+          正在创建目录“cmTC_ecf98.dir\\Debug\\cmTC_ecf98.tlog\\”。
         InitializeBuildStatus:
-          正在创建“cmTC_2918f.dir\\Debug\\cmTC_2918f.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
-          正在对“cmTC_2918f.dir\\Debug\\cmTC_2918f.tlog\\unsuccessfulbuild”执行 Touch 任务。
+          正在创建“cmTC_ecf98.dir\\Debug\\cmTC_ecf98.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+          正在对“cmTC_ecf98.dir\\Debug\\cmTC_ecf98.tlog\\unsuccessfulbuild”执行 Touch 任务。
         ClCompile:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_2918f.dir\\Debug\\\\" /Fd"cmTC_2918f.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5d89ay\\CheckFunctionExists.c"
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_ecf98.dir\\Debug\\\\" /Fd"cmTC_ecf98.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pqu4yi\\CheckFunctionExists.c"
           用于 x64 的 Microsoft (R) C/C++ 优化编译器 19.44.35225 版
           版权所有(C) Microsoft Corporation。保留所有权利。
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_2918f.dir\\Debug\\\\" /Fd"cmTC_2918f.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5d89ay\\CheckFunctionExists.c"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_ecf98.dir\\Debug\\\\" /Fd"cmTC_ecf98.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pqu4yi\\CheckFunctionExists.c"
           CheckFunctionExists.c
         Link:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5d89ay\\Debug\\cmTC_2918f.exe" /INCREMENTAL /ILK:"cmTC_2918f.dir\\Debug\\cmTC_2918f.ilk" /NOLOGO pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-5d89ay/Debug/cmTC_2918f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-5d89ay/Debug/cmTC_2918f.lib" /MACHINE:X64 cmTC_2918f.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: 无法打开文件“pthreads.lib” [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5d89ay\\cmTC_2918f.vcxproj]
-        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5d89ay\\cmTC_2918f.vcxproj”(默认目标)的操作 - 失败。
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pqu4yi\\Debug\\cmTC_ecf98.exe" /INCREMENTAL /ILK:"cmTC_ecf98.dir\\Debug\\cmTC_ecf98.ilk" /NOLOGO pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-pqu4yi/Debug/cmTC_ecf98.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-pqu4yi/Debug/cmTC_ecf98.lib" /MACHINE:X64 cmTC_ecf98.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: 无法打开文件“pthreads.lib” [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pqu4yi\\cmTC_ecf98.vcxproj]
+        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pqu4yi\\cmTC_ecf98.vcxproj”(默认目标)的操作 - 失败。
         
         生成失败。
         
-        “D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5d89ay\\cmTC_2918f.vcxproj”(默认目标) (1) ->
+        “D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pqu4yi\\cmTC_ecf98.vcxproj”(默认目标) (1) ->
         (Link 目标) -> 
-          LINK : fatal error LNK1104: 无法打开文件“pthreads.lib” [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-5d89ay\\cmTC_2918f.vcxproj]
+          LINK : fatal error LNK1104: 无法打开文件“pthreads.lib” [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-pqu4yi\\cmTC_ecf98.vcxproj]
         
             0 个警告
             1 个错误
         
-        已用时间 00:00:00.36
+        已用时间 00:00:00.31
         
       exitCode: 1
   -
@@ -3085,8 +3229,8 @@ events:
     checks:
       - "Looking for pthread_create in pthread"
     directories:
-      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-e69gcf"
-      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-e69gcf"
+      source: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-kct0mv"
+      binary: "D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-kct0mv"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od"
@@ -3096,41 +3240,41 @@ events:
       variable: "CMAKE_HAVE_PTHREAD_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-e69gcf'
+        Change Dir: 'D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-kct0mv'
         
-        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_f1897.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_67fd4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         适用于 .NET Framework MSBuild 版本 17.14.40+3e7442088
-        生成启动时间为 2026/5/1 14:53:56。
+        生成启动时间为 2026/5/2 10:38:13。
         
-        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e69gcf\\cmTC_f1897.vcxproj”(默认目标)。
+        节点 1 上的项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kct0mv\\cmTC_67fd4.vcxproj”(默认目标)。
         PrepareForBuild:
           已启用结构化输出。编译器诊断的格式设置将反映错误层次结构。有关详细信息，请参阅 https://aka.ms/cpp/structured-output。
-          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e69gcf\\Debug\\”。
-          正在创建目录“cmTC_f1897.dir\\Debug\\cmTC_f1897.tlog\\”。
+          正在创建目录“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kct0mv\\Debug\\”。
+          正在创建目录“cmTC_67fd4.dir\\Debug\\cmTC_67fd4.tlog\\”。
         InitializeBuildStatus:
-          正在创建“cmTC_f1897.dir\\Debug\\cmTC_f1897.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
-          正在对“cmTC_f1897.dir\\Debug\\cmTC_f1897.tlog\\unsuccessfulbuild”执行 Touch 任务。
+          正在创建“cmTC_67fd4.dir\\Debug\\cmTC_67fd4.tlog\\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+          正在对“cmTC_67fd4.dir\\Debug\\cmTC_67fd4.tlog\\unsuccessfulbuild”执行 Touch 任务。
         ClCompile:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_f1897.dir\\Debug\\\\" /Fd"cmTC_f1897.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e69gcf\\CheckFunctionExists.c"
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_67fd4.dir\\Debug\\\\" /Fd"cmTC_67fd4.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kct0mv\\CheckFunctionExists.c"
           用于 x64 的 Microsoft (R) C/C++ 优化编译器 19.44.35225 版
           版权所有(C) Microsoft Corporation。保留所有权利。
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_f1897.dir\\Debug\\\\" /Fd"cmTC_f1897.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e69gcf\\CheckFunctionExists.c"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /Fo"cmTC_67fd4.dir\\Debug\\\\" /Fd"cmTC_67fd4.dir\\Debug\\vc143.pdb" /external:W1 /TC /errorReport:queue "D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kct0mv\\CheckFunctionExists.c"
           CheckFunctionExists.c
         Link:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e69gcf\\Debug\\cmTC_f1897.exe" /INCREMENTAL /ILK:"cmTC_f1897.dir\\Debug\\cmTC_f1897.ilk" /NOLOGO pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-e69gcf/Debug/cmTC_f1897.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-e69gcf/Debug/cmTC_f1897.lib" /MACHINE:X64 cmTC_f1897.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: 无法打开文件“pthread.lib” [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e69gcf\\cmTC_f1897.vcxproj]
-        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e69gcf\\cmTC_f1897.vcxproj”(默认目标)的操作 - 失败。
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kct0mv\\Debug\\cmTC_67fd4.exe" /INCREMENTAL /ILK:"cmTC_67fd4.dir\\Debug\\cmTC_67fd4.ilk" /NOLOGO pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-kct0mv/Debug/cmTC_67fd4.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Desktop/Source/Halcon_Extension/Halcon_UI/build/CMakeFiles/CMakeScratch/TryCompile-kct0mv/Debug/cmTC_67fd4.lib" /MACHINE:X64 cmTC_67fd4.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: 无法打开文件“pthread.lib” [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kct0mv\\cmTC_67fd4.vcxproj]
+        已完成生成项目“D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kct0mv\\cmTC_67fd4.vcxproj”(默认目标)的操作 - 失败。
         
         生成失败。
         
-        “D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e69gcf\\cmTC_f1897.vcxproj”(默认目标) (1) ->
+        “D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kct0mv\\cmTC_67fd4.vcxproj”(默认目标) (1) ->
         (Link 目标) -> 
-          LINK : fatal error LNK1104: 无法打开文件“pthread.lib” [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-e69gcf\\cmTC_f1897.vcxproj]
+          LINK : fatal error LNK1104: 无法打开文件“pthread.lib” [D:\\Desktop\\Source\\Halcon_Extension\\Halcon_UI\\build\\CMakeFiles\\CMakeScratch\\TryCompile-kct0mv\\cmTC_67fd4.vcxproj]
         
             0 个警告
             1 个错误
         
-        已用时间 00:00:00.33
+        已用时间 00:00:00.31
         
       exitCode: 1
 ...

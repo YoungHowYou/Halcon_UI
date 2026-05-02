@@ -1,4 +1,4 @@
-WCreateWebServer<- CCreateWebServer[::port:server_id]
+WCreateWebServer<- CCreateWebServer[::port,web_root:server_id]
 short.german
   Create WebSocket server.;
 
@@ -29,6 +29,13 @@ parameter
   multivalue:         false;
   sem_type:           number;
   type_list:          integer;
+
+parameter
+  web_root:           input_control;
+  default_type:       string;
+  multivalue:         false;
+  sem_type:           string;
+  type_list:          string;
 
 parameter
   server_id:          output_control;

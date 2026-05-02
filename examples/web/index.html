@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Halcon_UI WebSocket 演示</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    margin: 0; padding: 16px; background: #f5f5f7; color: #1d1d1f;
+  }
+  h1 { margin: 0 0 12px; font-size: 18px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 12px; font-weight: 600; margin-left: 8px; }
+  .badge.connected    { background: #34c759; color: #fff; }
+  .badge.disconnected { background: #ff3b30; color: #fff; }
+
+  .imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .slot {
+    background: #fff; border: 1px solid #e5e5ea; border-radius: 8px;
+    padding: 8px; min-height: 240px;
+  }
+  .slot h3 { margin: 0 0 6px; font-size: 13px; color: #6e6e73; }
+  .slot img { width: 100%; height: auto; display: block; background: #000; border-radius: 4px; }
+  .slot .meta { font-size: 11px; color: #6e6e73; margin-top: 4px; }
+
+  .panel {
+    background: #fff; border: 1px solid #e5e5ea; border-radius: 8px;
+    padding: 12px; margin-bottom: 12px;
+  }
+  .row { display: flex; gap: 8px; align-items: center; }
+  .row > input { flex: 1; padding: 6px 8px; border: 1px solid #d1d1d6; border-radius: 6px; }
+  button {
+    padding: 8px 14px; background: #007aff; color: #fff;
+    border: none; border-radius: 6px; font-size: 13px; cursor: pointer;
+  }
+  button:hover { background: #0056b3; }
+
+  pre {
+    background: #1d1d1f; color: #f5f5f7; border-radius: 8px; padding: 10px;
+    font-family: "Consolas", monospace; font-size: 12px; line-height: 1.5;
+    margin: 0; max-height: 240px; overflow-y: auto;
+  }
+  .log-line { padding: 1px 0; }
+  .log-tx   { color: #66d9ef; }
+  .log-rx   { color: #a6e22e; }
+  .log-info { color: #ae81ff; }
+  .log-err  { color: #ff6188; }
+  .ts       { color: #6e6e73; }
+</style>
+</head>
+<body>
+
+<h1>Halcon_UI WebSocket 演示
+  <span id="ws-badge" class="badge disconnected">未连接</span>
+</h1>
+
+<div class="imgs">
+  <div class="slot">
+    <h3>图号 0 (主预览区)</h3>
+    <img id="img-0" alt="">
+    <div class="meta" id="meta-0">等待图像...</div>
+  </div>
+  <div class="slot">
+    <h3>图号 1 (副预览区)</h3>
+    <img id="img-1" alt="">
+    <div class="meta" id="meta-1">等待图像...</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3 style="margin:0 0 8px;font-size:13px;">发送命令到后端 (CMD=100)</h3>
+  <div class="row">
+    <input id="msg-input" placeholder="msg 内容" value="hello from web"/>
+    <button onclick="sendHello()">发送</button>
+  </div>
+</div>
+
+<pre id="log"></pre>
+
+<script>
+// ============================================================
+// 协议 (与 source/websocket.cpp 对称):
+//   [4B magic 0xDEADBEEF][4B json_len][4B data_len][JSON][binary]
+//   全部大端 (network byte order)
+// ============================================================
+const WS_MAGIC = 0xDEADBEEF;
+let ws = null;
+
+const logEl = document.getElementById('log');
+const badge = document.getElementById('ws-badge');
+
+function ts() {
+  const d = new Date();
+  return d.toTimeString().slice(0,8) + '.' + String(d.getMilliseconds()).padStart(3,'0');
+}
+function log(cls, text) {
+  const line = document.createElement('div');
+  line.className = 'log-line ' + cls;
+  line.innerHTML = '<span class="ts">' + ts() + '</span>  ' + text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  logEl.insertBefore(line, logEl.firstChild);
+}
+function setBadge(connected) {
+  badge.textContent = connected ? '已连接' : '未连接';
+  badge.className = 'badge ' + (connected ? 'connected' : 'disconnected');
+}
+
+// ---------------- WebSocket ----------------
+function connect() {
+  ws = new WebSocket('ws://' + location.host + '/ws');
+  ws.binaryType = 'arraybuffer';
+  ws.onopen  = () => { setBadge(true);  log('log-info', '[WS] 已连接'); };
+  ws.onclose = () => { setBadge(false); log('log-info', '[WS] 断开,2 秒后重连'); setTimeout(connect, 2000); };
+  ws.onerror = ()  => { log('log-err',  '[WS] 错误'); };
+  ws.onmessage = (ev) => onFrame(ev.data);
+}
+
+function onFrame(buf) {
+  if (!(buf instanceof ArrayBuffer) || buf.byteLength < 12) {
+    log('log-err', '[RX] 帧太短: ' + (buf.byteLength || 0));
+    return;
+  }
+  const dv = new DataView(buf);
+  const magic   = dv.getUint32(0, false);   // 大端
+  const jsonLen = dv.getUint32(4, false);
+  const dataLen = dv.getUint32(8, false);
+  if (magic !== WS_MAGIC) {
+    log('log-err', '[RX] magic 不匹配: 0x' + magic.toString(16));
+    return;
+  }
+  const jsonBytes = new Uint8Array(buf, 12, jsonLen);
+  const jsonStr   = new TextDecoder('utf-8').decode(jsonBytes);
+  let obj = null;
+  try { obj = JSON.parse(jsonStr); }
+  catch (e) { log('log-err', '[RX] JSON 解析失败: ' + e.message); return; }
+
+  const cmdJson = obj.CMD !== undefined ? obj : (obj['命令'] || obj.cmd);
+  if (!cmdJson) { log('log-err', '[RX] 无 CMD 字段: ' + jsonStr); return; }
+
+  const cmd  = cmdJson.CMD;
+  const data = cmdJson.Data || {};
+
+  if (cmd === 0) {
+    // 图像帧: 二进制部分是 JPEG (后端默认 fmt=jpeg)
+    const imgIdx = data['图号'] !== undefined ? data['图号'] : 0;
+    const W = data['宽'], H = data['高'], seq = data.seq;
+    if (dataLen > 0) {
+      const jpegBytes = new Uint8Array(buf, 12 + jsonLen, dataLen);
+      const blob = new Blob([jpegBytes], { type: 'image/jpeg' });
+      const url  = URL.createObjectURL(blob);
+      const img  = document.getElementById('img-' + imgIdx);
+      if (img) {
+        const old = img.src;
+        img.onload = () => { if (old && old.startsWith('blob:')) URL.revokeObjectURL(old); };
+        img.src = url;
+      }
+      const meta = document.getElementById('meta-' + imgIdx);
+      if (meta) meta.textContent = `${W}x${H}  seq=${seq}  ${dataLen} bytes`;
+    }
+    // 图像帧太频繁,不打日志
+  } else {
+    // 其他命令一律打日志
+    log('log-rx', '[RX] CMD=' + cmd + '  ' + JSON.stringify(data));
+  }
+}
+
+// ---------------- 发送 ----------------
+function send(cmd, data) {
+  if (!ws || ws.readyState !== 1) { log('log-err', '[TX] WS 未连接'); return; }
+  const payload = { CMD: cmd, Data: data || {} };
+  const jsonBytes = new TextEncoder().encode(JSON.stringify(payload));
+  const buf = new ArrayBuffer(12 + jsonBytes.length);
+  const dv  = new DataView(buf);
+  dv.setUint32(0, WS_MAGIC,         false);
+  dv.setUint32(4, jsonBytes.length, false);
+  dv.setUint32(8, 0,                false);
+  new Uint8Array(buf, 12).set(jsonBytes);
+  ws.send(buf);
+  log('log-tx', '[TX] CMD=' + cmd + '  ' + JSON.stringify(data || {}));
+}
+
+// 暴露到 window 方便 console 里调用
+window.sendCmd = send;
+
+function sendHello() {
+  const msg = document.getElementById('msg-input').value;
+  send(100, { msg: msg });
+}
+
+connect();
+</script>
+</body>
+</html>

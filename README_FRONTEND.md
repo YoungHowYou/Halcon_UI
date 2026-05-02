@@ -133,9 +133,8 @@ Connection: keep-alive
   "Data": {
     "宽": 1920,
     "高": 1080,
-    "位深": 1,
+    "图号": 0,
     "通道": 3,
-    "id": 0,
     "fmt": "jpeg"
   }
 }
@@ -146,9 +145,8 @@ Connection: keep-alive
 | `CMD` | int | 固定为 `0`，表示图像数据 |
 | `Data.宽` | int | 图像宽度（像素） |
 | `Data.高` | int | 图像高度（像素） |
-| `Data.位深` | int | 每通道字节数：`1`=8bit, `2`=16bit |
+| `Data.图号` | int | **图像控件编号**（可选，默认 `0`），前端据此路由到对应控件 |
 | `Data.通道` | int | 原始通道数：`1`=灰度, `3`=RGB |
-| `Data.id` | int | **窗口 ID**（可选，默认 `0`），用于区分多个图像窗口 |
 | `Data.fmt` | string | **编码格式**（可选）：`"jpeg"` 表示 JPEG 压缩，不存在则为 RAW 像素 |
 
 **命令/消息（CMD≠0）**：
@@ -175,8 +173,8 @@ Connection: keep-alive
 - 推荐用 `createImageBitmap(blob)` 解码（GPU 加速）
 
 **当 `fmt` 不存在（RAW 模式）**：
-- 灰度图（通道=1）：`[W×H×位深]` 字节，逐行存储
-- RGB 图（通道=3）：Planar 格式 `[R平面][G平面][B平面]`，每平面 `W×H×位深` 字节
+- 灰度图（通道=1）：`[W×H]` 字节，逐行存储（8bit/像素）
+- RGB 图（通道=3）：Planar 格式 `[R平面][G平面][B平面]`，每平面 `W×H` 字节
 - 前端需逐像素转换为 Canvas 的 RGBA 格式
 
 #### JavaScript 接收示例
@@ -210,7 +208,7 @@ while (true) {
 
     // 处理帧
     if (msg.CMD === 0 && dataLen > 0) {
-      const winId = msg.Data.id || 0;
+      const winId = msg.Data['图号'] || 0;
 
       if (msg.Data.fmt === 'jpeg') {
         // JPEG 图像
@@ -365,19 +363,19 @@ GET /img/logo.png  → web/img/logo.png
 
 ## 4. 多窗口支持
 
-Halcon 端在发送图像时，通过 `Data.id` 字段指定目标窗口：
+Halcon 端在发送图像时，通过 `Data.图号` 字段（整数）指定目标图像控件：
 
 ```
 * Halcon 端示例
-set_dict_tuple (DataDict, 'id', 0)   * → 前端 Window 0
-set_dict_tuple (DataDict, 'id', 1)   * → 前端 Window 1
-set_dict_tuple (DataDict, 'id', 2)   * → 前端 Window 2
+set_dict_tuple (DataDict, '图号', 0)   * → 前端主预览区
+set_dict_tuple (DataDict, '图号', 1)   * → 前端控件 1
+set_dict_tuple (DataDict, '图号', 2)   * → 前端控件 2
 ```
 
 **前端处理逻辑**：
-- 根据 `msg.Data.id` 找到或创建对应的 Canvas
-- 每个窗口独立渲染、独立 FPS 统计
-- `id` 字段可选，不传时默认为 `0`
+- 根据 `msg.Data['图号']` 找到或创建对应的 Canvas
+- 每个控件独立渲染、独立 FPS 统计
+- `图号` 字段可选，不传时默认为 `0`（主预览区）
 
 **建议的前端实现**：
 
@@ -402,7 +400,7 @@ function getOrCreateWindow(id) {
 }
 
 // 在 handleFrame 中使用
-const winId = msg.Data.id || 0;
+const winId = msg.Data['图号'] || 0;
 const win = getOrCreateWindow(winId);
 win.ctx.drawImage(bmp, 0, 0);
 ```
@@ -537,9 +535,8 @@ create_dict (DataDict)
 set_dict_tuple (CmdDict, 'CMD', 0)
 set_dict_tuple (DataDict, '宽', W)
 set_dict_tuple (DataDict, '高', H)
-set_dict_tuple (DataDict, '位深', 1)
 set_dict_tuple (DataDict, '通道', Ch)
-set_dict_tuple (DataDict, 'id', 0)
+set_dict_tuple (DataDict, '图号', 0)
 set_dict_tuple (CmdDict, 'Data', DataDict)
 set_dict_tuple (SendDict, '命令', CmdDict)
 set_dict_object (Image, SendDict, '图')

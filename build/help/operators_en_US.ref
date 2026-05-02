@@ -46,7 +46,7 @@ type_list=handle
 default_type=handle
 sem_type=handle
 multivalue=false
-WCreateWebServer(port,server_id)
+WCreateWebServer(port,web_root,server_id)
 short.ascii=Create WebSocket server.
 keywords=UserExtensionsWebSocketServerNetwork
 module=0 Foundation
@@ -55,6 +55,12 @@ parameter_class=input_control
 type_list=integer
 default_type=integer
 sem_type=number
+multivalue=false
+parameter=web_root
+parameter_class=input_control
+type_list=string
+default_type=string
+sem_type=string
 multivalue=false
 parameter=server_id
 parameter_class=output_control

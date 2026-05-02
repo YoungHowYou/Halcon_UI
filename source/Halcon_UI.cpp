@@ -221,10 +221,15 @@ static char* EncodeJpeg(const unsigned char* rPtr, const unsigned char* gPtr, co
 // ==================== 创建 HTTP 服务器 ====================
 Herror HCreateWebServer(Hproc_handle proc_handle)
 {
+    HAllocStringMem(proc_handle, 64);
     Hcpar port;
     HGetSPar(proc_handle, 1, LONG_PAR, &port, 1);
 
-    int ret = CreateWebServer((uint16_t)port.par.l);
+    Hcpar web_root;
+    HGetSPar(proc_handle, 2, STRING_PAR, &web_root, 1);
+
+    const char* root_str = web_root.par.s;
+    int ret = CreateWebServer((uint16_t)port.par.l, root_str);
     if (ret < 0) return 10000 - ret;
 
     HWebServerHandleData **handle_data;

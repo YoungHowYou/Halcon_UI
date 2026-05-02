@@ -31,9 +31,12 @@ extern "C" {
 #endif
 
 // 创建 WebSocket 服务器
-// port: 监听端口
-// 返回值: 服务器 ID (>=0)，失败返回 -1
-int CreateWebServer(uint16_t port);
+// port:     监听端口
+// web_root: 静态资源根目录（HTTP GET 服务的根）
+//           - 传 NULL 或空串：使用 DLL/SO 所在目录下的 "web" 子目录
+//           - 否则按用户指定的路径使用（绝对/相对均可）
+// 返回值:    服务器 ID (>=0)，失败返回 -1
+int CreateWebServer(uint16_t port, const char* web_root);
 
 // 发送数据（广播给所有已连接的客户端）
 // server_id: 服务器 ID
