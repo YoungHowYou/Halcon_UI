@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UI.pdb"
-  "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UI.so"
+  "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/lib/x64-linux/libHalcon_UI.pdb"
+  "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/lib/x64-linux/libHalcon_UI.so"
   "CMakeFiles/Halcon_UI.dir/HHalcon_UI.c.o"
   "CMakeFiles/Halcon_UI.dir/HHalcon_UI.c.o.d"
   "CMakeFiles/Halcon_UI.dir/source/Halcon_UI.c.o"

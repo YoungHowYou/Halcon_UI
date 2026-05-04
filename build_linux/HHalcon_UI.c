@@ -31,7 +31,7 @@ Herror CCreateWebServer(Hproc_handle proc_id);
 
 static Herror HSystem0(int32_t xid)
 {
-  HCkP(HXPkgSetOpInfo(xid,0,HOIID_ParameterType,0,"i"));
+  HCkP(HXPkgSetOpInfo(xid,0,HOIID_ParameterType,0,"h"));
   HCkP(HXPkgSetOpInfo(xid,0,HOIID_NumInpObjPar,0));
   HCkP(HXPkgSetOpInfo(xid,0,HOIID_NumOutpObjPar,0));
   HCkP(HXPkgSetOpInfo(xid,0,HOIID_NumInpCtrlPar,1));
@@ -50,7 +50,7 @@ static Herror HSystem0(int32_t xid)
   HCkP(HXPkgSetOpInfo(xid,0,HOIID_parallelMinCosts,0));
   HCkP(HXPkgSetOpInfo(xid,0,HOIID_parallelRegionsplit,0));
 
-  HCkP(HXPkgSetOpInfo(xid,1,HOIID_ParameterType,0,"ih"));
+  HCkP(HXPkgSetOpInfo(xid,1,HOIID_ParameterType,0,"hh"));
   HCkP(HXPkgSetOpInfo(xid,1,HOIID_NumInpObjPar,0));
   HCkP(HXPkgSetOpInfo(xid,1,HOIID_NumOutpObjPar,0));
   HCkP(HXPkgSetOpInfo(xid,1,HOIID_NumInpCtrlPar,2));
@@ -69,7 +69,7 @@ static Herror HSystem0(int32_t xid)
   HCkP(HXPkgSetOpInfo(xid,1,HOIID_parallelMinCosts,0));
   HCkP(HXPkgSetOpInfo(xid,1,HOIID_parallelRegionsplit,0));
 
-  HCkP(HXPkgSetOpInfo(xid,2,HOIID_ParameterType,0,"iih"));
+  HCkP(HXPkgSetOpInfo(xid,2,HOIID_ParameterType,0,"hih"));
   HCkP(HXPkgSetOpInfo(xid,2,HOIID_NumInpObjPar,0));
   HCkP(HXPkgSetOpInfo(xid,2,HOIID_NumOutpObjPar,0));
   HCkP(HXPkgSetOpInfo(xid,2,HOIID_NumInpCtrlPar,3));
@@ -88,11 +88,11 @@ static Herror HSystem0(int32_t xid)
   HCkP(HXPkgSetOpInfo(xid,2,HOIID_parallelMinCosts,0));
   HCkP(HXPkgSetOpInfo(xid,2,HOIID_parallelRegionsplit,0));
 
-  HCkP(HXPkgSetOpInfo(xid,3,HOIID_ParameterType,0,"i"));
-  HCkP(HXPkgSetOpInfo(xid,3,HOIID_ParameterType,1,"i"));
+  HCkP(HXPkgSetOpInfo(xid,3,HOIID_ParameterType,0,"is"));
+  HCkP(HXPkgSetOpInfo(xid,3,HOIID_ParameterType,1,"h"));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumInpObjPar,0));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumOutpObjPar,0));
-  HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumInpCtrlPar,1));
+  HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumInpCtrlPar,2));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_NumOutpCtrlPar,1));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_LogicalName,"WCreateWebServer"));
   HCkP(HXPkgSetOpInfo(xid,3,HOIID_PhysicalName,"CCreateWebServer"));

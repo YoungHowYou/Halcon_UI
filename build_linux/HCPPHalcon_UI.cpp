@@ -90,10 +90,11 @@ HUserExport void HalconCpp::WRecvWebData(const HTuple& server_id, const HTuple& 
 #ifdef WCreateWebServer
 # error An existing macro name conflicts with WCreateWebServer
 #endif
-HUserExport void HalconCpp::WCreateWebServer(const HTuple& port, HTuple* server_id)
+HUserExport void HalconCpp::WCreateWebServer(const HTuple& port, const HTuple& web_root, HTuple* server_id)
 {
   Hproc_handle proc = PreCallUser(3);
   HalconAPI::Store(proc,0,port);
+  HalconAPI::StoreEnc(proc,1,web_root);
   HalconAPI::InitOutp(proc,0);
   HalconAPI::CallProcedure(proc);
   HalconAPI::Load(proc,0,server_id);

@@ -84,13 +84,14 @@ HUserExport Herror T_WRecvWebData(const Htuple server_id, const Htuple timeout, 
   return HcPostCall(ph,err);
 }
 
-HUserExport Herror T_WCreateWebServer(const Htuple port, Htuple *server_id)
+HUserExport Herror T_WCreateWebServer(const Htuple port, const Htuple web_root, Htuple *server_id)
 {
   Hproc_handle ph;
   Herror err = H_MSG_OK;
 
   err = HcPreCallUser(3,&ph);
   if (err == H_MSG_OK) err = HcStoreICT(ph,0,&port);
+  if (err == H_MSG_OK) err = HcStoreICTEnc(ph,1,&web_root);
   if (err == H_MSG_OK)
   {
     HcInitOCT(ph,0,server_id);
@@ -142,12 +143,13 @@ HUserExport Herror WRecvWebData(Hlong server_id, Hlong timeout, Hlong DictHandle
   return HcPostCall(ph,err);
 }
 
-HUserExport Herror WCreateWebServer(Hlong port, Hlong *server_id)
+HUserExport Herror WCreateWebServer(Hlong port, const char *web_root, Hlong *server_id)
 {
   Hproc_handle ph;
   Herror err;
   err = HcPreCallUser(3,&ph);
   if (err == H_MSG_OK) HcStoreICL(ph,0,port);
+  if (err == H_MSG_OK) HcStoreICSEnc(ph,1,web_root);
   if (err == H_MSG_OK)
   {
     HcInitOCL(ph,0);

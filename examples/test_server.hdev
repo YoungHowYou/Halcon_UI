@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="24.11.1.0">
+<procedure name="main">
+<interface/>
+<body>
+<l>Port := 1802</l>
+<l>WebRoot := './web'</l>
+<l>WCreateWebServer (Port, WebRoot, ServerID)</l>
+<l>wait_seconds (8)</l>
+<l>WCloseWebServer (ServerID)</l>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+</hdevelop>

@@ -39,7 +39,7 @@ HUserExport void WSendWebData(const HTuple& server_id, const HTuple& DictHandle)
 HUserExport void WRecvWebData(const HTuple& server_id, const HTuple& timeout, const HTuple& DictHandle);
 
 // Create WebSocket server.
-HUserExport void WCreateWebServer(const HTuple& port, HTuple* server_id);
+HUserExport void WCreateWebServer(const HTuple& port, const HTuple& web_root, HTuple* server_id);
 
 }
 

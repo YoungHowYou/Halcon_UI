@@ -63,7 +63,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux" TYPE SHARED_LIBRARY FILES "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UI.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux" TYPE SHARED_LIBRARY FILES "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/lib/x64-linux/libHalcon_UI.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux/libHalcon_UI.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux/libHalcon_UI.so")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -76,7 +76,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux" TYPE SHARED_LIBRARY FILES "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIc.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux" TYPE SHARED_LIBRARY FILES "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/lib/x64-linux/libHalcon_UIc.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux/libHalcon_UIc.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux/libHalcon_UIc.so")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -93,7 +93,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux" TYPE SHARED_LIBRARY FILES "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/bin/libHalcon_UIcpp.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux" TYPE SHARED_LIBRARY FILES "/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/lib/x64-linux/libHalcon_UIcpp.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux/libHalcon_UIcpp.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/Halcon_UI/lib/x64-linux/libHalcon_UIcpp.so")
     if(CMAKE_INSTALL_DO_STRIP)

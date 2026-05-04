@@ -163,8 +163,8 @@ CMakeFiles/Halcon_UI_html.dir/clean:
 # Target rules for target CMakeFiles/Halcon_UI.dir
 
 # All Build rule for target.
-CMakeFiles/Halcon_UI.dir/all: CMakeFiles/Halcon_UI_html.dir/all
 CMakeFiles/Halcon_UI.dir/all: CMakeFiles/Halcon_UI_help.dir/all
+CMakeFiles/Halcon_UI.dir/all: CMakeFiles/Halcon_UI_html.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Halcon_UI.dir/build.make CMakeFiles/Halcon_UI.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Halcon_UI.dir/build.make CMakeFiles/Halcon_UI.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/njsc/MVTec/HALCON-24.11-Progress-Steady/Halcon_Extension/Halcon_UI/build_linux/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target Halcon_UI"
