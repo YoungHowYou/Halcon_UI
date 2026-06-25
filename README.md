@@ -1,88 +1,170 @@
 # Halcon_UI
 
-Halcon 扩展包 —— 内置 HTTP 服务器，将 Halcon 处理的图像和数据实时推送到浏览器 / Electron 前端。
+Halcon 扩展包 —— 内置 HTTP/WebSocket 服务器，将 Halcon 处理的图像和数据实时推送到浏览器 / Electron 前端。
 
 ## 特性
 
-- **纯 HTTP 协议**，浏览器 / Electron 原生支持，无需 WebSocket
+- **纯 HTTP/WebSocket 协议**，浏览器 / Electron 原生支持
 - **Chunked Streaming 推送图像**，服务器主动推帧，零轮询延迟
-- **JPEG 自动压缩**（GDI+），4000x3000 RGB 图从 36MB 压缩到 ~200KB
+- **JPEG 自动压缩**（libjpeg-turbo），4000×3000 RGB 图从 36MB 压缩到 ~200KB
 - **多窗口支持**，通过 `id` 字段区分不同图像显示窗口
-- **前端热更新**，修改 `web/` 目录下的 HTML/CSS/JS 保存即生效，不用重新编译 DLL
-- **双向通信**，前端可通过 POST 发送命令给 Halcon
+- **前端热更新**，修改 `web/` 目录下的 HTML/CSS/JS 保存即生效，不用重新编译
+- **双向通信**，前端可通过 POST/WebSocket 发送命令给 Halcon
 - **CORS 全开**，支持前端框架（Vue/React/Electron）独立开发
 - **Halcon 接口简洁**，4 个操作符，和原有扩展包风格一致
+- **跨平台**：Windows / Linux 统一代码路径
 
 ## 项目结构
 
 ```
 Halcon_UI/
-├── CMakeLists.txt              # 构建配置
+├── CMakeLists.txt              # CMake 构建配置（跨平台）
+├── CMakePresets.json           # CMake Presets（vcpkg 集成）
+├── vcpkg.json                  # vcpkg 依赖清单
 ├── README.md                   # 本文件
+├── PROTOCOL.md                 # 前后端通信协议
+├── OPERATORS.md                # Halcon 操作符文档
+├── .gitignore
 ├── def/
 │   └── Halcon_UI.def           # Halcon 操作符定义
 ├── include/
-│   ├── Halcon_UI.h             # DLL 导出声明
-│   ├── websocket.h             # HTTP 服务器 C 接口
+│   ├── Halcon_UI.h             # DLL/SO 导出声明
+│   ├── websocket.h             # HTTP/WebSocket 服务器 C 接口
 │   ├── ws_queue.h              # 线程安全环形队列
 │   └── ws_config.h             # 配置常量
-├── source/
-│   ├── websocket.cpp           # HTTP 服务器实现（Chunked Streaming + 静态文件服务）
-│   ├── Halcon_UI.cpp           # Halcon 扩展包装层（含 GDI+ JPEG 编码）
+├── src/                        # 源代码
+│   ├── websocket.cpp           # HTTP/WebSocket 服务器实现
+│   ├── Halcon_UI.cpp           # Halcon 扩展包装层（JPEG 编码）
 │   └── Halcon_UI.c             # C 包装层（DEF 入口）
 ├── web/                        # 前端文件（服务器自动 serve）
 │   ├── index.html
 │   ├── style.css
 │   ├── app.js
-│   └── README_FRONTEND.md      # 前端开发文档
+│   └── README_FRONTEND.md
 ├── examples/                   # HDevelop 例程
-│   ├── test_minimal.hdev       # 最小测试
-│   ├── demo_stream_image.hdev  # 连续推送图像流
-│   └── demo_command_loop.hdev  # 双向命令交互
-└── bin/                        # 编译输出
-    └── Halcon_UI.dll
+│   ├── demo.hdev
+│   └── test_server.hdev
+├── scripts/                    # 构建脚本
+│   ├── build_win.bat           # Windows 一键构建
+│   └── build_linux.sh          # Linux 一键构建
+├── bin/                        # Windows 编译输出 (Halcon_UI.dll)
+└── lib/x64-linux/              # Linux 编译输出 (libHalcon_UI.so)
 ```
 
 ## 环境要求
 
-- **Halcon** 24.11 或更高版本
-- **Visual Studio** 2022 Build Tools（或完整版）
-- **CMake** 4.1+
-- **操作系统** Windows 10/11（GDI+ 系统自带）
+| 依赖 | Windows | Linux |
+|------|---------|-------|
+| **Halcon** | 24.11+ | 24.11+ |
+| **CMake** | 3.20+ | 3.20+ |
+| **编译器** | Visual Studio 2022 | GCC 9+ / Clang 10+ |
+| **vcpkg** | ✅ 必需 | ✅ 必需 |
+| **libjpeg-turbo** | 通过 vcpkg | 通过 vcpkg |
 
-## 编译
+## 快速开始
+
+### 1. 安装 vcpkg
 
 ```bash
-# 确保 HALCONROOT 和 HALCONEXAMPLES 环境变量已设置
-mkdir build && cd build
-cmake .. -G "Visual Studio 17 2022" -A x64
-cmake --build . --config Debug
+# 克隆 vcpkg
+git clone https://github.com/Microsoft/vcpkg.git
+cd vcpkg
+./bootstrap-vcpkg.sh   # Linux
+# 或
+bootstrap-vcpkg.bat    # Windows
+
+# 设置环境变量
+export VCPKG_ROOT=/path/to/vcpkg   # Linux
+set VCPKG_ROOT=C:\path\to\vcpkg    # Windows
 ```
 
-编译产物输出到 `bin/` 目录。
+### 2. 设置 Halcon 环境
 
-## 安装
+```bash
+export HALCONROOT=/opt/halcon          # Linux
+export HALCONEXAMPLES=$HALCONROOT/examples
+
+set HALCONROOT=C:\Program Files\MVTec\HALCON-24.11   # Windows
+set HALCONEXAMPLES=%HALCONROOT%\examples
+```
+
+### 3. 构建
+
+**Windows:**
+```bash
+scripts\build_win.bat          # Debug
+scripts\build_win.bat release  # Release
+```
+
+**Linux:**
+```bash
+chmod +x scripts/build_linux.sh
+./scripts/build_linux.sh          # Debug
+./scripts/build_linux.sh release  # Release
+```
+
+或使用 CMake Presets 手动构建：
+
+```bash
+# 配置（自动通过 vcpkg 安装 libjpeg-turbo）
+cmake --preset win-x64-debug      # Windows Debug
+cmake --preset linux-x64-release  # Linux Release
+
+# 构建
+cmake --build --preset win-x64-debug
+```
+
+编译产物：
+- **Windows** → `bin/Halcon_UI.dll`
+- **Linux** → `lib/x64-linux/libHalcon_UI.so`
+
+### 4. 安装扩展包
 
 将项目路径添加到系统环境变量 `HALCONEXTENSIONS`：
 
 ```
-HALCONEXTENSIONS=...;D:\path\to\Halcon_UI
+HALCONEXTENSIONS=...;D:\path\to\Halcon_UI   # Windows
+HALCONEXTENSIONS=...:/path/to/Halcon_UI     # Linux
 ```
 
 添加后**重启 HDevelop** 使扩展包生效。
+
+## 三方库管理
+
+本项目使用 **vcpkg manifest 模式** 管理所有第三方依赖：
+
+```json
+// vcpkg.json
+{
+  "dependencies": [
+    "libjpeg-turbo"   // JPEG 编解码（跨平台，替代 GDI+）
+  ]
+}
+```
+
+- **Windows**: 不再依赖 GDI+，统一使用 libjpeg-turbo
+- **Linux**: 不再需要系统 `libjpeg-dev` 或 bundled .so
+- 所有平台均由 vcpkg 自动下载、编译、链接
+
+添加新依赖：
+```bash
+# 编辑 vcpkg.json，添加依赖条目后重新配置 CMake 即可
+cmake --preset win-x64-debug
+```
 
 ## Halcon 操作符
 
 ### WCreateWebServer — 创建 HTTP 服务器
 
 ```
-WCreateWebServer (Port, ServerID)
+WCreateWebServer (Port, WebRoot, ServerID)
 ```
 
 | 参数 | 方向 | 类型 | 说明 |
 |------|------|------|------|
 | Port | 输入 | integer | 监听端口（如 9090） |
-| ServerID | 输出 | integer | 服务器 ID，后续操作使用 |
+| WebRoot | 输入 | string | 静态文件根目录（空串=自动） |
+| ServerID | 输出 | handle | 服务器句柄 |
 
 ### WSendWebData — 发送数据到前端
 
@@ -92,10 +174,22 @@ WSendWebData (ServerID, DictHandle)
 
 | 参数 | 方向 | 类型 | 说明 |
 |------|------|------|------|
-| ServerID | 输入 | integer | 服务器 ID |
+| ServerID | 输入 | handle | 服务器句柄 |
 | DictHandle | 输入 | handle | 包含数据的字典 |
 
-**字典结构**：
+### WRecvWebData — 从前端接收数据
+
+```
+WRecvWebData (ServerID, Timeout, DictHandle)
+```
+
+### WCloseWebServer — 关闭服务器
+
+```
+WCloseWebServer (ServerID)
+```
+
+详细协议见 [PROTOCOL.md](./PROTOCOL.md)。
 
 ```
 DictHandle

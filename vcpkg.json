@@ -1,0 +1,10 @@
+{
+  "name": "halcon-ui",
+  "version": "1.0.0",
+  "description": "Halcon 扩展包 —— 内置 HTTP/WebSocket 服务器，跨平台图像推流",
+  "homepage": "https://github.com/your-org/Halcon_UI",
+  "license": "MIT",
+  "dependencies": [
+    "libjpeg-turbo"
+  ]
+}

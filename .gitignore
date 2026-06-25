@@ -1,0 +1,79 @@
+# ==================== 构建产物 ====================
+build/
+build_linux/
+bin/
+lib/
+out/
+
+# ==================== CMake 生成文件 ====================
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+Makefile
+*.cmake
+!CMakePresets.json
+
+# ==================== Visual Studio ====================
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+.vs/
+x64/
+Debug/
+Release/
+*.dir/
+
+# ==================== Windows 编译中间产物 ====================
+*.obj
+*.ilk
+*.pdb
+*.exp
+*.lib
+*.tlog/
+*.recipe
+*.lastbuildstate
+*.unsuccessfulbuild
+*.log
+
+# ==================== Halcon 自动生成 ====================
+HHalcon_UI.c
+HHalcon_UI.h
+HCHalcon_UI.c
+HCHalcon_UI.h
+HCPPHalcon_UI.cpp
+HCPPHalcon_UI.h
+*int.dir/
+
+# ==================== vcpkg ====================
+vcpkg_installed/
+vcpkg-manifest-install.log
+
+# ==================== IDE / 编辑器 ====================
+*.swp
+*.swo
+*~
+.idea/
+*.code-workspace
+.claude/
+
+# ==================== VS Code（仅追踪共享配置） ====================
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/c_cpp_properties.json
+!.vscode/cmake-kits.json
+
+# ==================== 系统文件 ====================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==================== 临时文件 ====================
+*.tmp
+*.temp
+*.bak
+*.orig
