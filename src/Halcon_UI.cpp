@@ -99,6 +99,82 @@ static char* EncodeJpeg(const unsigned char* rPtr, const unsigned char* gPtr, co
     return result;
 }
 
+// ==================== JSON 协议校验 ====================
+// 按 PROTOCOL.md 规范验证 JSON 帧格式
+// 返回值: H_MSG_TRUE 通过 / 1099x 格式错误码
+#define ERR_JSON_NO_CMD      10990  // JSON 缺少 "CMD" 字段
+#define ERR_JSON_NO_DATA     10991  // JSON 缺少 "Data" 字段
+#define ERR_JSON_CMD_TYPE    10992  // CMD 类型错误（非整数）
+#define ERR_JSON_MISSING_KEY 10993  // Data 缺少必要字段
+#define ERR_JSON_VALUE_TYPE  10994  // 字段值类型错误
+
+static Herror ValidateJsonProtocol(const HTuple& dict_json)
+{
+    // 1. 必须有 "CMD"
+    HTuple CMD;
+    try {
+        GetDictTuple(dict_json, "CMD", &CMD);
+    } catch (...) {
+        return ERR_JSON_NO_CMD;
+    }
+    // 确保 CMD 可转为整数
+    Hlong cmdVal;
+    try {
+        cmdVal = CMD.L();
+    } catch (...) {
+        return ERR_JSON_CMD_TYPE;
+    }
+    if (cmdVal < 0 || cmdVal > 999) {
+        return ERR_JSON_CMD_TYPE;
+    }
+
+    // 2. 必须有 "Data"
+    HTuple Data;
+    try {
+        GetDictTuple(dict_json, "Data", &Data);
+    } catch (...) {
+        return ERR_JSON_NO_DATA;
+    }
+
+    // 3. 按 CMD 校验 Data 必要字段
+    switch (cmdVal) {
+    case 0: {
+        // 图像帧: Data 必须包含 宽/高/图号/通道（全部为数值）
+        const char* required[] = { u8"宽", u8"高", u8"图号", u8"通道" };
+        for (int i = 0; i < 4; i++) {
+            HTuple tmp;
+            try {
+                GetDictTuple(Data, required[i], &tmp);
+            } catch (...) {
+                return ERR_JSON_MISSING_KEY;
+            }
+            // 确保是数值类型
+            try {
+                tmp.L();
+            } catch (...) {
+                return ERR_JSON_VALUE_TYPE;
+            }
+        }
+        break;
+    }
+    case 1: {
+        // 检测结果: 至少需要 result 字段
+        HTuple tmp;
+        try {
+            GetDictTuple(Data, "result", &tmp);
+        } catch (...) {
+            return ERR_JSON_MISSING_KEY;
+        }
+        break;
+    }
+    default:
+        // 其他 CMD 不做字段级校验，只要 Data 是 dict 即可
+        break;
+    }
+
+    return H_MSG_TRUE;
+}
+
 // ==================== 创建 HTTP 服务器 ====================
 Herror HCreateWebServer(Hproc_handle proc_handle)
 {
@@ -142,11 +218,16 @@ Herror HRecvWebData(Hproc_handle proc_handle)
     size_t out_length = 0;
 
     int ret = RecvWebData(handle_data->server_id, &jsontext, &data, &out_length, (int)timeout_ms.par.l);
-    if (ret != 0) return 10000 + (-ret);
+    if (ret != 0) return 10000 - ret;
 
     HTuple h_jsontext(jsontext);
     HTuple dict_json;
+    
     JsonToDict(h_jsontext, HTuple(), HTuple(), &dict_json);
+
+    // 协议格式校验
+    Herror vret = ValidateJsonProtocol(dict_json);
+    if (vret != H_MSG_TRUE) { free(jsontext); free(data); return vret; }
 
     HTuple CMD;
     GetDictTuple(dict_json, "CMD", &CMD);
@@ -207,6 +288,10 @@ Herror HSendWebData(Hproc_handle proc_handle)
     HTuple dict_json;
     GetDictTuple(hv_DictHandle, u8"命令", &dict_json);
 
+    // 协议格式校验
+    Herror vret = ValidateJsonProtocol(dict_json);
+    if (vret != H_MSG_TRUE) return vret;
+
     HTuple CMD;
     GetDictTuple(dict_json, "CMD", &CMD);
 
@@ -257,7 +342,7 @@ Herror HSendWebData(Hproc_handle proc_handle)
             free(jpegData);
         }
 
-        if (ret != 0) return 10000 + (-ret);
+        if (ret != 0) return 10000 - ret;
     }
     else
     {
@@ -265,7 +350,7 @@ Herror HSendWebData(Hproc_handle proc_handle)
         HTuple Text_json;
         DictToJson(dict_json, HTuple(), HTuple(), &Text_json);
         ret = SendWebData(handle_data->server_id, Text_json.S(), nullptr, 0);
-        if (ret != 0) return 10000 + (-ret);
+        if (ret != 0) return 10000 - ret;
     }
 
     return H_MSG_TRUE;

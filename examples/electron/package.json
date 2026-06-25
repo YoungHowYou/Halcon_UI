@@ -1,0 +1,13 @@
+{
+  "name": "halcon-ui-electron",
+  "version": "1.0.0",
+  "description": "Halcon_UI Electron 示例 —— 实时图像显示与双向命令通信",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "devDependencies": {
+    "electron": "^42.5.0"
+  }
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src ws://127.0.0.1:* http://127.0.0.1:*; img-src data: blob: 'self'">
+    <title>Halcon_UI — 实时预览</title>
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --panel: #16213e;
+            --accent: #0f3460;
+            --gold: #e8b830;
+            --green: #4caf84;
+            --red: #e0556a;
+            --text: #c8d6e5;
+            --text-dim: #7f8fa6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ====== 顶栏 ====== */
+        #topbar {
+            display: flex; align-items: center; gap: 12px;
+            padding: 8px 16px;
+            background: var(--panel);
+            border-bottom: 2px solid var(--accent);
+            flex-shrink: 0;
+        }
+        #topbar h1 { font-size: 18px; color: var(--gold); white-space: nowrap; }
+        #status { font-size: 13px; padding: 4px 12px; border-radius: 12px; font-weight: 600; }
+        #status.connected { background: #1a3a2a; color: var(--green); }
+        #status.disconnected { background: #3a1a1a; color: var(--red); }
+        #url-input {
+            flex: 1; max-width: 320px;
+            padding: 6px 10px; border: 1px solid var(--accent); border-radius: 6px;
+            background: var(--bg); color: var(--text); font-size: 13px; outline: none;
+        }
+        #url-input:focus { border-color: var(--gold); }
+        button {
+            padding: 6px 16px; border: none; border-radius: 6px;
+            font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .2s;
+        }
+        button:hover { opacity: 0.85; }
+        #btn-connect { background: var(--green); color: #fff; }
+        #btn-disconnect { background: var(--red); color: #fff; }
+        #fps { font-size: 12px; color: var(--text-dim); margin-left: auto; }
+
+        /* ====== 主区域 ====== */
+        #main-area {
+            flex: 1; display: flex; gap: 8px; padding: 8px; overflow: hidden;
+        }
+        /* 图像面板 */
+        #image-panels {
+            flex: 1; display: flex; flex-direction: column; gap: 8px; overflow-y: auto;
+        }
+        .img-panel {
+            background: var(--panel); border-radius: 8px; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .img-panel .header {
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 12px; background: var(--accent); font-size: 13px;
+        }
+        .img-panel .header .id { color: var(--gold); font-weight: 700; }
+        .img-panel .header .info { color: var(--text-dim); font-size: 11px; }
+        .img-panel canvas {
+            flex: 1; width: 100%; object-fit: contain; background: #000;
+            image-rendering: auto;
+        }
+
+        /* 侧边栏 */
+        #sidebar {
+            width: 320px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
+        }
+        #log-panel, #cmd-panel {
+            background: var(--panel); border-radius: 8px; padding: 12px;
+        }
+        #log-panel h3, #cmd-panel h3 {
+            font-size: 13px; color: var(--gold); margin-bottom: 8px;
+        }
+        #log {
+            height: 250px; overflow-y: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 11px; color: var(--text-dim); line-height: 1.5;
+            white-space: pre-wrap; word-break: break-all;
+        }
+        #log .ts { color: var(--accent); }
+        #log .rx { color: var(--green); }
+        #log .tx { color: var(--gold); }
+        #log .err { color: var(--red); }
+
+        #cmd-panel textarea {
+            width: 100%; height: 80px; resize: vertical;
+            background: var(--bg); color: var(--text); border: 1px solid var(--accent);
+            border-radius: 6px; padding: 8px; font-family: 'Consolas', monospace;
+            font-size: 12px; outline: none;
+        }
+        #cmd-panel textarea:focus { border-color: var(--gold); }
+    </style>
+</head>
+<body>
+
+<!-- 顶栏 -->
+<div id="topbar">
+    <h1>🔬 Halcon_UI</h1>
+    <input id="url-input" type="text" value="ws://127.0.0.1:1802/ws" placeholder="ws://127.0.0.1:1802/ws">
+    <button id="btn-connect" onclick="doConnect()">连接</button>
+    <button id="btn-disconnect" onclick="doDisconnect()" style="display:none">断开</button>
+    <span id="status" class="disconnected">● 未连接</span>
+    <span id="fps">FPS: --</span>
+</div>
+
+<!-- 主区域 -->
+<div id="main-area">
+    <!-- 图像面板 -->
+    <div id="image-panels">
+        <div class="img-panel" id="panel-0">
+            <div class="header">
+                <span class="id">图号 0 — 主预览</span>
+                <span class="info" id="info-0">等待图像…</span>
+            </div>
+            <canvas id="canvas-0"></canvas>
+        </div>
+    </div>
+
+    <!-- 侧边栏 -->
+    <div id="sidebar">
+        <div id="log-panel">
+            <h3>📋 通信日志</h3>
+            <div id="log"></div>
+        </div>
+        <div id="cmd-panel">
+            <h3>📤 发送命令</h3>
+            <textarea id="cmd-input">{"CMD": 100, "Data": {"msg": "hello from electron"}}</textarea>
+            <button style="margin-top:8px;background:var(--accent);color:#fff;width:100%"
+                    onclick="sendCommand()">发送</button>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

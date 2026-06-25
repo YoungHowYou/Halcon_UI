@@ -1,0 +1,54 @@
+# ============================================================
+# Halcon_UI 项目 C/C++ 代码格式规范
+# 基于 LLVM 风格，适配 Halcon 扩展开发习惯
+# ============================================================
+
+BasedOnStyle: LLVM
+
+# 缩进
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+AccessModifierOffset: -4
+
+# 大括号
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterFunction: true
+  AfterClass: true
+  AfterStruct: true
+  AfterEnum: true
+  AfterNamespace: false
+  BeforeElse: false
+  BeforeCatch: false
+
+# 列宽
+ColumnLimit: 120
+
+# 指针/引用对齐
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# 空格
+SpaceAfterCStyleCast: true
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+# 换行
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AlignOperands: Align
+
+# 注释
+ReflowComments: false
+SpacesBeforeTrailingComments: 2
+
+# 头文件排序
+SortIncludes: CaseSensitive
+IncludeBlocks: Preserve
+
+# 其他
+IndentCaseLabels: true
+MaxEmptyLinesToKeep: 1

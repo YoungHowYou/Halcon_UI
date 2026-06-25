@@ -50,6 +50,9 @@ HCPPHalcon_UI.h
 vcpkg_installed/
 vcpkg-manifest-install.log
 
+# ==================== Node.js / Electron ====================
+node_modules/
+
 # ==================== IDE / 编辑器 ====================
 *.swp
 *.swo
