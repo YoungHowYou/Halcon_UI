@@ -1,147 +1,658 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src ws://127.0.0.1:* http://127.0.0.1:*; img-src data: blob: 'self'">
-    <title>Halcon_UI — 实时预览</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src ws://127.0.0.1:* ws://localhost:*; img-src data: blob: 'self';" />
+    <title>Halcon_UI — 工业视觉检测</title>
     <style>
-        :root {
-            --bg: #1a1a2e;
-            --panel: #16213e;
-            --accent: #0f3460;
-            --gold: #e8b830;
-            --green: #4caf84;
-            --red: #e0556a;
-            --text: #c8d6e5;
-            --text-dim: #7f8fa6;
-        }
+        /* ===== 全局重置 ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+
+        :root {
+            --bg-primary: #0b0e17;
+            --bg-secondary: #131a2b;
+            --bg-panel: #1a2338;
+            --bg-card: #1f2b45;
+            --bg-input: #0d1422;
+            --border-color: #2a3a5a;
+            --text-primary: #e8edf5;
+            --text-secondary: #8fa4c8;
+            --text-muted: #5a729a;
+            --accent-blue: #4a9eff;
+            --accent-cyan: #00d4ff;
+            --accent-green: #00d4aa;
+            --accent-orange: #ff9f4a;
+            --accent-red: #ff6b6b;
+            --accent-gold: #e8b830;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --radius: 8px;
+            --radius-sm: 4px;
+            --transition: 0.2s ease;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
-        /* ====== 顶栏 ====== */
-        #topbar {
-            display: flex; align-items: center; gap: 12px;
-            padding: 8px 16px;
-            background: var(--panel);
-            border-bottom: 2px solid var(--accent);
+        html, body {
+            height: 100%;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font);
+            font-size: 14px;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+        /* ===== 主布局 ===== */
+        #app { display: flex; flex-direction: column; height: 100vh; min-height: 0; }
+
+        /* ===== 顶部栏 ===== */
+        .topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 20px; background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0; min-height: 56px; z-index: 10;
+            flex-wrap: wrap; gap: 6px 12px;
+        }
+        .topbar-left { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+        .logo {
+            display: flex; align-items: center; gap: 10px;
+            font-weight: 700; font-size: 18px; letter-spacing: 0.5px;
+        }
+        .logo svg { width: 28px; height: 28px; fill: var(--accent-cyan); }
+        .logo span {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-badge {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 13px; color: var(--text-secondary);
+            padding: 4px 14px; border-radius: 20px;
+            background: var(--bg-panel); border: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+        .status-badge .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--accent-red); transition: var(--transition);
+        }
+        .status-badge .dot.connected {
+            background: var(--accent-green);
+            box-shadow: 0 0 12px rgba(0, 212, 170, 0.3);
+        }
+        .status-badge .dot.connecting {
+            background: var(--accent-orange);
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        #fps { font-size: 11px; color: var(--text-muted); white-space: nowrap; margin-left: 4px; }
+
+        .param-tabs {
+            display: flex; align-items: center; gap: 4px;
+            background: var(--bg-panel); border-radius: var(--radius-sm);
+            padding: 3px 4px; border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+        .param-tab {
+            padding: 4px 14px; border-radius: var(--radius-sm);
+            font-size: 12px; font-weight: 500; cursor: pointer;
+            transition: var(--transition); color: var(--text-secondary);
+            border: none; background: transparent;
+            font-family: var(--font); white-space: nowrap;
+            height: 28px; display: inline-flex; align-items: center; gap: 4px;
+        }
+        .param-tab:hover { color: var(--text-primary); background: var(--bg-card); }
+        .param-tab.active {
+            color: #fff; background: var(--accent-blue);
+            box-shadow: 0 0 12px rgba(74, 158, 255, 0.2);
+        }
+
+        .topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+        /* 按钮 */
+        .btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 16px; border: none; border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            transition: var(--transition); background: var(--bg-panel);
+            color: var(--text-primary); border: 1px solid var(--border-color);
+            height: 34px; white-space: nowrap; font-family: var(--font);
+        }
+        .btn:hover { background: var(--bg-card); border-color: var(--text-secondary); }
+        .btn:active { transform: scale(0.96); }
+        .btn-primary { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
+        .btn-primary:hover { background: #3a8aee; border-color: #3a8aee; }
+        .btn-success { background: var(--accent-green); color: #fff; border-color: var(--accent-green); }
+        .btn-success:hover { background: #00b892; border-color: #00b892; }
+        .btn-danger { background: var(--accent-red); color: #fff; border-color: var(--accent-red); }
+        .btn-danger:hover { background: #e55a5a; border-color: #e55a5a; }
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); }
+        .btn-outline:hover { background: var(--bg-panel); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .btn-sm { padding: 3px 10px; font-size: 11px; height: 26px; }
+
+        /* ===== 主体三列 ===== */
+        .main-body { flex: 1; display: flex; min-height: 0; position: relative; }
+
+        /* 左列: 图像 */
+        .image-container {
+            flex: 1; background: var(--bg-primary);
+            position: relative; overflow: hidden; cursor: grab;
+            min-width: 200px; display: flex; flex-direction: column;
+        }
+        .image-container:active { cursor: grabbing; }
+        .image-container canvas {
+            display: block; width: 100%; height: 100%;
+            object-fit: contain; image-rendering: auto;
+        }
+        .image-placeholder {
+            position: absolute; inset: 0; display: flex;
+            flex-direction: column; align-items: center;
+            justify-content: center; color: var(--text-muted);
+            gap: 12px; pointer-events: none; z-index: 1;
+        }
+        .image-placeholder svg {
+            width: 64px; height: 64px; fill: var(--text-muted); opacity: 0.3;
+        }
+        .image-placeholder p { font-size: 15px; letter-spacing: 1px; }
+
+        .window-tabs {
+            display: flex; gap: 2px; padding: 4px 8px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0; overflow-x: auto;
+        }
+        .window-tab {
+            padding: 3px 12px; font-size: 11px;
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            cursor: pointer; color: var(--text-muted);
+            background: transparent; border: 1px solid transparent;
+            white-space: nowrap; transition: var(--transition);
+        }
+        .window-tab:hover { color: var(--text-primary); }
+        .window-tab.active {
+            color: var(--accent-cyan); background: var(--bg-primary);
+            border-color: var(--border-color); border-bottom-color: transparent;
+        }
+
+        /* 中列: 缺陷记录+日志 */
+        .defect-column {
+            width: 240px; background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            display: flex; flex-direction: column; flex-shrink: 0;
+            padding: 12px 12px; gap: 8px; overflow: hidden;
+        }
+        .defect-list {
+            flex: 1; overflow-y: auto; display: flex;
+            flex-direction: column; gap: 6px; padding: 4px 0;
+            min-height: 60px;
+        }
+        .defect-item {
+            display: flex; align-items: center; gap: 10px;
+            background: var(--bg-panel); border-radius: var(--radius-sm);
+            padding: 4px 8px; border: 1px solid var(--border-color);
             flex-shrink: 0;
         }
-        #topbar h1 { font-size: 18px; color: var(--gold); white-space: nowrap; }
-        #status { font-size: 13px; padding: 4px 12px; border-radius: 12px; font-weight: 600; }
-        #status.connected { background: #1a3a2a; color: var(--green); }
-        #status.disconnected { background: #3a1a1a; color: var(--red); }
-        #url-input {
-            flex: 1; max-width: 320px;
-            padding: 6px 10px; border: 1px solid var(--accent); border-radius: 6px;
-            background: var(--bg); color: var(--text); font-size: 13px; outline: none;
+        .defect-item img {
+            width: 56px; height: 56px; object-fit: cover;
+            border-radius: var(--radius-sm); background: var(--bg-primary);
+            border: 1px solid var(--border-color);
         }
-        #url-input:focus { border-color: var(--gold); }
-        button {
-            padding: 6px 16px; border: none; border-radius: 6px;
-            font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .2s;
+        .defect-info { flex: 1; font-size: 12px; color: var(--text-secondary); overflow: hidden; }
+        .defect-name { font-weight: 600; color: var(--text-primary); }
+        .defect-desc { font-size: 11px; color: var(--text-muted); }
+        .defect-empty {
+            color: var(--text-muted); font-size: 12px;
+            text-align: center; padding: 20px 0;
         }
-        button:hover { opacity: 0.85; }
-        #btn-connect { background: var(--green); color: #fff; }
-        #btn-disconnect { background: var(--red); color: #fff; }
-        #fps { font-size: 12px; color: var(--text-dim); margin-left: auto; }
-
-        /* ====== 主区域 ====== */
-        #main-area {
-            flex: 1; display: flex; gap: 8px; padding: 8px; overflow: hidden;
+        .defect-column .log-area {
+            flex: 1; display: flex; flex-direction: column;
+            min-height: 60px; overflow: hidden;
         }
-        /* 图像面板 */
-        #image-panels {
-            flex: 1; display: flex; flex-direction: column; gap: 8px; overflow-y: auto;
-        }
-        .img-panel {
-            background: var(--panel); border-radius: 8px; overflow: hidden;
-            display: flex; flex-direction: column;
-        }
-        .img-panel .header {
-            display: flex; align-items: center; gap: 8px;
-            padding: 6px 12px; background: var(--accent); font-size: 13px;
-        }
-        .img-panel .header .id { color: var(--gold); font-weight: 700; }
-        .img-panel .header .info { color: var(--text-dim); font-size: 11px; }
-        .img-panel canvas {
-            flex: 1; width: 100%; object-fit: contain; background: #000;
-            image-rendering: auto;
-        }
-
-        /* 侧边栏 */
-        #sidebar {
-            width: 320px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
-        }
-        #log-panel, #cmd-panel {
-            background: var(--panel); border-radius: 8px; padding: 12px;
-        }
-        #log-panel h3, #cmd-panel h3 {
-            font-size: 13px; color: var(--gold); margin-bottom: 8px;
-        }
-        #log {
-            height: 250px; overflow-y: auto;
+        .defect-column .log-content {
+            flex: 1; font-size: 11px; color: var(--text-muted);
             font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 11px; color: var(--text-dim); line-height: 1.5;
-            white-space: pre-wrap; word-break: break-all;
+            overflow-y: auto; background: var(--bg-primary);
+            padding: 6px 8px; border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            line-height: 1.6; min-height: 40px;
         }
-        #log .ts { color: var(--accent); }
-        #log .rx { color: var(--green); }
-        #log .tx { color: var(--gold); }
-        #log .err { color: var(--red); }
 
-        #cmd-panel textarea {
-            width: 100%; height: 80px; resize: vertical;
-            background: var(--bg); color: var(--text); border: 1px solid var(--accent);
-            border-radius: 6px; padding: 8px; font-family: 'Consolas', monospace;
-            font-size: 12px; outline: none;
+        /* 右列: 统计+结果 */
+        .middle-panel {
+            width: 320px; background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            display: flex; flex-direction: column; flex-shrink: 0;
+            overflow: hidden; padding: 12px 14px; gap: 10px;
         }
-        #cmd-panel textarea:focus { border-color: var(--gold); }
+        .section-title {
+            font-size: 11px; text-transform: uppercase;
+            color: var(--text-muted); letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px; flex-shrink: 0;
+        }
+        .log-entry {
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .log-entry .ts { color: var(--text-muted); }
+        .log-entry.rx .msg { color: var(--accent-green); }
+        .log-entry.tx .msg { color: var(--accent-gold); }
+        .log-entry.err .msg { color: var(--accent-red); }
+        .log-entry.info .msg { color: var(--text-secondary); }
+
+        .stats-area { flex: 1; display: flex; flex-direction: column; min-height: 100px; overflow-y: auto; }
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 6px; margin-top: 4px;
+        }
+        .stat-card {
+            background: var(--bg-panel); border-radius: var(--radius-sm);
+            padding: 6px 10px; border: 1px solid var(--border-color);
+        }
+        .stat-value {
+            font-size: 18px; font-weight: 700;
+            color: var(--text-primary); line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 9px; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;
+        }
+        .stat-value.green { color: var(--accent-green); }
+        .stat-value.red { color: var(--accent-red); }
+        .stat-value.blue { color: var(--accent-blue); }
+        .stat-value.orange { color: var(--accent-orange); }
+
+        .defect-bars {
+            display: flex; flex-direction: column; gap: 3px; margin-top: 6px;
+        }
+        .defect-bar-row { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+        .bar-label {
+            width: 36px; color: var(--text-secondary);
+            flex-shrink: 0; text-align: right; font-size: 10px;
+        }
+        .bar-track {
+            flex: 1; height: 6px; background: var(--bg-input);
+            border-radius: 3px; overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%; border-radius: 3px;
+            transition: width 0.4s ease; width: 0%;
+        }
+        .bar-value {
+            width: 26px; color: var(--text-primary);
+            font-weight: 500; font-size: 10px; text-align: right;
+        }
+
+        /* 结果展示 */
+        .result-area { flex: 1; display: flex; flex-direction: column; min-height: 80px; overflow: hidden; }
+        .result-content {
+            flex: 1; overflow-y: auto; font-size: 12px;
+            background: var(--bg-primary); border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color); padding: 8px 10px;
+            line-height: 1.7; min-height: 40px;
+        }
+        .result-content .result-empty {
+            color: var(--text-muted); text-align: center; padding: 16px 0;
+            font-size: 12px;
+        }
+        .result-row { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+        .result-row .r-label {
+            color: var(--text-muted); font-size: 11px;
+            min-width: 48px; flex-shrink: 0;
+        }
+        .result-row .r-value {
+            color: var(--text-primary); font-weight: 500;
+            word-break: break-all;
+        }
+        .result-row .r-value.ng { color: var(--accent-red); }
+        .result-row .r-value.ok { color: var(--accent-green); }
+        .result-sep {
+            border: none; border-top: 1px solid var(--border-color);
+            margin: 6px 0; opacity: 0.5;
+        }
+        .result-header {
+            font-size: 12px; font-weight: 600; color: var(--accent-cyan);
+            padding: 2px 0 4px 0; display: flex; align-items: center; gap: 6px;
+        }
+        .result-header .rh-dot {
+            width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+        }
+        .result-header .rh-dot.ng { background: var(--accent-red); }
+        .result-header .rh-dot.ok { background: var(--accent-green); }
+
+        /* ===== 参数弹窗 ===== */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px);
+            z-index: 1000; display: none;
+            align-items: center; justify-content: center;
+        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.25s ease; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal {
+            background: var(--bg-secondary); border-radius: var(--radius);
+            border: 1px solid var(--border-color); box-shadow: var(--shadow);
+            width: 92vw; max-width: 1300px; height: 86vh; max-height: 860px;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .modal-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 24px; border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0; background: var(--bg-panel);
+        }
+        .modal-header h2 { font-size: 17px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .modal-header h2 svg { width: 22px; height: 22px; fill: var(--accent-cyan); }
+        .modal-header .actions { display: flex; gap: 8px; }
+        .modal-body { flex: 1; display: flex; min-height: 0; }
+        .param-tree {
+            width: 280px; min-width: 200px; background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto; padding: 8px 0; flex-shrink: 0;
+        }
+        .param-tree .tree-node { cursor: pointer; user-select: none; }
+        .param-tree .node-label {
+            display: flex; align-items: center; gap: 6px;
+            padding: 5px 16px 5px 12px; font-size: 13px;
+            color: var(--text-secondary); transition: var(--transition);
+            border-left: 2px solid transparent;
+        }
+        .param-tree .node-label:hover { background: var(--bg-panel); color: var(--text-primary); }
+        .param-tree .node-label.active {
+            background: var(--bg-panel); color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+        }
+        .param-tree .node-label .arrow {
+            font-size: 10px; transition: var(--transition);
+            display: inline-block; width: 16px; text-align: center;
+            color: var(--text-muted);
+        }
+        .param-tree .node-label .arrow.open { transform: rotate(90deg); }
+        .param-tree .node-label .icon { font-size: 14px; }
+        .param-tree .node-label .name {
+            flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .param-tree .node-label .badge {
+            font-size: 9px; background: var(--bg-card);
+            color: var(--text-muted); padding: 1px 8px;
+            border-radius: 10px; flex-shrink: 0;
+        }
+        .param-tree .children { display: none; padding-left: 8px; }
+        .param-tree .children.open { display: block; }
+        .param-detail {
+            flex: 1; overflow-y: auto; padding: 18px 24px 30px;
+            background: var(--bg-secondary);
+        }
+        .param-detail .empty-state {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; height: 100%; color: var(--text-muted); gap: 10px;
+        }
+        .param-detail .empty-state svg {
+            width: 48px; height: 48px; fill: var(--text-muted); opacity: 0.2;
+        }
+        .param-group-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+        .param-group-desc {
+            font-size: 13px; color: var(--text-secondary);
+            margin-bottom: 18px; border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .param-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 8px 12px; background: var(--bg-panel);
+            border-radius: var(--radius-sm); margin-bottom: 6px;
+            border: 1px solid transparent; transition: var(--transition);
+            flex-wrap: wrap;
+        }
+        .param-item:hover { border-color: var(--border-color); }
+        .param-item .p-name {
+            min-width: 130px; font-size: 13px; font-weight: 500;
+            color: var(--text-primary); flex-shrink: 0;
+        }
+        .param-item .p-meta {
+            display: flex; align-items: center; gap: 6px;
+            flex-shrink: 0; font-size: 11px; color: var(--text-muted);
+        }
+        .param-item .type-tag {
+            background: var(--bg-input); padding: 1px 8px; border-radius: 10px;
+            border: 1px solid var(--border-color); font-family: monospace; font-size: 10px;
+        }
+        .param-item .comp-tag {
+            padding: 1px 8px; border-radius: 10px; font-size: 10px;
+            font-weight: 600; background: var(--bg-input);
+            border: 1px solid var(--border-color);
+        }
+        .comp-tag.lv0 { color: var(--text-muted); }
+        .comp-tag.lv1 { color: var(--accent-green); }
+        .comp-tag.lv2 { color: var(--accent-blue); }
+        .comp-tag.lv3 { color: var(--accent-orange); }
+        .param-item .p-control {
+            flex: 1; min-width: 120px; display: flex;
+            align-items: center; gap: 8px;
+        }
+        .param-item .p-control input,
+        .param-item .p-control select {
+            background: var(--bg-input); border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm); color: var(--text-primary);
+            padding: 4px 10px; font-size: 13px; font-family: var(--font);
+            width: 100%; max-width: 200px; transition: var(--transition); height: 30px;
+        }
+        .param-item .p-control input:focus,
+        .param-item .p-control select:focus {
+            outline: none; border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.15);
+        }
+        .param-item .p-control input:disabled,
+        .param-item .p-control select:disabled { opacity: 0.5; cursor: not-allowed; }
+        .param-item .p-control .range-hint {
+            font-size: 11px; color: var(--text-muted); white-space: nowrap;
+        }
+        .param-item .p-control .bool-switch {
+            display: flex; align-items: center; gap: 6px; cursor: pointer;
+        }
+        .param-item .p-control .bool-switch .track {
+            width: 40px; height: 22px; background: var(--bg-input);
+            border-radius: 12px; border: 1px solid var(--border-color);
+            position: relative; transition: var(--transition);
+        }
+        .param-item .p-control .bool-switch .track .thumb {
+            width: 16px; height: 16px; background: var(--text-muted);
+            border-radius: 50%; position: absolute; top: 2px; left: 2px;
+            transition: var(--transition);
+        }
+        .param-item .p-control .bool-switch .track.on {
+            background: var(--accent-blue); border-color: var(--accent-blue);
+        }
+        .param-item .p-control .bool-switch .track.on .thumb { left: 20px; background: #fff; }
+        .param-item .p-control .bool-label {
+            font-size: 12px; color: var(--text-secondary); min-width: 36px;
+        }
+        .param-tree .param-loading {
+            padding: 24px 16px; text-align: center;
+            color: var(--text-muted); font-size: 13px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .middle-panel { width: 260px; padding: 10px; }
+            .defect-column { width: 200px; padding: 10px; }
+            .defect-item img { width: 44px; height: 44px; }
+            .stats-grid { gap: 4px; }
+            .stat-value { font-size: 16px; }
+        }
+        @media (max-width: 820px) {
+            .main-body { flex-direction: column; overflow-y: auto; }
+            .image-container { flex: 0 0 50vh; min-height: 200px; }
+            .middle-panel {
+                width: 100%; border-left: none; border-top: 1px solid var(--border-color);
+                flex-direction: row; flex-wrap: wrap; padding: 8px 12px;
+                gap: 8px; max-height: 40vh;
+            }
+            .middle-panel .stats-area,
+            .middle-panel .result-area { flex: 1 1 200px; min-height: 100px; }
+            .defect-column {
+                width: 100%; border-left: none; border-top: 1px solid var(--border-color);
+                flex-direction: row; flex-wrap: wrap; padding: 8px 12px; max-height: 30vh;
+            }
+            .defect-column .section-title { width: 100%; }
+            .defect-column .defect-list,
+            .defect-column .log-area { flex: 1 1 150px; min-height: 80px; }
+            .defect-column .defect-list {
+                flex-direction: row; flex-wrap: wrap;
+                overflow-y: hidden; overflow-x: auto; padding: 4px 0; gap: 6px;
+            }
+            .defect-item { flex: 0 0 auto; width: 160px; }
+            .defect-item img { width: 48px; height: 48px; }
+            .param-tree { width: 200px; min-width: 140px; }
+            .modal { width: 96vw; height: 92vh; max-height: none; }
+            .topbar {
+                padding: 6px 12px; min-height: auto; gap: 6px;
+                flex-direction: column; align-items: stretch;
+            }
+            .topbar-left { justify-content: space-between; width: 100%; }
+            .param-tabs { width: 100%; justify-content: center; flex-wrap: wrap; }
+            .param-tab { font-size: 11px; padding: 3px 10px; }
+            .topbar-right { justify-content: center; width: 100%; }
+            .param-item { flex-direction: column; align-items: stretch; gap: 6px; }
+            .param-item .p-name { min-width: auto; }
+            .param-item .p-control input,
+            .param-item .p-control select { max-width: 100%; }
+        }
+        @media (max-width: 500px) {
+            .middle-panel { flex-direction: column; max-height: none; }
+            .middle-panel .stats-area,
+            .middle-panel .result-area { flex: 0 0 auto; min-height: 80px; }
+            .defect-column { max-height: none; flex-direction: column; }
+            .defect-column .defect-list { flex-direction: column; overflow-y: auto; overflow-x: hidden; }
+            .defect-item { width: 100%; }
+            .param-tree { width: 140px; min-width: 100px; }
+            .modal-header h2 { font-size: 14px; }
+            .param-tab { font-size: 10px; padding: 2px 8px; height: 24px; }
+            .defect-item img { width: 36px; height: 36px; }
+            .stats-grid { gap: 2px; }
+            .stat-card { padding: 4px 6px; }
+            .stat-value { font-size: 14px; }
+            .bar-label { width: 28px; font-size: 9px; }
+            .bar-value { font-size: 9px; width: 20px; }
+        }
+
+        .hidden { display: none !important; }
+        .text-muted { color: var(--text-muted); }
     </style>
 </head>
 <body>
 
-<!-- 顶栏 -->
-<div id="topbar">
-    <h1>🔬 Halcon_UI</h1>
-    <input id="url-input" type="text" value="ws://127.0.0.1:1802/ws" placeholder="ws://127.0.0.1:1802/ws">
-    <button id="btn-connect" onclick="doConnect()">连接</button>
-    <button id="btn-disconnect" onclick="doDisconnect()" style="display:none">断开</button>
-    <span id="status" class="disconnected">● 未连接</span>
-    <span id="fps">FPS: --</span>
-</div>
-
-<!-- 主区域 -->
-<div id="main-area">
-    <!-- 图像面板 -->
-    <div id="image-panels">
-        <div class="img-panel" id="panel-0">
-            <div class="header">
-                <span class="id">图号 0 — 主预览</span>
-                <span class="info" id="info-0">等待图像…</span>
+<div id="app">
+    <!-- ===== 顶部栏 ===== -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6l5.25 3.15L17 12.23l-4-2.37V7z"/></svg>
+                <span>Halcon_UI</span>
             </div>
-            <canvas id="canvas-0"></canvas>
+        </div>
+
+        <div class="param-tabs" id="paramTabs">
+            <button class="param-tab" data-category="算法参数"><span>🧠</span> 算法</button>
+            <button class="param-tab" data-category="相机参数"><span>📷</span> 相机</button>
+            <button class="param-tab" data-category="存储参数"><span>💾</span> 存储</button>
+            <button class="param-tab" data-category="通信参数"><span>📡</span> 通信</button>
+            <button class="param-tab" data-category="运动参数"><span>⚙️</span> 运动</button>
+        </div>
+
+        <div class="topbar-right">
+            <div class="status-badge">
+                <span class="dot" id="statusDot"></span>
+                <span id="statusText">未连接</span>
+            </div>
+            <span id="fps">FPS: --</span>
+        </div>
+    </header>
+
+    <!-- ===== 主体三列 ===== -->
+    <div class="main-body">
+        <!-- 左列：多窗口图像 -->
+        <div class="image-container" id="imageContainer">
+            <div class="window-tabs hidden" id="windowTabs"></div>
+            <canvas id="imageCanvas"></canvas>
+            <div class="image-placeholder" id="placeholder">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4-3h2v13h-2z"/></svg>
+                <p>连接后端以接收图像</p>
+                <p style="font-size:12px;opacity:0.5;">拖拽平移 · 滚轮缩放 · 双击适应</p>
+            </div>
+        </div>
+
+        <!-- 中列：缺陷记录 + 日志 -->
+        <div class="defect-column">
+            <div class="section-title">🔍 缺陷记录</div>
+            <div class="defect-list" id="defectList">
+                <div class="defect-empty">暂无缺陷</div>
+            </div>
+
+            <div class="log-area">
+                <div class="section-title">📋 通信日志</div>
+                <div class="log-content" id="logContent">
+                    <div class="log-entry info"><span class="ts">--:--:--</span> <span class="msg">系统就绪，等待连接...</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右列：统计 + 结果 -->
+        <div class="middle-panel">
+            <div class="stats-area">
+                <div class="section-title">📊 检测统计</div>
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card"><div class="stat-value green" id="statTotal">0</div><div class="stat-label">总检测数</div></div>
+                    <div class="stat-card"><div class="stat-value green" id="statPass">0</div><div class="stat-label">良品</div></div>
+                    <div class="stat-card"><div class="stat-value red" id="statFail">0</div><div class="stat-label">不良品</div></div>
+                    <div class="stat-card"><div class="stat-value blue" id="statYield">--</div><div class="stat-label">良率</div></div>
+                </div>
+                <div class="defect-bars" id="defectBars"></div>
+            </div>
+
+            <div class="result-area">
+                <div class="section-title">📝 检测结果</div>
+                <div class="result-content" id="resultContent">
+                    <div class="result-empty">等待检测结果...</div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- 侧边栏 -->
-    <div id="sidebar">
-        <div id="log-panel">
-            <h3>📋 通信日志</h3>
-            <div id="log"></div>
+<!-- ===== 参数弹窗 ===== -->
+<div class="modal-overlay" id="paramModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>
+                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 15.6 12 3.6 3.6 0 0 1 12 15.6z"/></svg>
+                <span id="modalTitle">参数设置</span>
+            </h2>
+            <div class="actions">
+                <button class="btn btn-success btn-sm" id="btnRefreshParams">🔄 刷新</button>
+                <button class="btn btn-primary btn-sm" id="btnSaveParams">💾 保存</button>
+                <button class="btn btn-outline btn-sm" id="btnCloseParams">✕ 关闭</button>
+            </div>
         </div>
-        <div id="cmd-panel">
-            <h3>📤 发送命令</h3>
-            <textarea id="cmd-input">{"CMD": 100, "Data": {"msg": "hello from electron"}}</textarea>
-            <button style="margin-top:8px;background:var(--accent);color:#fff;width:100%"
-                    onclick="sendCommand()">发送</button>
+        <div class="modal-body">
+            <div class="param-tree" id="paramTree">
+                <div class="param-loading">请先连接后端</div>
+            </div>
+            <div class="param-detail" id="paramDetail">
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                    <p>从左侧选择参数分组</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
