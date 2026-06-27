@@ -255,13 +255,23 @@ function sendOfflinePath(filePath) {
 
 function updateBatchInfo() {
     var el = $('batchInfo');
+    var btn = $('btnBatchExit');
     if (!el) return;
     if (state.batchFiles.length === 0) {
         el.style.display = 'none';
+        if (btn) btn.style.display = 'none';
         return;
     }
     el.style.display = '';
     el.textContent = (state.batchIndex + 1) + ' / ' + state.batchFiles.length;
+    if (btn) btn.style.display = '';
+}
+
+function exitBatchMode() {
+    state.batchFiles = [];
+    state.batchIndex = -1;
+    updateBatchInfo();
+    log('已退出批量检测模式', 'info');
 }
 
 function sendCurrentBatchImage() {
@@ -310,6 +320,9 @@ $('btnBatch').onclick = function () {
     };
     input.click();
 };
+
+// 退出批量模式
+$('btnBatchExit').onclick = function () { exitBatchMode(); };
 
 // 图片文件名后缀校验
 function isImageFile(filePath) {
