@@ -316,6 +316,21 @@ $('btnSaveParams').onclick = function () {
     setTimeout(function () { $('btnSaveParams').textContent = o; }, 1500);
 };
 
+$('btnExportParams').onclick = function () {
+    if (!state.currentCategory) return;
+    var params = state.paramCache[state.currentCategory];
+    if (!params) { log('无参数可导出', 'err'); return; }
+    var jsonStr = JSON.stringify(params, null, 2);
+    var blob = new Blob([jsonStr], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = state.currentCategory + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    log('导出参数: ' + state.currentCategory + '.json', 'info');
+};
+
 // ==================== 离线检测 ====================
 function sendOfflinePath(filePath) {
     if (!state.connected) { log('请先连接后端', 'err'); return; }
