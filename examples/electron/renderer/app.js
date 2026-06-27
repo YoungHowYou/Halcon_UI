@@ -6,7 +6,7 @@ const MAGIC = 0xDEADBEEF;
 const HEADER_SIZE = 12;
 const MAX_LOG = 500;
 
-const PARAM_CATEGORY_CMD = { '算法参数': 10, '相机参数': 11, '存储参数': 12, '通信参数': 13, '运动参数': 14 };
+const PARAM_CATEGORY_CMD = { '算法参数': 2, '相机参数': 3, '存储参数': 4, '通信参数': 5, '运动参数': 6 };
 const COMP_LABELS = ['操作员', '产线工程师', '系统工程师', '管理员'];
 
 const state = {
@@ -97,7 +97,14 @@ function sendCommand(cmd, data) {
 // ==================== 帧路由 ====================
 function handleFrame(f) {
     var cmd = f.json.CMD, payload = f.json.Data || {};
-    switch (cmd) { case 0: handleImage(payload, f.binary); break; case 1: handleLog(payload); break; case 2: handleDetection(payload); break; case 200: handleReply(payload); break; default: if (cmd >= 10 && cmd <= 14) handleParamResponse(cmd, payload); else log('收到 CMD=' + cmd, 'rx'); }
+    switch (cmd) {
+        case 0: handleImage(payload, f.binary); break;
+        case 1: handleStartOnline(payload); break;
+        case 10: handleLog(payload); break;
+        case 11: handleDetection(payload); break;
+        case 200: handleReply(payload); break;
+        default: if (cmd >= 2 && cmd <= 6) handleParamResponse(cmd, payload); else log('收到 CMD=' + cmd, 'rx');
+    }
 }
 
 // ==================== 图像 (CMD=0) ====================
@@ -169,13 +176,18 @@ new ResizeObserver(function () {
     _resizeTimer = setTimeout(function () { renderCurrentWindow(); }, 80);
 }).observe(dom.imageContainer);
 
-// ==================== 日志消息 (CMD=1) ====================
+// ==================== 启动在线检测 (CMD=1) ====================
+function handleStartOnline(payload) {
+    log('启动在线检测', 'rx');
+}
+
+// ==================== 日志消息 (CMD=10) ====================
 function handleLog(payload) {
     var msg = payload.msg || payload.message || payload.text || JSON.stringify(payload);
     log(msg, 'rx');
 }
 
-// ==================== 检测结果 (CMD=2) ====================
+// ==================== 检测结果 (CMD=11) ====================
 function handleDetection(payload) {
     log('检测结果: ' + (payload.result || '?') + ' | ' + (payload.defectType || '--') + ' x' + (payload.defectCount || 0), 'rx');
     state.stats.total++; if (payload.result === 'OK' || payload.result === 'PASS' || payload.result === '良品') state.stats.pass++; else { state.stats.fail++; if (payload.defectType) addDefect(payload); }
@@ -256,7 +268,7 @@ $('btnSaveParams').onclick = function () { if (state.currentCategory) { var cmd 
 function sendOfflinePath(filePath) {
     if (!state.connected) { log('请先连接后端', 'err'); return; }
     log('发送离线检测路径: ' + filePath, 'tx');
-    sendCommand(50, { path: filePath });
+    sendCommand(20, { path: filePath });
 }
 
 function updateBatchInfo() {
