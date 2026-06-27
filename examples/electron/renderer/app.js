@@ -103,7 +103,7 @@ function handleFrame(f) {
         case 0: handleImage(payload, f.binary); break;
         case 1: handleStartOnline(payload); break;
         case 10: handleLog(payload); break;
-        case 11: handleDetection(payload, f.binary); break;
+        case 11: handleDetection(payload); break;
         case 100: handleErrorPopup(payload); break;
         case 101: handleInfoPopup(payload); break;
         case 200: handleReply(payload); break;
@@ -233,24 +233,12 @@ function handleLog(payload) {
 }
 
 // ==================== 检测结果 (CMD=11) ====================
-function handleDetection(payload, binary) {
+function handleDetection(payload) {
     log('检测结果: ' + (payload.result || '?') + ' | ' + (payload.defectType || '--') + ' x' + (payload.defectCount || 0), 'rx');
-    state.stats.total++; if (payload.result === 'OK' || payload.result === 'PASS' || payload.result === '良品') state.stats.pass++; else { state.stats.fail++; if (payload.defectType) addDefect(payload, binary); }
+    state.stats.total++; if (payload.result === 'OK' || payload.result === 'PASS' || payload.result === '良品') state.stats.pass++; else { state.stats.fail++; if (payload.defectType) addDefect(payload); }
     updateStats(); updateResult(payload); if (payload.defectBars) updateDefectBars(payload.defectBars);
 }
-function addDefect(payload, binary) {
-    var imgUrl = null;
-    if (binary && binary.byteLength > 0) {
-        var blob = new Blob([binary], { type: 'image/jpeg' });
-        imgUrl = URL.createObjectURL(blob);
-    } else if (payload.defectImage) {
-        // 兼容旧的 base64 方式
-        imgUrl = 'data:image/jpeg;base64,' + payload.defectImage;
-    }
-    state.defects.unshift({ name: payload.defectType || '未知', desc: (payload.defectDesc || '') + ' 面积:' + (payload.area || '?') + 'px²', img: imgUrl });
-    if (state.defects.length > 100) state.defects.pop();
-    renderDefectList();
-}
+function addDefect(payload) { state.defects.unshift({ name: payload.defectType || '未知', desc: (payload.defectDesc || '') + ' 面积:' + (payload.area || '?') + 'px²', img: payload.defectImage ? 'data:image/jpeg;base64,' + payload.defectImage : null }); if (state.defects.length > 100) state.defects.pop(); renderDefectList(); }
 function updateStats() { var t = state.stats.total, p = state.stats.pass, f = state.stats.fail; dom.statTotal.textContent = t.toLocaleString(); dom.statPass.textContent = p.toLocaleString(); dom.statFail.textContent = f.toLocaleString(); dom.statYield.textContent = t > 0 ? (p / t * 100).toFixed(1) + '%' : '--'; }
 function updateDefectBars(bars) { if (!Array.isArray(bars)) return; var colors = ['#ff6b6b', '#ff9f4a', '#4a9eff', '#00d4aa', '#8fa4c8']; dom.defectBars.innerHTML = bars.map(function (b, i) { var pct = Math.min(100, Math.max(0, (b.count || b.value || 0) / Math.max(b.max || 50, 1) * 100)); return '<div class="defect-bar-row"><span class="bar-label">' + escapeHtml(b.label || b.name || '?') + '</span><div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + (b.color || colors[i % colors.length]) + ';"></div></div><span class="bar-value">' + (b.count || b.value || 0) + '</span></div>'; }).join(''); }
 function renderDefectList() { if (state.defects.length === 0) { dom.defectList.innerHTML = '<div class="defect-empty">暂无缺陷</div>'; return; } dom.defectList.innerHTML = state.defects.map(function (d) { var ih = d.img ? '<img src="' + d.img + '" alt="" />' : '<div style="width:56px;height:56px;background:var(--bg-input);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:24px;">!</div>'; return '<div class="defect-item">' + ih + '<div class="defect-info"><div class="defect-name">' + escapeHtml(d.name) + '</div><div class="defect-desc">' + escapeHtml(d.desc) + '</div></div></div>'; }).join(''); }
