@@ -97,7 +97,7 @@ function sendCommand(cmd, data) {
 // ==================== 帧路由 ====================
 function handleFrame(f) {
     var cmd = f.json.CMD, payload = f.json.Data || {};
-    switch (cmd) { case 0: handleImage(payload, f.binary); break; case 1: handleDetection(payload); break; case 200: handleReply(payload); break; default: if (cmd >= 10 && cmd <= 14) handleParamResponse(cmd, payload); else log('收到 CMD=' + cmd, 'rx'); }
+    switch (cmd) { case 0: handleImage(payload, f.binary); break; case 1: handleLog(payload); break; case 2: handleDetection(payload); break; case 200: handleReply(payload); break; default: if (cmd >= 10 && cmd <= 14) handleParamResponse(cmd, payload); else log('收到 CMD=' + cmd, 'rx'); }
 }
 
 // ==================== 图像 (CMD=0) ====================
@@ -169,7 +169,13 @@ new ResizeObserver(function () {
     _resizeTimer = setTimeout(function () { renderCurrentWindow(); }, 80);
 }).observe(dom.imageContainer);
 
-// ==================== 检测结果 (CMD=1) ====================
+// ==================== 日志消息 (CMD=1) ====================
+function handleLog(payload) {
+    var msg = payload.msg || payload.message || payload.text || JSON.stringify(payload);
+    log(msg, 'rx');
+}
+
+// ==================== 检测结果 (CMD=2) ====================
 function handleDetection(payload) {
     log('检测结果: ' + (payload.result || '?') + ' | ' + (payload.defectType || '--') + ' x' + (payload.defectCount || 0), 'rx');
     state.stats.total++; if (payload.result === 'OK' || payload.result === 'PASS' || payload.result === '良品') state.stats.pass++; else { state.stats.fail++; if (payload.defectType) addDefect(payload); }
