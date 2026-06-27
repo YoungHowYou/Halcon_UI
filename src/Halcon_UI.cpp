@@ -148,7 +148,6 @@ static Herror ValidateJsonProtocol(const HTuple& dict_json)
             } catch (...) {
                 return ERR_JSON_MISSING_KEY;
             }
-            // 确保是数值类型
             try {
                 tmp.L();
             } catch (...) {
@@ -157,13 +156,16 @@ static Herror ValidateJsonProtocol(const HTuple& dict_json)
         }
         break;
     }
-    case 1: {
-        // 检测结果: 至少需要 result 字段
-        HTuple tmp;
-        try {
-            GetDictTuple(Data, "result", &tmp);
-        } catch (...) {
-            return ERR_JSON_MISSING_KEY;
+    case 10: {
+        // 缺陷缩略图: Data 必须包含 defectType/宽/高/通道/bigPath
+        const char* required[] = { "defectType", u8"宽", u8"高", u8"通道", "bigPath" };
+        for (int i = 0; i < 5; i++) {
+            HTuple tmp;
+            try {
+                GetDictTuple(Data, required[i], &tmp);
+            } catch (...) {
+                return ERR_JSON_MISSING_KEY;
+            }
         }
         break;
     }
@@ -254,7 +256,7 @@ Herror HRecvWebData(Hproc_handle proc_handle)
         else
         {
             int64_t Tw = 宽.L() * 高.L() ;
-            HObject ImageR, ImageG, ImageB;
+            HObject ImageR, ImageG, ImageB; 
           
             GenImage1(&ImageR, "byte", 宽.L(), 高.L(), (int64_t)data);
             GenImage1(&ImageG, "byte", 宽.L(), 高.L(), (int64_t)(data + Tw));
@@ -334,6 +336,52 @@ Herror HSendWebData(Hproc_handle proc_handle)
                                   (const unsigned char*)ptrG.L(),
                                   (const unsigned char*)ptrB.L(),
                                   (int)宽.L(), (int)高.L(), 3, 80, &jpegSize);
+        }
+
+        if (jpegData)
+        {
+            ret = SendWebData(handle_data->server_id, Text_json.S(), jpegData, jpegSize);
+            free(jpegData);
+        }
+
+        if (ret != 0) return 10000 - ret;
+    }
+    else if (CMD.L() == 10) // 缺陷缩略图 → JPEG 压缩后发送（质量 60）
+    {
+        HObject Image;
+        GetDictObject(&Image, hv_DictHandle, u8"图");
+
+        HTuple Data;
+        GetDictTuple(dict_json, "Data", &Data);
+
+        HTuple 宽, 高, TYPE位深, 通道;
+        GetDictTuple(Data, u8"通道", &通道);
+        GetDictTuple(Data, u8"宽", &宽);
+        GetDictTuple(Data, u8"高", &高);
+
+        SetDictTuple(Data, "fmt", HTuple("jpeg"));
+
+        HTuple Text_json;
+        DictToJson(dict_json, HTuple(), HTuple(), &Text_json);
+
+        size_t jpegSize = 0;
+        char* jpegData = nullptr;
+
+        if (通道.L() == 1)
+        {
+            HTuple ptr;
+            GetImagePointer1(Image, &ptr, &TYPE位深, &宽, &高);
+            jpegData = EncodeJpeg((const unsigned char*)ptr.L(), nullptr, nullptr,
+                                  (int)宽.L(), (int)高.L(), 1, 60, &jpegSize);
+        }
+        else if (通道.L() == 3)
+        {
+            HTuple ptrR, ptrG, ptrB;
+            GetImagePointer3(Image, &ptrR, &ptrG, &ptrB, &TYPE位深, &宽, &高);
+            jpegData = EncodeJpeg((const unsigned char*)ptrR.L(),
+                                  (const unsigned char*)ptrG.L(),
+                                  (const unsigned char*)ptrB.L(),
+                                  (int)宽.L(), (int)高.L(), 3, 60, &jpegSize);
         }
 
         if (jpegData)
