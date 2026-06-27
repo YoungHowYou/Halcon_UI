@@ -234,11 +234,29 @@ function handleDefectThumbnail(payload, binary) {
     var w = payload['宽'] || payload.width || 0;
     var h = payload['高'] || payload.height || 0;
     var ch = payload['通道'] || payload.channels || 1;
-    var desc = (payload.defectDesc || payload.desc || '') + (payload.area ? ' 面积:' + payload.area + 'px²' : '') + (w ? ' ' + w + '×' + h : '');
+    var fmt = payload.fmt || 'jpeg';
+    var desc = (payload.defectDesc || payload.desc || '') + (w ? ' ' + w + '×' + h : '');
     var imgUrl = null;
     if (binary && binary.byteLength > 0) {
-        var blob = new Blob([binary], { type: 'image/jpeg' });
-        imgUrl = URL.createObjectURL(blob);
+        if (fmt === 'raw') {
+            var raw = new Uint8Array(binary);
+            var cvs = document.createElement('canvas');
+            cvs.width = w; cvs.height = h;
+            var ctx2d = cvs.getContext('2d');
+            var idata = ctx2d.createImageData(w, h), px = idata.data;
+            if (ch === 1) {
+                for (var i = 0; i < w * h; i++) { var v = raw[i], o = i * 4; px[o] = px[o + 1] = px[o + 2] = v; px[o + 3] = 255; }
+            } else {
+                var ps = w * h;
+                for (var i = 0; i < ps; i++) { var o = i * 4; px[o] = raw[i]; px[o + 1] = raw[ps + i]; px[o + 2] = raw[ps * 2 + i]; px[o + 3] = 255; }
+            }
+            ctx2d.putImageData(idata, 0, 0);
+            imgUrl = cvs.toDataURL('image/jpeg', 0.6);
+            cvs.remove();
+        } else {
+            var blob = new Blob([binary], { type: 'image/jpeg' });
+            imgUrl = URL.createObjectURL(blob);
+        }
     }
     state.defects.unshift({ name: defectType, desc: desc, img: imgUrl, bigPath: bigPath });
     if (state.defects.length > 100) state.defects.pop();
