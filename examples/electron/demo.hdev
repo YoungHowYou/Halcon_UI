@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.2" halcon_version="24.11.1.0">
+<procedure name="main">
+<interface/>
+<body>
+<c>* ============================================================</c>
+<c>* Halcon_UI WebSocket 演示</c>
+<c>*</c>
+<c>* 演示三件事：</c>
+<c>*   1) 后端推 2 张图到前端（图号=0 主预览区，图号=1 副预览区）</c>
+<c>*   2) 前端发命令到后端（CMD=100）</c>
+<c>*   3) 后端收到后回复一条命令（CMD=200，带 echo 内容）</c>
+<c>*</c>
+<c>* 使用方法：</c>
+<c>*   1. 运行本脚本（会停在第一个 stop 处启动服务器）</c>
+<c>*   2. 浏览器打开 http://127.0.0.1:3000</c>
+<c>*   3. 回到 HDevelop 按 F5 进入主循环（持续推图 + 等命令）</c>
+<c>*   4. 在前端 console 执行：</c>
+<c>*        sendCmd(100, { msg: 'hello from web' })</c>
+<c>*      后端会打印收到的 msg 并回 CMD=200 { echo: '...' }</c>
+<c>*   5. 在前端 console 执行 sendCmd(999, {}) 触发退出</c>
+<c>* ============================================================</c>
+<c></c>
+<l>dev_update_off ()</l>
+<l>dev_get_window (WindowHandle)</l>
+<l>set_display_font (WindowHandle, 14, 'mono', 'true', 'false')</l>
+<c></c>
+<c>* ---------- 1. 启动 WebSocket 服务器 ----------</c>
+<c>* WebRoot 传空串 ''：使用 DLL 同目录下的 web 子目录作为前端资源根</c>
+<l>Port := 1802</l>
+<l>WebRoot := './web'</l>
+<l>WCreateWebServer (Port, WebRoot, ServerID)</l>
+<l>disp_message (WindowHandle, 'WebSocket 已启动 (端口 ' + Port + ')', 'window', 12, 12, 'lime green', 'false')</l>
+<l>disp_message (WindowHandle, '浏览器打开 http://127.0.0.1:' + Port, 'window', 36, 12, 'white', 'false')</l>
+<l>disp_message (WindowHandle, '按 F5 进入主循环', 'window', 60, 12, 'yellow', 'false')</l>
+<l>system_call (' ./start.bat')</l>
+<l>stop ()</l>
+<c></c>
+<c>* ---------- 2. 准备两张 Halcon 自带测试图 ----------</c>
+<l>read_image (ImageA, 'fabrik')</l>
+<l>read_image (ImageB, 'monkey')</l>
+<c></c>
+<c>* ---------- 3. 主循环 ----------</c>
+<l>Running := true</l>
+<l>FrameSeq := 0</l>
+<c></c>
+<l>while (Running)</l>
+<c></c>
+<c>    * ---- (a) 非阻塞收一条前端命令（timeout=0） ----</c>
+<l>    create_dict (RecvDict)</l>
+<l>    try</l>
+<l>        WRecvWebData (ServerID, 0, RecvDict)</l>
+<l>        get_dict_tuple (RecvDict, '命令', CmdJson)</l>
+<l>        get_dict_tuple (CmdJson, 'CMD', CMD)</l>
+<l>        try</l>
+<l>            get_dict_tuple (CmdJson, 'Data', CmdData)</l>
+<l>        catch (Ex2)</l>
+<l>            create_dict (CmdData)</l>
+<l>        endtry</l>
+<l>        disp_message (WindowHandle, '&lt;- 收到 CMD=' + CMD, 'window', 96, 12, 'cyan', 'true')</l>
+<c></c>
+<l>        if (CMD == 100)</l>
+<c>            * 取出前端发来的 msg 字段并回 CMD=200 echo 回去</c>
+<l>            try</l>
+<l>                get_dict_tuple (CmdData, 'msg', MsgIn)</l>
+<l>            catch (Ex3)</l>
+<l>                MsgIn := '(no msg)'</l>
+<l>            endtry</l>
+<l>            disp_message (WindowHandle, '   msg = ' + MsgIn, 'window', 120, 12, 'white', 'true')</l>
+<c></c>
+<l>            create_dict (Reply)</l>
+<l>            create_dict (ReplyCmd)</l>
+<l>            create_dict (ReplyData)</l>
+<l>            set_dict_tuple (ReplyCmd, 'CMD', 200)</l>
+<l>            set_dict_tuple (ReplyData, 'echo', MsgIn)</l>
+<l>            set_dict_tuple (ReplyData, 'seq', FrameSeq)</l>
+<l>            set_dict_tuple (ReplyCmd, 'Data', ReplyData)</l>
+<l>            set_dict_tuple (Reply, '命令', ReplyCmd)</l>
+<l>            WSendWebData (ServerID, Reply)</l>
+<l>            disp_message (WindowHandle, '-&gt; 已回 CMD=200 echo', 'window', 144, 12, 'lime green', 'true')</l>
+<c></c>
+<l>        elseif (CMD == 999)</l>
+<l>            disp_message (WindowHandle, '收到退出命令 CMD=999', 'window', 168, 12, 'red', 'true')</l>
+<l>            Running := false</l>
+<l>            continue</l>
+<l>        endif</l>
+<l>    catch (Ex)</l>
+<c>        * 无命令到达（超时），属于正常流程</c>
+<l>    endtry</l>
+<c></c>
+<c>    * ---- (b) 推图 A → 主预览区（图号=0） ----</c>
+<l>    SendImage (ImageA,ServerID,  0, FrameSeq)</l>
+<c></c>
+<c>    * ---- (c) 推图 B → 副预览区（图号=1） ----</c>
+<l>    SendImage (ImageB,ServerID,  1, FrameSeq)</l>
+<c></c>
+<l>    FrameSeq := FrameSeq + 1</l>
+<l>    dev_display (ImageA)</l>
+<c></c>
+<c>    * 控制约 5 fps</c>
+<l>    wait_seconds (0.2)</l>
+<l>endwhile</l>
+<c></c>
+<c>* ---------- 4. 关闭 ----------</c>
+<l>WCloseWebServer (ServerID)</l>
+<l>disp_message (WindowHandle, '服务器已关闭，共推送 ' + FrameSeq + ' 轮', 'window', 192, 12, 'red', 'true')</l>
+</body>
+<docu id="main">
+<parameters/>
+</docu>
+</procedure>
+<procedure name="SendImage">
+<interface>
+<io>
+<par name="Image" base_type="iconic" dimension="0"/>
+</io>
+<ic>
+<par name="ServerID" base_type="ctrl" dimension="0"/>
+<par name="ImgIdx" base_type="ctrl" dimension="0"/>
+<par name="Seq" base_type="ctrl" dimension="0"/>
+</ic>
+</interface>
+<body>
+<c>* 把一张图打包成 CMD=0 帧发给前端，由 ImgIdx 决定显示到哪个控件</c>
+<l>get_image_size (Image, W, H)</l>
+<l>count_channels (Image, Ch)</l>
+<c></c>
+<l>create_dict (SendDict)</l>
+<l>create_dict (CmdDict)</l>
+<l>create_dict (DataDict)</l>
+<l>set_dict_tuple (CmdDict, 'CMD', 0)</l>
+<l>set_dict_tuple (DataDict, '图号', ImgIdx)</l>
+<l>set_dict_tuple (DataDict, 'seq', Seq)</l>
+<l>set_dict_tuple (DataDict, '宽', W)</l>
+<l>set_dict_tuple (DataDict, '高', H)</l>
+<l>set_dict_tuple (DataDict, '通道', Ch)</l>
+<l>set_dict_tuple (CmdDict, 'Data', DataDict)</l>
+<l>set_dict_tuple (SendDict, '命令', CmdDict)</l>
+<l>set_dict_object (Image, SendDict, '图')</l>
+<l>WSendWebData (ServerID, SendDict)</l>
+</body>
+<docu id="SendImage">
+<parameters>
+<parameter id="Image"/>
+<parameter id="ImgIdx"/>
+<parameter id="Seq"/>
+<parameter id="ServerID"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

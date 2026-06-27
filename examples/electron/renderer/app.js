@@ -19,6 +19,8 @@ const state = {
     stats: { total: 0, pass: 0, fail: 0 }, defects: [], userLevel: 2,
     // 批量离线检测
     batchFiles: [], batchIndex: -1,
+    // 在线检测
+    onlineMode: false,
 };
 
 function $(id) { return document.getElementById(id); }
@@ -356,6 +358,7 @@ function exitBatchMode() {
     state.batchFiles = [];
     state.batchIndex = -1;
     updateBatchInfo();
+    if (!state.onlineMode) $('btnOnline').disabled = false;
     log('已退出批量检测模式', 'info');
 }
 
@@ -366,8 +369,30 @@ function sendCurrentBatchImage() {
     updateBatchInfo();
 }
 
-// 离线检测（单张）—— 使用原生文件选择
+// 在线检测
+$('btnOnline').onclick = function () {
+    state.onlineMode = true;
+    $('btnOnline').style.display = 'none';
+    $('btnOnlineExit').style.display = '';
+    $('btnOffline').disabled = true;
+    $('btnBatch').disabled = true;
+    exitBatchMode();
+    sendCommand(1, {});
+    log('进入在线检测模式', 'info');
+};
+
+$('btnOnlineExit').onclick = function () {
+    state.onlineMode = false;
+    $('btnOnline').style.display = '';
+    $('btnOnlineExit').style.display = 'none';
+    $('btnOffline').disabled = false;
+    $('btnBatch').disabled = false;
+    log('退出在线检测模式', 'info');
+};
+
+// 离线检测（单张）
 $('btnOffline').onclick = function () {
+    if (state.onlineMode) return;
     var input = $('fileInput');
     if (!input) return;
     input.value = '';
@@ -384,8 +409,9 @@ $('btnOffline').onclick = function () {
     input.click();
 };
 
-// 批量离线检测（文件夹）—— 使用 webkitdirectory
+// 批量离线检测（文件夹）
 $('btnBatch').onclick = function () {
+    if (state.onlineMode) return;
     var input = $('folderInput');
     if (!input) return;
     input.value = '';
@@ -400,6 +426,8 @@ $('btnBatch').onclick = function () {
         state.batchFiles = paths;
         state.batchIndex = 0;
         updateBatchInfo();
+        // 进入批量模式，禁用在线
+        $('btnOnline').disabled = true;
         log('加载 ' + paths.length + ' 张图片，← → 键切换', 'info');
         sendCurrentBatchImage();
     };
@@ -501,7 +529,7 @@ setInterval(function () { var n = performance.now(), e = (n - state.fpsLastTime)
 
 // ==================== 启动 ====================
 function init() {
-    log('Halcon_UI Electron 客户端就绪', 'info');
+    log('YouEyE 客户端就绪', 'info');
     if (window.electronAPI) log('Electron ' + (window.electronAPI.versions && window.electronAPI.versions.electron || '?'), 'info');
     var rect = dom.imageContainer.getBoundingClientRect(); dom.imageCanvas.width = rect.width; dom.imageCanvas.height = rect.height;
     dom.imageContainer.style.cursor = 'grab';

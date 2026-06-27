@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src ws://127.0.0.1:* ws://localhost:*; img-src data: blob: 'self';" />
-    <title>Halcon_UI — 工业视觉检测</title>
+    <title>YouEyE — 工业视觉检测</title>
     <style>
         /* ===== 全局重置 ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -618,7 +618,7 @@
         <div class="topbar-left">
             <div class="logo">
                 <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6l5.25 3.15L17 12.23l-4-2.37V7z"/></svg>
-                <span>Halcon_UI</span>
+                <span>YouEyE</span>
             </div>
         </div>
 
@@ -636,6 +636,8 @@
         </div>
 
         <div class="topbar-right">
+            <button class="btn btn-success btn-sm" id="btnOnline" style="height:28px;">▶ 在线检测</button>
+            <button class="btn btn-outline btn-sm" id="btnOnlineExit" style="height:28px;display:none;">✕ 退出</button>
             <div class="status-badge">
                 <span class="dot" id="statusDot"></span>
                 <span id="statusText">未连接</span>

@@ -13,7 +13,7 @@ function createWindow() {
         height: 960,
         minWidth: 900,
         minHeight: 600,
-        title: 'Halcon_UI — 工业视觉检测',
+        title: 'YouEyE — 工业视觉检测',
         backgroundColor: '#0b0e17',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
