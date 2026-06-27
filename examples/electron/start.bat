@@ -1,7 +1,7 @@
 @echo off
 REM ============================================================
-REM  Halcon_UI Electron 客户端 — 一键启动
-REM  用法: 双击此文件，或在终端运行 start.bat
+REM  YouEyE Electron 客户端 — 后台启动（不阻塞 Halcon）
+REM  用法: Halcon 中 system_call('start.bat')
 REM ============================================================
 cd /d "%~dp0"
-call node_modules\.bin\electron.cmd .
+start "" "%~dp0node_modules\electron\dist\electron.exe" "%~dp0"
