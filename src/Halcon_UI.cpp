@@ -297,35 +297,80 @@ Herror HSendWebData(Hproc_handle proc_handle)
         GetDictTuple(Data, u8"宽", &宽);
         GetDictTuple(Data, u8"高", &高);
 
-        SetDictTuple(Data, "fmt", HTuple("jpeg"));
+        // 读取用户指定的编码格式，默认 jpeg
+        HTuple fmt;
+        bool hasFmt = false;
+        try { GetDictTuple(Data, "fmt", &fmt); hasFmt = true; } catch (...) {}
+        const char* fmtStr = hasFmt ? fmt.S() : "jpeg";
 
         HTuple Text_json;
         DictToJson(dict_json, HTuple(), HTuple(), &Text_json);
 
-        size_t jpegSize = 0;
-        char* jpegData = nullptr;
-
-        if (通道.L() == 1)
+        if (strcmp(fmtStr, "raw") == 0)
         {
+            // RAW planar 像素直接发送
             HTuple ptr;
-            GetImagePointer1(Image, &ptr, &TYPE位深, &宽, &高);
-            jpegData = EncodeJpeg((const unsigned char*)ptr.L(), nullptr, nullptr,
-                                  (int)宽.L(), (int)高.L(), 1, 80, &jpegSize);
-        }
-        else if (通道.L() == 3)
-        {
-            HTuple ptrR, ptrG, ptrB;
-            GetImagePointer3(Image, &ptrR, &ptrG, &ptrB, &TYPE位深, &宽, &高);
-            jpegData = EncodeJpeg((const unsigned char*)ptrR.L(),
-                                  (const unsigned char*)ptrG.L(),
-                                  (const unsigned char*)ptrB.L(),
-                                  (int)宽.L(), (int)高.L(), 3, 80, &jpegSize);
-        }
+            size_t rawSize = 0;
+            char* rawData = nullptr;
 
-        if (jpegData)
+            if (通道.L() == 1)
+            {
+                GetImagePointer1(Image, &ptr, &TYPE位深, &宽, &高);
+                rawSize = (size_t)宽.L() * 高.L();
+                rawData = (char*)malloc(rawSize);
+                if (rawData) memcpy(rawData, (void*)ptr.L(), rawSize);
+            }
+            else if (通道.L() == 3)
+            {
+                HTuple ptrR, ptrG, ptrB;
+                GetImagePointer3(Image, &ptrR, &ptrG, &ptrB, &TYPE位深, &宽, &高);
+                size_t planeSize = (size_t)宽.L() * 高.L();
+                rawSize = planeSize * 3;
+                rawData = (char*)malloc(rawSize);
+                if (rawData) {
+                    memcpy(rawData, (void*)ptrR.L(), planeSize);
+                    memcpy(rawData + planeSize, (void*)ptrG.L(), planeSize);
+                    memcpy(rawData + planeSize * 2, (void*)ptrB.L(), planeSize);
+                }
+            }
+
+            if (rawData)
+            {
+                ret = SendWebData(handle_data->server_id, Text_json.S(), rawData, rawSize);
+                free(rawData);
+            }
+        }
+        else
         {
-            ret = SendWebData(handle_data->server_id, Text_json.S(), jpegData, jpegSize);
-            free(jpegData);
+            // JPEG 编码发送
+            if (!hasFmt) SetDictTuple(Data, "fmt", HTuple("jpeg"));
+            DictToJson(dict_json, HTuple(), HTuple(), &Text_json);
+
+            size_t jpegSize = 0;
+            char* jpegData = nullptr;
+
+            if (通道.L() == 1)
+            {
+                HTuple ptr;
+                GetImagePointer1(Image, &ptr, &TYPE位深, &宽, &高);
+                jpegData = EncodeJpeg((const unsigned char*)ptr.L(), nullptr, nullptr,
+                                      (int)宽.L(), (int)高.L(), 1, 80, &jpegSize);
+            }
+            else if (通道.L() == 3)
+            {
+                HTuple ptrR, ptrG, ptrB;
+                GetImagePointer3(Image, &ptrR, &ptrG, &ptrB, &TYPE位深, &宽, &高);
+                jpegData = EncodeJpeg((const unsigned char*)ptrR.L(),
+                                      (const unsigned char*)ptrG.L(),
+                                      (const unsigned char*)ptrB.L(),
+                                      (int)宽.L(), (int)高.L(), 3, 80, &jpegSize);
+            }
+
+            if (jpegData)
+            {
+                ret = SendWebData(handle_data->server_id, Text_json.S(), jpegData, jpegSize);
+                free(jpegData);
+            }
         }
     }
     else
