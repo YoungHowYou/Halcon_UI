@@ -231,7 +231,10 @@ $('popupOverlay').onclick = function (e) { if (e.target === this) closePopup(); 
 function handleDefectThumbnail(payload, binary) {
     var defectType = payload.defectType || payload['缺陷类型'] || '未知缺陷';
     var bigPath = payload.bigPath || payload['大图路径'] || '';
-    var desc = (payload.defectDesc || payload.desc || '') + ' 面积:' + (payload.area || '?') + 'px²';
+    var w = payload['宽'] || payload.width || 0;
+    var h = payload['高'] || payload.height || 0;
+    var ch = payload['通道'] || payload.channels || 1;
+    var desc = (payload.defectDesc || payload.desc || '') + (payload.area ? ' 面积:' + payload.area + 'px²' : '') + (w ? ' ' + w + '×' + h : '');
     var imgUrl = null;
     if (binary && binary.byteLength > 0) {
         var blob = new Blob([binary], { type: 'image/jpeg' });
@@ -240,7 +243,7 @@ function handleDefectThumbnail(payload, binary) {
     state.defects.unshift({ name: defectType, desc: desc, img: imgUrl, bigPath: bigPath });
     if (state.defects.length > 100) state.defects.pop();
     renderDefectList();
-    log('缺陷缩略图: ' + defectType + (bigPath ? ' 大图:' + bigPath : ''), 'rx');
+    log('缺陷缩略图: ' + defectType + (w ? ' ' + w + '×' + h : '') + (bigPath ? ' 大图:' + bigPath : ''), 'rx');
 }
 
 // ==================== 日志消息 (CMD=11) ====================
