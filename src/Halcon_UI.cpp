@@ -143,29 +143,10 @@ static Herror ValidateJsonProtocol(const HTuple& dict_json)
         const char* required[] = { u8"宽", u8"高", u8"图号", u8"通道" };
         for (int i = 0; i < 4; i++) {
             HTuple tmp;
-            try {
-                GetDictTuple(Data, required[i], &tmp);
-            } catch (...) {
-                return ERR_JSON_MISSING_KEY;
-            }
-            try {
-                tmp.L();
-            } catch (...) {
-                return ERR_JSON_VALUE_TYPE;
-            }
-        }
-        break;
-    }
-    case 10: {
-        // 缺陷缩略图: Data 必须包含 defectType/宽/高/通道/bigPath
-        const char* required[] = { "defectType", u8"宽", u8"高", u8"通道", "bigPath" };
-        for (int i = 0; i < 5; i++) {
-            HTuple tmp;
-            try {
-                GetDictTuple(Data, required[i], &tmp);
-            } catch (...) {
-                return ERR_JSON_MISSING_KEY;
-            }
+            try { GetDictTuple(Data, required[i], &tmp); }
+            catch (...) { return ERR_JSON_MISSING_KEY; }
+            try { tmp.L(); }
+            catch (...) { return ERR_JSON_VALUE_TYPE; }
         }
         break;
     }
@@ -294,27 +275,30 @@ Herror HSendWebData(Hproc_handle proc_handle)
     Herror vret = ValidateJsonProtocol(dict_json);
     if (vret != H_MSG_TRUE) return vret;
 
-    HTuple CMD;
-    GetDictTuple(dict_json, "CMD", &CMD);
-
     int ret = -1;
 
-    if (CMD.L() == 0) // 图像数据 → JPEG 压缩后发送
-    {
-        HObject Image;
+    // 检查是否附带图像对象 → 有就 JPEG 编码发送，没有就只发 JSON
+    HObject Image;
+    bool hasImage = false;
+    try {
         GetDictObject(&Image, hv_DictHandle, u8"图");
+        hasImage = true;
+    } catch (...) {
+        hasImage = false;
+    }
 
+    if (hasImage)
+    {
         HTuple Data;
         GetDictTuple(dict_json, "Data", &Data);
 
-        HTuple 宽, 高, TYPE位深, 图号, 通道;
+        HTuple 宽, 高, TYPE位深, 通道;
         GetDictTuple(Data, u8"通道", &通道);
-        GetDictTuple(Data, u8"图号", &图号);
+        GetDictTuple(Data, u8"宽", &宽);
+        GetDictTuple(Data, u8"高", &高);
 
-        // 在 Data 字典中标记编码格式，前端据此解码
         SetDictTuple(Data, "fmt", HTuple("jpeg"));
 
-        // 重新序列化 JSON（现在包含 fmt 字段）
         HTuple Text_json;
         DictToJson(dict_json, HTuple(), HTuple(), &Text_json);
 
@@ -343,63 +327,16 @@ Herror HSendWebData(Hproc_handle proc_handle)
             ret = SendWebData(handle_data->server_id, Text_json.S(), jpegData, jpegSize);
             free(jpegData);
         }
-
-        if (ret != 0) return 10000 - ret;
-    }
-    else if (CMD.L() == 10) // 缺陷缩略图 → JPEG 压缩后发送（质量 60）
-    {
-        HObject Image;
-        GetDictObject(&Image, hv_DictHandle, u8"图");
-
-        HTuple Data;
-        GetDictTuple(dict_json, "Data", &Data);
-
-        HTuple 宽, 高, TYPE位深, 通道;
-        GetDictTuple(Data, u8"通道", &通道);
-        GetDictTuple(Data, u8"宽", &宽);
-        GetDictTuple(Data, u8"高", &高);
-
-        SetDictTuple(Data, "fmt", HTuple("jpeg"));
-
-        HTuple Text_json;
-        DictToJson(dict_json, HTuple(), HTuple(), &Text_json);
-
-        size_t jpegSize = 0;
-        char* jpegData = nullptr;
-
-        if (通道.L() == 1)
-        {
-            HTuple ptr;
-            GetImagePointer1(Image, &ptr, &TYPE位深, &宽, &高);
-            jpegData = EncodeJpeg((const unsigned char*)ptr.L(), nullptr, nullptr,
-                                  (int)宽.L(), (int)高.L(), 1, 60, &jpegSize);
-        }
-        else if (通道.L() == 3)
-        {
-            HTuple ptrR, ptrG, ptrB;
-            GetImagePointer3(Image, &ptrR, &ptrG, &ptrB, &TYPE位深, &宽, &高);
-            jpegData = EncodeJpeg((const unsigned char*)ptrR.L(),
-                                  (const unsigned char*)ptrG.L(),
-                                  (const unsigned char*)ptrB.L(),
-                                  (int)宽.L(), (int)高.L(), 3, 60, &jpegSize);
-        }
-
-        if (jpegData)
-        {
-            ret = SendWebData(handle_data->server_id, Text_json.S(), jpegData, jpegSize);
-            free(jpegData);
-        }
-
-        if (ret != 0) return 10000 - ret;
     }
     else
     {
-        // 非图像命令，只发 JSON
+        // 纯 JSON，无图像
         HTuple Text_json;
         DictToJson(dict_json, HTuple(), HTuple(), &Text_json);
         ret = SendWebData(handle_data->server_id, Text_json.S(), nullptr, 0);
-        if (ret != 0) return 10000 - ret;
     }
+
+    if (ret != 0) return 10000 - ret;
 
     return H_MSG_TRUE;
 }
