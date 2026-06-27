@@ -102,6 +102,8 @@ function handleFrame(f) {
         case 1: handleStartOnline(payload); break;
         case 10: handleLog(payload); break;
         case 11: handleDetection(payload); break;
+        case 100: handleErrorPopup(payload); break;
+        case 101: handleInfoPopup(payload); break;
         case 200: handleReply(payload); break;
         default: if (cmd >= 2 && cmd <= 6) handleParamResponse(cmd, payload); else log('收到 CMD=' + cmd, 'rx');
     }
@@ -176,10 +178,51 @@ new ResizeObserver(function () {
     _resizeTimer = setTimeout(function () { renderCurrentWindow(); }, 80);
 }).observe(dom.imageContainer);
 
-// ==================== 启动在线检测 (CMD=1) ====================
-function handleStartOnline(payload) {
-    log('启动在线检测', 'rx');
+// ==================== 错误弹窗 (CMD=100) ====================
+function handleErrorPopup(payload) {
+    var msg = payload.msg || payload.message || payload.text || JSON.stringify(payload);
+    showPopup('error', '❌', msg);
+    log('报错: ' + msg, 'err');
 }
+
+// ==================== 信息弹窗 (CMD=101) ====================
+function handleInfoPopup(payload) {
+    var msg = payload.msg || payload.message || payload.text || JSON.stringify(payload);
+    showPopup('info', 'ℹ️', msg);
+    log('信息: ' + msg, 'info');
+}
+
+var _popupTimer = null;
+function showPopup(type, icon, msg) {
+    var overlay = $('popupOverlay');
+    var box = $('popupBox');
+    var iconEl = $('popupIcon');
+    var msgEl = $('popupMsg');
+    if (!overlay || !box) return;
+
+    // 清除之前的自动关闭定时器
+    if (_popupTimer) { clearTimeout(_popupTimer); _popupTimer = null; }
+
+    box.className = 'popup-box ' + type;
+    iconEl.textContent = icon;
+    msgEl.textContent = msg;
+    overlay.classList.add('active');
+
+    // 错误弹窗：手动关闭；信息弹窗：10 秒自动关闭
+    if (type === 'info') {
+        _popupTimer = setTimeout(function () { closePopup(); }, 10000);
+    }
+}
+
+function closePopup() {
+    var overlay = $('popupOverlay');
+    if (!overlay) return;
+    overlay.classList.remove('active');
+    if (_popupTimer) { clearTimeout(_popupTimer); _popupTimer = null; }
+}
+
+$('popupClose').onclick = function () { closePopup(); };
+$('popupOverlay').onclick = function (e) { if (e.target === this) closePopup(); };
 
 // ==================== 日志消息 (CMD=10) ====================
 function handleLog(payload) {

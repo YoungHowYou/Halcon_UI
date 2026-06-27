@@ -585,6 +585,29 @@
 
         .hidden { display: none !important; }
         .text-muted { color: var(--text-muted); }
+
+        /* ===== 弹窗提示（CMD 100/101） ===== */
+        .popup-overlay {
+            position: fixed; inset: 0; z-index: 2000;
+            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center;
+        }
+        .popup-overlay.active { display: flex; animation: fadeIn 0.2s ease; }
+        .popup-box {
+            background: var(--bg-secondary); border-radius: var(--radius);
+            border: 1px solid var(--border-color); box-shadow: var(--shadow);
+            max-width: 600px; min-width: 320px; padding: 24px 28px;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .popup-box .popup-icon { font-size: 32px; }
+        .popup-box .popup-msg {
+            font-size: 14px; line-height: 1.7; color: var(--text-primary);
+            white-space: pre-wrap; word-break: break-word; max-height: 50vh; overflow-y: auto;
+        }
+        .popup-box.error { border-color: var(--accent-red); }
+        .popup-box.error .popup-icon { color: var(--accent-red); }
+        .popup-box.info  { border-color: var(--accent-blue); }
+        .popup-box.info  .popup-icon { color: var(--accent-blue); }
     </style>
 </head>
 <body>
@@ -705,6 +728,17 @@
 <!-- 隐藏的文件选择控件 -->
 <input type="file" id="fileInput" accept=".bmp,.png,.tif,.tiff,.jpg,.jpeg" style="display:none" />
 <input type="file" id="folderInput" webkitdirectory accept=".bmp,.png,.tif,.tiff,.jpg,.jpeg" style="display:none" />
+
+<!-- 弹窗提示（CMD 100 报错 / CMD 101 信息）-->
+<div class="popup-overlay" id="popupOverlay">
+    <div class="popup-box error" id="popupBox">
+        <div class="popup-icon" id="popupIcon">❌</div>
+        <div class="popup-msg" id="popupMsg"></div>
+        <div style="display:flex;justify-content:flex-end;">
+            <button class="btn btn-primary" id="popupClose">确定</button>
+        </div>
+    </div>
+</div>
 
 <script src="app.js"></script>
 </body>
