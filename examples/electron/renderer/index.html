@@ -50,6 +50,39 @@
         /* ===== 主布局 ===== */
         #app { display: flex; flex-direction: column; height: 100vh; min-height: 0; }
 
+        /* ===== 可拖动分隔条 ===== */
+        .splitter {
+            width: 5px; background: #131a2b;
+            border-left: 1px solid #2a3a5a; border-right: 1px solid #2a3a5a;
+            cursor: col-resize; flex-shrink: 0; transition: background 0.15s;
+            position: relative; z-index: 5;
+        }
+        .splitter:hover, .splitter.active { background: #4a9eff; }
+        .splitter::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 3px; height: 32px; border-radius: 2px;
+            background: #5a729a; opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .splitter:hover::after, .splitter.active::after { opacity: 1; }
+
+        .splitter-h {
+            height: 5px; background: #131a2b;
+            border-top: 1px solid #2a3a5a; border-bottom: 1px solid #2a3a5a;
+            cursor: row-resize; flex-shrink: 0; transition: background 0.15s;
+            position: relative; z-index: 5;
+        }
+        .splitter-h:hover, .splitter-h.active { background: #4a9eff; }
+        .splitter-h::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 32px; height: 3px; border-radius: 2px;
+            background: #5a729a; opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .splitter-h:hover::after, .splitter-h.active::after { opacity: 1; }
+
         /* ===== 顶部栏 ===== */
         .topbar {
             display: flex; align-items: center; justify-content: space-between;
@@ -113,6 +146,11 @@
         .param-tab.active {
             color: #fff; background: var(--accent-blue);
             box-shadow: 0 0 12px rgba(74, 158, 255, 0.2);
+        }
+
+        .topbar-sep {
+            display: inline-block; width: 1px; height: 20px;
+            background: var(--border-color); margin: 0 4px; align-self: center;
         }
 
         .topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -248,7 +286,7 @@
         .log-entry.err .msg { color: var(--accent-red); }
         .log-entry.info .msg { color: var(--text-secondary); }
 
-        .stats-area { flex: 1; display: flex; flex-direction: column; min-height: 100px; overflow-y: auto; }
+        .stats-area { flex: 1; display: flex; flex-direction: column; min-height: 100px; min-height: 0; overflow-y: auto; }
         .stats-grid {
             display: grid; grid-template-columns: 1fr 1fr;
             gap: 6px; margin-top: 4px;
@@ -292,7 +330,7 @@
         }
 
         /* 结果展示 */
-        .result-area { flex: 1; display: flex; flex-direction: column; min-height: 80px; overflow: hidden; }
+        .result-area { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: visible; }
         .result-content {
             flex: 1; overflow-y: auto; font-size: 12px;
             background: var(--bg-primary); border-radius: var(--radius-sm);
@@ -567,6 +605,10 @@
             <button class="param-tab" data-category="存储参数"><span>💾</span> 存储</button>
             <button class="param-tab" data-category="通信参数"><span>📡</span> 通信</button>
             <button class="param-tab" data-category="运动参数"><span>⚙️</span> 运动</button>
+            <span class="topbar-sep"></span>
+            <button class="param-tab" id="btnOffline" title="选择单张图片进行离线检测"><span>🖼</span> 离线检测</button>
+            <button class="param-tab" id="btnBatch" title="选择文件夹批量离线检测"><span>📁</span> 批量检测</button>
+            <span id="batchInfo" style="display:none;font-size:11px;color:var(--accent-cyan);white-space:nowrap;margin-left:4px;align-self:center;"></span>
         </div>
 
         <div class="topbar-right">
@@ -578,8 +620,8 @@
         </div>
     </header>
 
-    <!-- ===== 主体三列 ===== -->
-    <div class="main-body">
+    <!-- ===== 主体三列（可拖动分隔条） ===== -->
+    <div class="main-body" id="mainBody">
         <!-- 左列：多窗口图像 -->
         <div class="image-container" id="imageContainer">
             <div class="window-tabs hidden" id="windowTabs"></div>
@@ -590,14 +632,15 @@
                 <p style="font-size:12px;opacity:0.5;">拖拽平移 · 滚轮缩放 · 双击适应</p>
             </div>
         </div>
+        <div class="splitter" id="splitter1"></div>
 
         <!-- 中列：缺陷记录 + 日志 -->
-        <div class="defect-column">
+        <div class="defect-column" id="defectColumn">
             <div class="section-title">🔍 缺陷记录</div>
             <div class="defect-list" id="defectList">
                 <div class="defect-empty">暂无缺陷</div>
             </div>
-
+            <div class="splitter-h" id="splitter2"></div>
             <div class="log-area">
                 <div class="section-title">📋 通信日志</div>
                 <div class="log-content" id="logContent">
@@ -605,10 +648,11 @@
                 </div>
             </div>
         </div>
+        <div class="splitter" id="splitter3"></div>
 
         <!-- 右列：统计 + 结果 -->
-        <div class="middle-panel">
-            <div class="stats-area">
+        <div class="middle-panel" id="middlePanel">
+            <div class="stats-area" id="statsArea">
                 <div class="section-title">📊 检测统计</div>
                 <div class="stats-grid" id="statsGrid">
                     <div class="stat-card"><div class="stat-value green" id="statTotal">0</div><div class="stat-label">总检测数</div></div>
@@ -618,8 +662,8 @@
                 </div>
                 <div class="defect-bars" id="defectBars"></div>
             </div>
-
-            <div class="result-area">
+            <div class="splitter-h" id="splitter4"></div>
+            <div class="result-area" id="resultArea">
                 <div class="section-title">📝 检测结果</div>
                 <div class="result-content" id="resultContent">
                     <div class="result-empty">等待检测结果...</div>
@@ -656,6 +700,10 @@
         </div>
     </div>
 </div>
+
+<!-- 隐藏的文件选择控件 -->
+<input type="file" id="fileInput" accept=".bmp,.png,.tif,.tiff,.jpg,.jpeg" style="display:none" />
+<input type="file" id="folderInput" webkitdirectory accept=".bmp,.png,.tif,.tiff,.jpg,.jpeg" style="display:none" />
 
 <script src="app.js"></script>
 </body>

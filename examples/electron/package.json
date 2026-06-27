@@ -8,6 +8,10 @@
     "dev": "electron . --dev"
   },
   "devDependencies": {
-    "electron": "^42.5.0"
+    "electron": "^42.5.0",
+    "esbuild": "^0.28.1"
+  },
+  "dependencies": {
+    "golden-layout": "^2.6.0"
   }
 }
