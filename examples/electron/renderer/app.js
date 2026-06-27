@@ -305,7 +305,16 @@ dom.paramTabs.querySelectorAll('.param-tab[data-category]').forEach(function (t)
 $('btnCloseParams').onclick = closeParamModal;
 dom.paramModal.onclick = function (e) { if (e.target === dom.paramModal) closeParamModal(); };
 $('btnRefreshParams').onclick = function () { if (state.currentCategory) { requestParams(state.currentCategory); log('刷新参数 (' + state.currentCategory + ')', 'tx'); } };
-$('btnSaveParams').onclick = function () { if (state.currentCategory) { var cmd = PARAM_CATEGORY_CMD[state.currentCategory]; if (cmd) { sendCommand(cmd, { action: 'save' }); var o = this.textContent; this.textContent = '✅ 已保存'; setTimeout(function () { $('btnSaveParams').textContent = o; }, 1500); } } };
+$('btnSaveParams').onclick = function () {
+    if (!state.currentCategory) return;
+    var cmd = PARAM_CATEGORY_CMD[state.currentCategory];
+    if (!cmd) return;
+    var params = state.paramCache[state.currentCategory];
+    if (!params) return;
+    sendCommand(cmd, { action: 'save', params: params });
+    var o = this.textContent; this.textContent = '✅ 已保存';
+    setTimeout(function () { $('btnSaveParams').textContent = o; }, 1500);
+};
 
 // ==================== 离线检测 ====================
 function sendOfflinePath(filePath) {
